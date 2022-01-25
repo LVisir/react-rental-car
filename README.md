@@ -68,3 +68,32 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Rental Car
+
+## DB
+In this React project the goal is to simulate an application that manage the bookings of cars. The fake DB it has been done thanks to [json-server](https://github.com/typicode/json-server). 
+The possible users are: Superuser and Customer. 
+
+### Customer
+Every Customer has an email and a password and others details like name, surname, date and the card id number (that in Italy normally is a string) that reflect his uniqueness in the db. Every Customer can rent a Car just one at a time and every rent request have to be denied or accepted from the Superuser. So the Customer can have multiple Bookings but not more than one Booking not accepted. 
+
+### Car
+The Car entity has some details like model, tipology (SUV, MINIVAN, CLASSIC), date of creation, his id number plate and the brand. 
+
+### Booking
+A Booking can be done from a Customer and it is relate to a Car so his property are: period of the reservations (start date/end date), the Car, the Customer, an id and a state that represents if the Superuser have accepted or denied the Booking. 
+
+### Superuser
+The goal of the Superuser is to add/cancel a Car, modify/cancel/add Customer, accept/deny/cancel Bookings.
+
+
+
+# UI
+A User can access to the application via his username and password where is put on the Customer entity. There is also a 'role' attribute that indicates if a certain Customer is just a Customer or a Superuser.
+
+### Superuser UI
+In the Superuser UI there is an Header where he can navigate through the app. There is the page for the Bookings with the appropriate actions, a page for Customers with the appropriate actions and the page of Cars with appropriate actions. Every list of entities is rappresented by a table where the user can sort by a certain field and search some data based on some filter. Every page can have at most ten elements, if more, a paging will allow the user to navigate through all the data.
+
+### Customer UI
+Also here there is an Header where he can navigate through the app. There is a page that shows all his Bookings, a page where he can update the Booking and a page where he can see and rent a Car. A Customer can update a Booking just if the initial date of the reservation is far at least two days from the new Booking.  
