@@ -1,0 +1,166 @@
+{
+  "customer": [
+    {
+      "id": 0,
+      "cf": "RBT",
+      "nome": "Roberto",
+      "cognome": "Colombini",
+      "dataNascita": "1990-01-01"
+    },
+    {
+      "id": 1,
+      "cf": "PPO",
+      "nome": "Pippo",
+      "cognome": "Baudo",
+      "dataNascita": "1999-01-01"
+    },
+    {
+      "id": 2,
+      "cf": "KNT",
+      "nome": "Kenneth",
+      "cognome": "Rotterdam",
+      "dataNascita": "1990-01-01"
+    },
+    {
+      "id": 3,
+      "cf": "AAAB",
+      "nome": "Edoardo",
+      "cognome": "Mariani",
+      "dataNascita": "2021-12-23"
+    },
+    {
+      "nome": "Test",
+      "cognome": "Test",
+      "dataNascita": "1999-01-01",
+      "cf": "Test",
+      "id": 4
+    },
+    {
+      "nome": "Test2",
+      "cognome": "Test2",
+      "dataNascita": "1999-01-01",
+      "cf": "QWER",
+      "id": 5
+    },
+    {
+      "nome": "test3",
+      "cognome": "test3",
+      "dataNascita": "1999-01-01",
+      "cf": "test3",
+      "id": 6
+    }
+  ],
+  "veicolo": [
+    {
+      "targa": "AA000AA",
+      "modello": "Sunshine",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Mercedes",
+      "annoImmatricolazione": "2021-12-23"
+    },
+    {
+      "targa": "AA000AB",
+      "modello": "Sunshine",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Mercedes",
+      "annoImmatricolazione": "1999-01-01"
+    },
+    {
+      "targa": "AA123BD",
+      "modello": "Moonlight",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Toyota",
+      "annoImmatricolazione": "1999-01-01"
+    },
+    {
+      "targa": "AAAAAAA",
+      "modello": "Sun",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Toyota",
+      "annoImmatricolazione": "1999-01-01"
+    },
+    {
+      "targa": "AS125FG",
+      "modello": "Oppo",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Mazda",
+      "annoImmatricolazione": "1999-01-01"
+    },
+    {
+      "targa": "ED045DO",
+      "modello": "Jellyfish",
+      "tipologia": "MINIVAN",
+      "casaCostruttrice": "Skoda",
+      "annoImmatricolazione": "2000-01-01"
+    },
+    {
+      "targa": "JK000PG",
+      "modello": "Rotshire",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Mazda",
+      "annoImmatricolazione": "2021-01-01"
+    },
+    {
+      "targa": "MA514NI",
+      "modello": "Classic",
+      "tipologia": "SUV",
+      "casaCostruttrice": "Ferrari",
+      "annoImmatricolazione": "2000-01-01"
+    },
+    {
+      "targa": "SU123JU",
+      "modello": "Ricecotton",
+      "tipologia": "UTILITARIA",
+      "casaCostruttrice": "Swift",
+      "annoImmatricolazione": "1983-01-04"
+    }
+  ],
+  "prenotazione": [
+    {
+      "fine": "2022-01-28",
+      "codice": 34,
+      "inizio": "2022-01-24",
+      "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "SU123JU"
+    },
+    {
+      "fine": "2001-01-28",
+      "codice": 35,
+      "inizio": "2000-01-24",
+      "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "MA514NI"
+    },
+    {
+      "fine": "2005-01-28",
+      "codice": 36,
+      "inizio": "2004-01-24",
+      "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "JK000PG"
+    },
+    {
+      "fine": "2007-01-28",
+      "codice": 37,
+      "inizio": "2006-01-24",
+      "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "JK000PG"
+    },
+    {
+      "fine": "2012-01-28",
+      "codice": 38,
+      "inizio": "2011-01-24",
+      "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "AA000AA"
+    }
+  ],
+  "superuser": [
+    {
+      "id": 1,
+      "customer": "AAAB"
+    }
+  ]
+}
