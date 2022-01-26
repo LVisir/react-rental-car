@@ -7,6 +7,8 @@ import Reservations from "./components/Reservations";
 import Header from "./components/Header";
 import {Container} from "react-bootstrap";
 import AddCustomer from "./components/AddCustomer";
+import {CustomersProvider} from "./service/Customer/CustomerContext";
+import {BookingsProvider} from "./service/Booking/BookingContext";
 
 const App = () => {
   // UI customers
@@ -39,6 +41,7 @@ const App = () => {
 
     getSuperusers()
     getCustomers()
+      //console.log(customers)
     }, []);
 
   // fetch dei Customer dal server
@@ -103,22 +106,26 @@ const App = () => {
   if(!token){
       return (
           <>
-              <Router>
-                  <Container>
-                      <Routes>
-                          {['/','/:customerCf','/AddCustomer'].map(
-                              (path) =>
-                                  <Route
-                                      key={path}
-                                      path={path}
-                                      element={
-                                          <Login customers={customers} superusers={superusers} setToken={setToken}/>
-                                      }
-                                  />
-                          )}
-                      </Routes>
-                  </Container>
-              </Router>
+              <CustomersProvider>
+                  <BookingsProvider>
+                      <Router>
+                          <Container>
+                              <Routes>
+                                  {['/','/:customerCf','/AddCustomer'].map(
+                                      (path) =>
+                                          <Route
+                                              key={path}
+                                              path={path}
+                                              element={
+                                                  <Login customers={customers} superusers={superusers} setToken={setToken}/>
+                                              }
+                                          />
+                                  )}
+                              </Routes>
+                          </Container>
+                      </Router>
+                  </BookingsProvider>
+              </CustomersProvider>
           </>
 
 
@@ -129,32 +136,34 @@ const App = () => {
    */
   else if(sessionStorage.getItem('superuser')!==null){
       return (
-          <Router>
-              <Header logout={logout}/>
-              <Container className={'my-2'}>
-                  <Routes>
-                      <Route
-                          path={'/'}
-                          element={
-                              <Customers
-                                  customers={customers}
-                                  superusers={superusers}
-                                  logout={logout}
-                              />
-                          }
-                      />
-                      <Route
-                          path={'/AddCustomer'}
-                          element={
-                              <AddCustomer
-                                  addCustomer={addCustomer}
-                                  customers={customers}
-                              />
-                          }
-                      />
-                  </Routes>
-              </Container>
-          </Router>
+          <CustomersProvider>
+              <Router>
+                  <Header logout={logout}/>
+                  <Container className={'my-2'}>
+                      <Routes>
+                          <Route
+                              path={'/'}
+                              element={
+                                  <Customers
+                                      customers={customers}
+                                      superusers={superusers}
+                                      logout={logout}
+                                  />
+                              }
+                          />
+                          <Route
+                              path={'/AddCustomer'}
+                              element={
+                                  <AddCustomer
+                                      addCustomer={addCustomer}
+                                      customers={customers}
+                                  />
+                              }
+                          />
+                      </Routes>
+                  </Container>
+              </Router>
+          </CustomersProvider>
       )
   }
   /**
@@ -165,28 +174,27 @@ const App = () => {
    */
   else if(sessionStorage.getItem('customer')!==null){
       return (
-          <Router>
-              <Header logout={logout}/>
-              <Container  className={'my-2'}>
-                  <Routes>
-                      {['/','/:customerCf'].map(
-                          (path) =>
-                              <Route
-                                  path={path}
-                                  key={path}
-                                  element={
-                                      <Reservations
-                                          fetchReservations={fetchReservations}
-                                          logout={logout}
-                                          superusers={superusers}
-                                          customers={customers}
+          <CustomersProvider>
+              <BookingsProvider>
+                  <Router>
+                      <Header logout={logout}/>
+                      <Container  className={'my-2'}>
+                          <Routes>
+                              {['/','/:customerCf'].map(
+                                  (path) =>
+                                      <Route
+                                          path={path}
+                                          key={path}
+                                          element={
+                                              <Reservations />
+                                          }
                                       />
-                                  }
-                              />
-                      )}
-                  </Routes>
-              </Container>
-          </Router>
+                              )}
+                          </Routes>
+                      </Container>
+                  </Router>
+              </BookingsProvider>
+          </CustomersProvider>
       )
   }
 }

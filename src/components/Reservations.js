@@ -3,6 +3,7 @@ import {useParams, useNavigate} from 'react-router-dom'
 import Reservation from './Reservation';
 import Logout from './Logout';
 import CustomTable from "./CustomTable";
+import { useBookings } from '../service/Booking/BookingContext';
 
 /**
  * Componente che rappresenta tutte le prenotazioni di un Customer fornito in props
@@ -13,36 +14,20 @@ import CustomTable from "./CustomTable";
  * @returns {JSX.Element}
  * @constructor
  */
-const Reservations = ({fetchReservations, logout, superusers, customers}) => {
+const Reservations = () => {
 
-    // legge dei parametri nel chiesto la richiesta l'abbia fatta il Superuser per un certo Customer
-    const params = useParams()
-    const navigate = useNavigate()
+    // retrieve the list of bookings from the BookingsContext
+    const bookings = useBookings()
 
     const campi = ['inizio','fine','codice','customer','veicolo']
-
-    // salvo le prenotazioni che dovrò mostrare in UI
-    const [prenotazioni, setPrenotazioni] = useState([]);
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
-        /**
-         * Ricavo le prenotazioni in base al cf del Customer in sessione se esso si è autenticato
-         * altrimenti in base al cf di un Customer richiesto dal Superuser
-         * @returns {Promise<void>}
-         */
-        const getReservations = async () => {
-            const prenotazioniDelCustomerDalServer = await fetchReservations(
-                params.customerCf===undefined ? sessionStorage.getItem('customer') : params.customerCf
-            )
-            setPrenotazioni(prenotazioniDelCustomerDalServer)
-        }
-        getReservations()
+        //console.log(bookings)
         setLoading(true)
-
 
     }, []);
 
@@ -57,7 +42,7 @@ const Reservations = ({fetchReservations, logout, superusers, customers}) => {
             ) : (
                 <h1>Loading...</h1>
                 )}*/}
-            <CustomTable campi={campi} lista={prenotazioni}/>
+            <CustomTable campi={campi} lista={bookings}/>
         </>
     )
 };

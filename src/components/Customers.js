@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import Logout from "./Logout";
 import CustomTable from "./CustomTable";
+import { useCustomers } from "../service/Customer/CustomerContext";
 
 /**
  * Componente che mostra i Customer con i relativi dati e le relative operazioni
@@ -23,10 +24,18 @@ const Customers = ({ customers, logout, superusers }) => {
     // usato per gestire il logout
     const navigate = useNavigate()
 
+    // fetch the list of Customers from the CustomerContext
+    const ris = useCustomers()
+
+    const [custs, setCusts] = useState([]);
+
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    useEffect(async () => {
+
+        // set customers from the CustomerContext so useCustomers()
+        //setCusts(await ris)
         setLoading(true)
     }, []);
 
@@ -34,14 +43,17 @@ const Customers = ({ customers, logout, superusers }) => {
       navigate('/AddCustomer')
     }
 
-    return (
+    // wait for the customers loading
+    return loading ? (
         <>
             <h3>
                 Customers
                 <Button color={'green'} text={'Aggiungi'} onClickDo={move}/>
             </h3>
-            <CustomTable lista={customers} campi={campi2}/>
+            <CustomTable lista={ris} campi={campi2}/>
         </>
+    ) : (
+        <h1>Loading...</h1>
     )
 };
 
