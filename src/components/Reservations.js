@@ -7,7 +7,7 @@ import { useBookings } from '../service/Booking/BookingContext';
 
 /**
  * Component that show all the Bookings of a given Customer
- * retrieve the Bookings from the Context and use the CustomTable to show it
+ * retrieve the Bookings from the Context and use the CustomTable to show its
  * @param fetchReservations
  * @param logout
  * @param superusers
