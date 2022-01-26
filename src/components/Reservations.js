@@ -6,7 +6,8 @@ import CustomTable from "./CustomTable";
 import { useBookings } from '../service/Booking/BookingContext';
 
 /**
- * Componente che rappresenta tutte le prenotazioni di un Customer fornito in props
+ * Component that show all the Bookings of a given Customer
+ * retrieve the Bookings from the Context and use the CustomTable to show it
  * @param fetchReservations
  * @param logout
  * @param superusers
@@ -34,14 +35,6 @@ const Reservations = () => {
     return (
         <>
             <h3>Prenotazioni</h3>
-            {/*{loading ? (
-                prenotazioni.map(
-                        (prenotazione) =>
-                            <Reservation key={prenotazione.codice} prenotazione={prenotazione}/>
-                    )
-            ) : (
-                <h1>Loading...</h1>
-                )}*/}
             <CustomTable campi={campi} lista={bookings}/>
         </>
     )
