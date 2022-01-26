@@ -8,8 +8,8 @@ import CustomTable from "./CustomTable";
 import { useCustomers } from "../service/Customer/CustomerContext";
 
 /**
- * Componente che mostra i Customer con i relativi dati e le relative operazioni
- * Al suo interno ha altre componenti: Customer.js, Button.js, Search.js, Logout.js
+ * Page of Superuser
+ * Component that uses the list Customer in the Context and use the CustomeTable component to show it
  * @param customers
  * @param logout
  * @returns {false|JSX.Element}
