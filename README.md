@@ -1,3 +1,6 @@
+# Important
+For now, to test the code, to log as Superuser the credentials are: {username: Edoardo, password: AAAB}; to log as Customer the credentials are: {username: customer.nome, password: customer.cf} where customer.nome and customer.cf are any nome and cf from the file 'db.json'. In the next days it will change. Since now, it was to test the hook useContext, the service layer and the custom hook based on Context. Otherwise use cypress to test the app. In the '/cypress/integration' folder there a description of various tests.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
