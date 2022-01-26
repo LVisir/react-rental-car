@@ -34,6 +34,18 @@ const Login = ({superusers, setToken}) => {
     // path where to fetch the list of Bookings
     const bookingsPath = 'http://localhost:5001/prenotazione'
 
+    /**
+     * Phases:
+     * - Check if the user fill all the fields, otherwise error
+     * - fetch all the Customer
+     * - check if it exists a Customer with the given data, otherwise error
+     * - update in the context the list of Customer
+     * - check if this Customer is a Superuser:
+     *  - if yes, bring to the Superuser page
+     *  - otherwise, update his bookings in the context and bring to the Customer page
+     * @param e
+     * @returns {Promise<void>}
+     */
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!username || !pass) {
@@ -79,8 +91,6 @@ const Login = ({superusers, setToken}) => {
 
             const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))
             updateBookings(bookingsData)
-
-            //console.log(bookingsData)
 
             // aggiorno il token che dichiara se qualcuno si è autenticato
             setToken(true)
