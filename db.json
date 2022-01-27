@@ -5,28 +5,40 @@
       "cf": "RBT",
       "nome": "Roberto",
       "cognome": "Colombini",
-      "dataNascita": "1990-01-01"
+      "dataNascita": "1990-01-01",
+      "role": "CUSTOMER",
+      "email": "roberto.rbt@email.com",
+      "password": "1234"
     },
     {
       "id": 1,
       "cf": "PPO",
       "nome": "Pippo",
       "cognome": "Baudo",
-      "dataNascita": "1999-01-01"
+      "dataNascita": "1999-01-01",
+      "role": "CUSTOMER",
+      "email": "pippo.ppo@email.com",
+      "password": "1234"
     },
     {
       "id": 2,
       "cf": "KNT",
       "nome": "Kenneth",
       "cognome": "Rotterdam",
-      "dataNascita": "1990-01-01"
+      "dataNascita": "1990-01-01",
+      "role": "CUSTOMER",
+      "email": "kenneth.knt@email.com",
+      "password": "1234"
     },
     {
       "id": 3,
       "cf": "AAAB",
       "nome": "Edoardo",
       "cognome": "Mariani",
-      "dataNascita": "2021-12-23"
+      "dataNascita": "2021-12-23",
+      "role": "SUPERUSER",
+      "email": "edoardo.aaab@email.com",
+      "password": "1234"
     },
     {
       "nome": "Test",
@@ -34,20 +46,6 @@
       "dataNascita": "1999-01-01",
       "cf": "Test",
       "id": 4
-    },
-    {
-      "nome": "Test2",
-      "cognome": "Test2",
-      "dataNascita": "1999-01-01",
-      "cf": "QWER",
-      "id": 5
-    },
-    {
-      "nome": "test3",
-      "cognome": "test3",
-      "dataNascita": "1999-01-01",
-      "cf": "test3",
-      "id": 6
     }
   ],
   "veicolo": [
@@ -155,12 +153,6 @@
       "customer": "KNT",
       "approvazione": 0,
       "veicolo": "AA000AA"
-    }
-  ],
-  "superuser": [
-    {
-      "id": 1,
-      "customer": "AAAB"
     }
   ]
 }
