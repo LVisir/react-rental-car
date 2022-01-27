@@ -23,7 +23,7 @@ const Header = ({logout}) => {
                         style={{ maxHeight: '100px '}}
                         navbarScroll
                     >
-                        <Logout logout={logout}/>
+                        <Logout logout={logout} />
                         <NavDropdown title="Filtri" id="navbarScrollingDropdown">
                             <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>

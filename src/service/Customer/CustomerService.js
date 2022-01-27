@@ -1,3 +1,5 @@
+export const customersPath = 'http://localhost:5001/customer'
+
 // function to fetch the list of Customers
 export const getCustomers = async (path) => {
     const response = await fetch(path)

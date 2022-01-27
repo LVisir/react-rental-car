@@ -9,49 +9,18 @@ import {Container} from "react-bootstrap";
 import AddCustomer from "./components/AddCustomer";
 import {CustomersProvider} from "./service/Customer/CustomerContext";
 import {BookingsProvider} from "./service/Booking/BookingContext";
+import Error from "./components/Error";
+import LoginPage from "./pages/LoginPage";
+import { customersPath } from "./service/Customer/CustomerService";
+import { bookingsPath } from "./service/Booking/BookingService";
+import UsefulFunctions from "./functions/UsefulFunctions";
 
 const App = () => {
   // UI customers
   const [customers, setCustomers] = useState([]);
 
-  // UI superuser
-  const [superusers, setSuperusers] = useState([]);
+  const {logout, token, setToken} = UsefulFunctions()
 
-    /**
-     * token che serve per capire se qualcuno si è autenticato
-     * nel caso in sessione ci stessa o un Superuser o un Customer allora
-     * token settato su true; false altrimenti
-     */
-  const [token, setToken] = useState((sessionStorage.getItem('customer') !== null || sessionStorage.getItem('superuser') !== null));
-
-  // al caricamento della pagina fetcho i dati dei Customer e dei Superuser
-  useEffect(() => {
-
-    // carico i Customer dal server all'UI
-    const getCustomers = async () => {
-      const customersFromServer = await fetchCustomers();
-      setCustomers(customersFromServer)
-    }
-
-    // carico i Superuser dal server all'UI
-    const getSuperusers = async () => {
-      const superusersFromServer = await fetchSuperusers();
-      setSuperusers(superusersFromServer)
-    }
-
-    getSuperusers()
-    getCustomers()
-      //console.log(customers)
-    }, []);
-
-  // fetch dei Customer dal server
-    const fetchCustomers = async () => {
-        const response = await fetch('http://localhost:5001/customer')
-        const customers = await response.json()
-
-        return customers
-    }
-    
     // add Customer
     const addCustomer = async (customer) => {
         const response = await fetch(
@@ -74,15 +43,7 @@ const App = () => {
 
     }
 
-  // fetch delle prenotazioni dal server dato un certo cf
-  const fetchReservations = async (cf) => {
-    const response = await fetch(`http://localhost:5001/prenotazione?customer=${cf}`)
-    const prenotazioni = await response.json()
-
-    return prenotazioni
-  }
-
-    // logout
+/*    // logout
     const logout = () => {
         //sessionStorage.removeItem('page')
         sessionStorage.removeItem('superuser')
@@ -90,15 +51,7 @@ const App = () => {
 
         // aggiorno il token che dichiara se qualcuno si è autenticato
         setToken(false)
-    }
-
-    // fetch dei Superuser dal server
-    const fetchSuperusers = async () => {
-        const response = await fetch('http://localhost:5001/superuser')
-        const superusers = await response.json()
-
-        return superusers
-    }
+    }*/
 
     /**
      * Se nessuno si è loggato carica il componente Login
@@ -108,22 +61,7 @@ const App = () => {
           <>
               <CustomersProvider>
                   <BookingsProvider>
-                      <Router>
-                          <Container>
-                              <Routes>
-                                  {['/','/:customerCf','/AddCustomer'].map(
-                                      (path) =>
-                                          <Route
-                                              key={path}
-                                              path={path}
-                                              element={
-                                                  <Login customers={customers} superusers={superusers} setToken={setToken}/>
-                                              }
-                                          />
-                                  )}
-                              </Routes>
-                          </Container>
-                      </Router>
+                     <LoginPage setToken={setToken} />
                   </BookingsProvider>
               </CustomersProvider>
           </>
@@ -138,28 +76,12 @@ const App = () => {
       return (
           <CustomersProvider>
               <Router>
-                  <Header logout={logout}/>
+                  <Header logout={logout} />
                   <Container className={'my-2'}>
                       <Routes>
-                          <Route
-                              path={'/'}
-                              element={
-                                  <Customers
-                                      customers={customers}
-                                      superusers={superusers}
-                                      logout={logout}
-                                  />
-                              }
-                          />
-                          <Route
-                              path={'/AddCustomer'}
-                              element={
-                                  <AddCustomer
-                                      addCustomer={addCustomer}
-                                      customers={customers}
-                                  />
-                              }
-                          />
+                          <Route path="*" element={<Error />} />
+                          <Route path={'/'} element={<Customers customersPath={customersPath}/>}/>
+                          <Route path={'/AddCustomer'} element={<AddCustomer addCustomer={addCustomer}customers={customers}/>}/>{/* attento qui che customers non esiste più in App.js */}
                       </Routes>
                   </Container>
               </Router>
@@ -177,19 +99,14 @@ const App = () => {
           <CustomersProvider>
               <BookingsProvider>
                   <Router>
-                      <Header logout={logout}/>
+                      <Header logout={logout} />
                       <Container  className={'my-2'}>
                           <Routes>
-                              {['/','/:customerCf'].map(
-                                  (path) =>
-                                      <Route
-                                          path={path}
-                                          key={path}
-                                          element={
-                                              <Reservations />
-                                          }
-                                      />
-                              )}
+                              <Route path='*' element={<Error />} />
+                              <Route path={'/'} element={<Reservations bookingsPath={bookingsPath} />}/>
+                              {/* Quando farai questo Route dentro :customerCf ci può finire qualsiasi cosa
+                              perciò fai un controllo se il cf messo è valido altrimenti porta ad una pagina di errore*/}
+                              {/*<Route path={'/:customerCf'} element={<Reservations bookingsPath={bookingsPath} />}/>*/}
                           </Routes>
                       </Container>
                   </Router>

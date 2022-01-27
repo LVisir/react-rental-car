@@ -39,13 +39,6 @@
       "role": "SUPERUSER",
       "email": "edoardo.aaab@email.com",
       "password": "1234"
-    },
-    {
-      "nome": "Test",
-      "cognome": "Test",
-      "dataNascita": "1999-01-01",
-      "cf": "Test",
-      "id": 4
     }
   ],
   "veicolo": [
@@ -119,6 +112,14 @@
       "codice": 34,
       "inizio": "2022-01-24",
       "customer": "KNT",
+      "approvazione": 0,
+      "veicolo": "SU123JU"
+    },
+    {
+      "fine": "2029-01-28",
+      "codice": 67,
+      "inizio": "2029-01-24",
+      "customer": "PPO",
       "approvazione": 0,
       "veicolo": "SU123JU"
     },

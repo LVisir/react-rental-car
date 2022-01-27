@@ -5,7 +5,8 @@ import {useEffect, useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import Logout from "./Logout";
 import CustomTable from "./CustomTable";
-import { useCustomers } from "../service/Customer/CustomerContext";
+import { useCustomers, useUpdateCustomers } from "../service/Customer/CustomerContext";
+import {getCustomers} from '../service/Customer/CustomerService';
 
 /**
  * Page of Superuser
@@ -15,7 +16,7 @@ import { useCustomers } from "../service/Customer/CustomerContext";
  * @returns {false|JSX.Element}
  * @constructor
  */
-const Customers = ({ customers, logout, superusers }) => {
+const Customers = ({logout, superusers, customersPath }) => {
     // filtri per fare le ricerche in base ad un certo campo Customer
     const campi = ['NOME','COGNOME','DATA NASCITA','COD FISCALE']
 
@@ -25,17 +26,25 @@ const Customers = ({ customers, logout, superusers }) => {
     const navigate = useNavigate()
 
     // fetch the list of Customers from the CustomerContext
-    const ris = useCustomers()
+    let ris = useCustomers()
 
-    const [custs, setCusts] = useState([]);
+    // setState of Customers taken from Context that update the lis of Customers in the Context
+    const updateCustomer = useUpdateCustomers()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
 
+    /**
+     * The goal of this useEffect is to check if the list of Customers in the Context are not empty
+     * if not it means maybe that the page was reloaded so the Context lose their data, so we have to fetch them again
+     * and update the Context with this fetched data;
+     * otherwise use the data in the Context;
+     */
     useEffect(async () => {
-
-        // set customers from the CustomerContext so useCustomers()
-        //setCusts(await ris)
+        if (ris.length === 0) {
+            ris = await getCustomers(customersPath)
+            updateCustomer(ris)
+        }
         setLoading(true)
     }, []);
 

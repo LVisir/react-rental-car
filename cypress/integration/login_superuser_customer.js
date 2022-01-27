@@ -4,10 +4,10 @@ describe('login superuser and after customer', () => {
         cy.visit('http://localhost:3000/')
 
         // aggiungo l'username
-        cy.findByRole('textbox', {  name: /username/i}).type('Edoardo')
+        cy.findByRole('textbox', {  name: /email/i}).type('edoardo.aaab@email.com')
 
         // aggiungo password
-        cy.findByLabelText(/password/i).type('AAAB')
+        cy.findByLabelText(/password/i).type('1234')
 
         // premo tasto login
         cy.findByRole('button', {  name: /login/i}).click()
@@ -16,13 +16,19 @@ describe('login superuser and after customer', () => {
         cy.findByText(/logout/i).click()
 
         // aggiungo l'username
-        cy.findByRole('textbox', {  name: /username/i}).type('Kenneth')
+        cy.findByRole('textbox', {  name: /email/i}).type('kenneth.knt@email.com')
 
         // aggiungo password
-        cy.findByLabelText(/password/i).type('KNT')
+        cy.findByLabelText(/password/i).type('1234')
 
         // premo tasto login
         cy.findByRole('button', {  name: /login/i}).click()
+
+        // visito un url non esistente
+        cy.visit('http://localhost:3000/undefinedUrl')
+
+        // torno alla home
+        cy.findByRole('link', {  name: /go home/i}).click()
 
     })
 })
