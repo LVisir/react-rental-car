@@ -2,9 +2,11 @@ import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import {useUpdateCustomers } from '../service/Customer/CustomerContext';
-import { getCustomers, customersPath } from '../service/Customer/CustomerService';
+/*import { getCustomers, customersPath } from '../service/Customer/CustomerService';*/
 import {useUpdateBookings} from '../service/Booking/BookingContext';
-import { fetchReservationsByCustomerId, bookingsPath } from '../service/Booking/BookingService';
+import BookingService from "../service/Booking/BookingService";
+import CustomerService from "../service/Customer/CustomerService";
+/*import { fetchReservationsByCustomerId, bookingsPath } from '../service/Booking/BookingService';*/
 
 /**
  * Pagina di login che si carica tutti i Customer e i Superuser
@@ -20,6 +22,8 @@ const Login = ({superusers, setToken}) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
+    const {fetchReservationsByCustomerId, bookingsPath} = BookingService()
+
     const navigate = useNavigate()
 
     // hook to update the customers in the CustomersContext
@@ -27,6 +31,8 @@ const Login = ({superusers, setToken}) => {
 
     // hook to update the bookings in the BookingsContext
     const updateBookings = useUpdateBookings()
+
+    const { getCustomers, customersPath } = CustomerService()
 
     /**
      * Phases:
@@ -48,7 +54,7 @@ const Login = ({superusers, setToken}) => {
         }
 
         // wait for the array from Promise object
-        const customersData = await getCustomers(customersPath) // now custs contains a list of Customers
+        const customersData = await getCustomers() // now custs contains a list of Customers
 
         // ricavo il Customer con username e pass inseriti nella form (username, pass) --> (nome, cf)
         /*let correctUsername = customersData.reduce((a, b) => a = b.email === email ? b.cf : a, 0)
@@ -85,7 +91,7 @@ const Login = ({superusers, setToken}) => {
         } else {
             sessionStorage.setItem('customer', customer.cf)
 
-            // fetch of the bookings that it will be the first thing the a Customer will see in his page
+            // fetch of the bookings that it will be the first thing that a Customer will see in his page
             const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))
 
             // update the bookings in the BookingContext from [] to what it fetched at the previous operation

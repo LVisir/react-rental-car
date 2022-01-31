@@ -11,47 +11,23 @@ import {CustomersProvider} from "./service/Customer/CustomerContext";
 import {BookingsProvider} from "./service/Booking/BookingContext";
 import Error from "./components/Error";
 import LoginPage from "./pages/LoginPage";
-import { customersPath } from "./service/Customer/CustomerService";
-import { bookingsPath } from "./service/Booking/BookingService";
+/*import { customersPath } from "./service/Customer/CustomerService";*/
+/*import { bookingsPath } from "./service/Booking/BookingService";*/
 import UsefulFunctions from "./functions/UsefulFunctions";
+import BookingService from "./service/Booking/BookingService";
+import CustomerService from "./service/Customer/CustomerService";
+import SuperuserPage from "./pages/SuperuserPage";
+import CustomerPage from "./pages/CustomerPage";
 
 const App = () => {
+
   // UI customers
   const [customers, setCustomers] = useState([]);
 
-  const {logout, token, setToken} = UsefulFunctions()
+  const { bookingsPath } = BookingService()
 
-    // add Customer
-    const addCustomer = async (customer) => {
-        const response = await fetch(
-            'http://localhost:5001/customer',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(customer),
-            }
-        )
-
-        // converto in un oggetto json
-        // l'id lo mette in automatico
-        const data = await response.json()
-
-        // aggiorno tasks aggiungendo il nuovo task
-        setCustomers([...customers, data])
-
-    }
-
-/*    // logout
-    const logout = () => {
-        //sessionStorage.removeItem('page')
-        sessionStorage.removeItem('superuser')
-        sessionStorage.removeItem('customer')
-
-        // aggiorno il token che dichiara se qualcuno si è autenticato
-        setToken(false)
-    }*/
+    // variables to handle the login
+    const {logout, token, setToken} = UsefulFunctions()
 
     /**
      * Se nessuno si è loggato carica il componente Login
@@ -65,8 +41,6 @@ const App = () => {
                   </BookingsProvider>
               </CustomersProvider>
           </>
-
-
       )
   }
   /**
@@ -75,16 +49,7 @@ const App = () => {
   else if(sessionStorage.getItem('superuser')!==null){
       return (
           <CustomersProvider>
-              <Router>
-                  <Header logout={logout} />
-                  <Container className={'my-2'}>
-                      <Routes>
-                          <Route path="*" element={<Error />} />
-                          <Route path={'/'} element={<Customers customersPath={customersPath}/>}/>
-                          <Route path={'/AddCustomer'} element={<AddCustomer addCustomer={addCustomer}customers={customers}/>}/>{/* attento qui che customers non esiste più in App.js */}
-                      </Routes>
-                  </Container>
-              </Router>
+              <SuperuserPage logout={logout} />
           </CustomersProvider>
       )
   }
@@ -98,18 +63,7 @@ const App = () => {
       return (
           <CustomersProvider>
               <BookingsProvider>
-                  <Router>
-                      <Header logout={logout} />
-                      <Container  className={'my-2'}>
-                          <Routes>
-                              <Route path='*' element={<Error />} />
-                              <Route path={'/'} element={<Reservations bookingsPath={bookingsPath} />}/>
-                              {/* Quando farai questo Route dentro :customerCf ci può finire qualsiasi cosa
-                              perciò fai un controllo se il cf messo è valido altrimenti porta ad una pagina di errore*/}
-                              {/*<Route path={'/:customerCf'} element={<Reservations bookingsPath={bookingsPath} />}/>*/}
-                          </Routes>
-                      </Container>
-                  </Router>
+                  <CustomerPage logout={logout} />
               </BookingsProvider>
           </CustomersProvider>
       )

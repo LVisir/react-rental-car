@@ -4,7 +4,10 @@ import Reservation from './Reservation';
 import Logout from './Logout';
 import CustomTable from "./CustomTable";
 import { useBookings, useUpdateBookings } from '../service/Booking/BookingContext';
-import { fetchReservationsByCustomerId } from '../service/Booking/BookingService';
+import BookingService from "../service/Booking/BookingService";
+import Header from "./Header";
+import {Container} from "react-bootstrap";
+/*import { fetchReservationsByCustomerId } from '../service/Booking/BookingService';*/
 
 /**
  * Component that show all the Bookings of a given Customer
@@ -16,7 +19,7 @@ import { fetchReservationsByCustomerId } from '../service/Booking/BookingService
  * @returns {JSX.Element}
  * @constructor
  */
-const Reservations = ({bookingsPath}) => {
+const Reservations = ({bookingsPath, logout}) => {
 
     // retrieve the list of bookings from the BookingsContext
     let bookings = useBookings()
@@ -25,6 +28,8 @@ const Reservations = ({bookingsPath}) => {
     const updateBookings = useUpdateBookings()
 
     const campi = ['inizio','fine','codice','customer','veicolo']
+
+    const {fetchReservationsByCustomerId } = BookingService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
@@ -47,8 +52,11 @@ const Reservations = ({bookingsPath}) => {
 
     return loading ? (
         <>
-            <h3>Prenotazioni</h3>
-            <CustomTable campi={campi} lista={bookings}/>
+            <Header logout={logout} />
+            <Container className={'my-2'}>
+                <h3>Prenotazioni</h3>
+                <CustomTable campi={campi} lista={bookings}/>
+            </Container>
         </>
     ) : (
         <h1>Loading...</h1>
