@@ -1,6 +1,3 @@
-# Important
-For now, to test the code, to log as Superuser the credentials are written in 'db.json' file under the properties of Customer {username, password}. Use cypress to test the app. In the '/cypress/integration' folder there a description of various tests.
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
