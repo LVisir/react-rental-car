@@ -2,7 +2,7 @@ import {Table} from 'react-bootstrap'
 import Button from "./Button";
 import React, {useEffect} from 'react';
 
-import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillPauseFill } from 'react-icons/bs';
+import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill } from 'react-icons/bs';
 import Pagination from "./Pagination";
 
 /**
@@ -39,6 +39,18 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
         }
     }
 
+    const sortStyle = (sortableFields, index) => {
+        //console.log(Object.entries(sortableFields.state)[0][1])
+        switch (Object.entries(sortableFields.state)[0][1]){
+            case 0:
+                return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
+            case 1:
+                return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
+            case 2:
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)}  />
+        }
+    }
+
     /**
      * Ragionamento:
      * - creo tabella con <th> uguale a 'campi' dato in input
@@ -64,11 +76,7 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
                                     {tableConfigurations.sortableFields.filter((el) => el.field === nomeCampo).length > 0 &&
                                         <th key={index}>
                                             {
-                                                tableConfigurations.sortableFields[index].orderBy[nomeCampo] ? (
-                                                    <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
-                                                    ) : (
-                                                        <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
-                                                )
+                                                sortStyle(tableConfigurations.sortableFields[index], index)
                                             }
                                         </th>
                                     }

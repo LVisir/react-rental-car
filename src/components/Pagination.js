@@ -10,10 +10,11 @@ const Pagination = ({tableConfigurations}) => {
         let sort = []
         let order = []
         sortableFields.map((element, index) => {
-            if(element.hasOwnProperty('orderBy')){
+            if((Object.entries(element.orderBy)[0][1]) && element.hasOwnProperty('orderBy') && (Object.entries(element.state)[0][1])!==0){
                 sort.push(element.field)
                 order.push(Object.entries(element['orderType'])[0][1])
-
+                /*console.log(element.field+' '+(Object.entries(element.state)[0][1]))
+                console.log(Object.entries(element.orderBy)[0][1])*/
             }
         })
 
@@ -41,6 +42,13 @@ const Pagination = ({tableConfigurations}) => {
 
     const sortAndOrderInfo = [tableConfigurations.sortableFields[0]['orderBy']['nome'], tableConfigurations.sortableFields[1]['orderBy']['cognome']]
 
+    const useEffectDependencies = [tableConfigurations.currentPage.currentPage,
+        tableConfigurations.sortableFields[0]['state']['buttonNameState'],
+        tableConfigurations.sortableFields[1]['state']['buttonSurnameState'],
+        tableConfigurations.sortableFields[2]['state']['buttonDateState'],
+        tableConfigurations.sortableFields[3]['state']['buttonCfState'],
+        tableConfigurations.sortableFields[4]['state']['buttonEmailState']]
+
 
     /*tableConfigurations.sortableFields.map((element, index) =>{
         sortAndOrderInfo.push(element.field+' '+tableConfigurations.sortableFields[index]['orderBy'][element.field])
@@ -64,7 +72,7 @@ const Pagination = ({tableConfigurations}) => {
 
         getCustomers().then(r => tableConfigurations.setList(r))
 
-    }, [tableConfigurations.currentPage.currentPage, tableConfigurations.sortableFields[0]['orderBy']['nome'], tableConfigurations.sortableFields[1]['orderBy']['cognome'], tableConfigurations.sortableFields[2]['orderBy']['dataNascita']]);
+    }, useEffectDependencies);
 
 
     const forward = (k) => {

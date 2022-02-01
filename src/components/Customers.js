@@ -22,11 +22,11 @@ const Customers = ({logout}) => {
 
     const [customers, setCustomers] = useState([]);
 
-    const [nome, setNome] = useState(false);
-    const [cognome, setCognome] = useState(false);
-    const [dataNascita, setDataNascita] = useState(false);
-    const [cf, setCf] = useState(false);
-    const [email, setEmail] = useState(false);
+    const [nome, setNome] = useState(true);
+    const [cognome, setCognome] = useState(true);
+    const [dataNascita, setDataNascita] = useState(true);
+    const [cf, setCf] = useState(true);
+    const [email, setEmail] = useState(true);
 
     const [pagesArray, setPagesArray] = useState([1,2,3]);
 
@@ -40,11 +40,22 @@ const Customers = ({logout}) => {
     const [orderTypeCf, setOrderTypeCf] = useState('asc');
     const [orderTypeEmail, setOrderTypeEmail] = useState('asc');
 
-    const [buttonState, setButtonState] = useState(false);
+    const [buttonNameState, setButtonNameState] = useState(0);
+    const [buttonSurnameState, setButtonSurnameState] = useState(0);
+    const [buttonDateState, setButtonDateState] = useState(0);
+    const [buttonCfState, setButtonCfState] = useState(0);
+    const [buttonEmailState, setButtonEmailState] = useState(0);
 
     // functions that switch the orderType between 'asc' and 'desc'
     const flipOrderType = (type) => {
-        return type === 'asc' ? 'desc' : 'asc'
+        switch (type){
+            case 0:
+                return 'asc'
+            case 1:
+                return 'desc'
+            case 2:
+                return ''
+        }
     }
 
     // change the state: {0,1,2} -> {inactive, asc, desc}
@@ -88,11 +99,11 @@ const Customers = ({logout}) => {
                 },
                 orderType: {orderTypeNome},
                 changeOrderType() {
-                    setOrderTypeNome(flipOrderType(orderTypeNome))
+                    setOrderTypeNome(flipOrderType(buttonNameState))
                 },
-                state: {buttonState},
+                state: {buttonNameState},
                 changeState() {
-                    setButtonState(shiftState(buttonState))
+                    setButtonNameState(shiftState(buttonNameState))
                 },
             }, {
                 field: 'cognome',
@@ -102,7 +113,11 @@ const Customers = ({logout}) => {
                 },
                 orderType: {orderTypeCognome},
                 changeOrderType() {
-                    setOrderTypeCognome(flipOrderType(orderTypeCognome))
+                    setOrderTypeCognome(flipOrderType(buttonSurnameState))
+                },
+                state: {buttonSurnameState},
+                changeState() {
+                    setButtonSurnameState(shiftState(buttonSurnameState))
                 },
             }, {
                 field: 'dataNascita',
@@ -112,7 +127,11 @@ const Customers = ({logout}) => {
                 },
                 orderType: {orderTypeDataNascita},
                 changeOrderType() {
-                    setOrderTypeDataNascita(flipOrderType(orderTypeDataNascita))
+                    setOrderTypeDataNascita(flipOrderType(buttonDateState))
+                },
+                state: {buttonDateState},
+                changeState() {
+                    setButtonDateState(shiftState(buttonDateState))
                 },
             }, {
                 field: 'cf',
@@ -122,7 +141,11 @@ const Customers = ({logout}) => {
                 },
                 orderType: {orderTypeCf},
                 changeOrderType() {
-                    setOrderTypeCf(flipOrderType(orderTypeCf))
+                    setOrderTypeCf(flipOrderType(buttonCfState))
+                },
+                state: {buttonCfState},
+                changeState() {
+                    setButtonCfState(shiftState(buttonCfState))
                 },
             }, {
                 field: 'email',
@@ -132,7 +155,11 @@ const Customers = ({logout}) => {
                 },
                 orderType: {orderTypeEmail},
                 changeOrderType() {
-                    setOrderTypeEmail(flipOrderType(orderTypeEmail))
+                    setOrderTypeEmail(flipOrderType(buttonEmailState))
+                },
+                state: {buttonEmailState},
+                changeState() {
+                    setButtonEmailState(shiftState(buttonEmailState))
                 },
             }]
         }
@@ -145,25 +172,30 @@ const Customers = ({logout}) => {
     const changeOrder = (param, index) => {
         switch (param[index].field) {
             case 'nome':
-                param[index].setState()
+                /*param[index].setState()*/
                 param[index].changeOrderType()
+                param[index].changeState()
                 break
             case 'cognome':
-                param[index].setState()
+                /*param[index].setState()*/
                 param[index].changeOrderType()
+                param[index].changeState()
                 break
             case 'dataNascita':
-                param[index].setState()
+                /*param[index].setState()*/
                 param[index].changeOrderType()
+                param[index].changeState()
                 //console.log(index)
                 break
             case 'cf':
-                param[index].setState()
+                /*param[index].setState()*/
                 param[index].changeOrderType()
+                param[index].changeState()
                 break
             case 'email':
-                param[index].setState()
+                /*param[index].setState()*/
                 param[index].changeOrderType()
+                param[index].changeState()
                 break
         }
     }
