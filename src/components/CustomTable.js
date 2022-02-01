@@ -2,7 +2,7 @@ import {Table} from 'react-bootstrap'
 import Button from "./Button";
 import React, {useEffect} from 'react';
 
-import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill } from 'react-icons/bs';
+import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillPauseFill } from 'react-icons/bs';
 import Pagination from "./Pagination";
 
 /**
@@ -14,9 +14,9 @@ import Pagination from "./Pagination";
  */
 const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
 
-    useEffect(() => {
-        console.log(tableConfigurations.sortableFields[2].orderBy['dataNascita'])
-    }, [tableConfigurations.sortableFields[2].orderBy]);
+/*    useEffect(() => {
+        //console.log(tableConfigurations.sortableFields[2].orderBy['dataNascita'])
+    }, [tableConfigurations.sortableFields[2].orderBy]);*/
 
 
     /**
@@ -79,7 +79,7 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
                     </tr>
                 </thead>
                 <tbody>
-                {lista.map(
+                {tableConfigurations.list.customers.map(
                     (el, index) =>
                         <tr key={index} style={{textAlign: 'center'}}>
                             <td key={index}>{index}</td>
@@ -92,7 +92,7 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
                 )}
                 </tbody>
             </Table>
-            <Pagination />
+            <Pagination tableConfigurations={tableConfigurations}/>
         </>
     );
 };
