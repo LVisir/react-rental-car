@@ -12,7 +12,7 @@ import Pagination from "./Pagination";
  * @returns {JSX.Element}
  * @constructor
  */
-const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
+const CustomTable = ({ tableConfigurations, changeOrder }) => {
 
 /*    useEffect(() => {
         //console.log(tableConfigurations.sortableFields[2].orderBy['dataNascita'])
@@ -33,14 +33,8 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
         )
     }
 
-    const testFunction = (param) => {
-        if(param.field==='nome'){
-            param.setState()
-        }
-    }
-
+    // different style based on the 'tableConfigurations.sortableFields.state' value
     const sortStyle = (sortableFields, index) => {
-        //console.log(Object.entries(sortableFields.state)[0][1])
         switch (Object.entries(sortableFields.state)[0][1]){
             case 0:
                 return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
@@ -52,14 +46,14 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
     }
 
     /**
-     * Ragionamento:
-     * - creo tabella con <th> uguale a 'campi' dato in input
-     * - per ogni elemento della lista creo una nuova riga e per ogni riga:
-     *  - creo x colonne in base al numero di campi (map dentro un map)
+     * Explanation:
+     *   - from 'tableConfiguraitons' I'm iterating through the 'sortableFields' to set headers of the table;
+     *   - for each element I'm checking if that object can be sort: if yes I will put some button to interact with the table, otherwise nothing;
+     *      - for example in <td colspan .../> I'm checking if this is true so the column shold take 2 columns: 1 for the field name and 1 for the button relate to him
      *
      *  Clarifications:
      *  - React.Fragment is for empty tag that need a key;
-     *  - In 'tableConfigurations.sortableFields.filter((el) => el.field === nomeCampo).length > 0' I'm checking if in the configuration for the table that field name is sortable or not
+     *  - In 'tableConfigurations.sortableFields.filter((el) => el.orderBy)' I'm checking if in the configuration for the table that field name is sortable or not
      */
     return (
         <>
@@ -70,10 +64,10 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
                         {tableConfigurations.fieldNameDb.map(
                             (nomeCampo, index) =>
                                 <React.Fragment key={index}>
-                                    <th key={nomeCampo}>
-                                        {nomeCampo}
+                                    <th>
+                                        {tableConfigurations.fieldNameTableHeader[index]}
                                     </th>
-                                    {tableConfigurations.sortableFields.filter((el) => el.field === nomeCampo).length > 0 &&
+                                    {tableConfigurations.sortableFields.filter((el) => el.orderBy) &&
                                         <th key={index}>
                                             {
                                                 sortStyle(tableConfigurations.sortableFields[index], index)
@@ -91,7 +85,7 @@ const CustomTable = ({campi, lista, tableConfigurations, changeOrder }) => {
                     (el, index) =>
                         <tr key={index} style={{textAlign: 'center'}}>
                             <td key={index}>{index}</td>
-                            {campi.map(
+                            {tableConfigurations.fieldNameDb.map(
                                 (innerEl, innerIndex) =>
                                     <td colSpan={`${tableConfigurations.sortableFields.filter((el) => el.field === innerEl).length > 0 ? 2 : 1}`} key={innerIndex}>{el[innerEl]}</td>
                             )}

@@ -2,73 +2,74 @@ import Button from './Button';
 import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from './CustomTable';
-import { useCustomers, useUpdateCustomers } from '../service/Customer/CustomerContext';
 import CustomerService from '../service/Customer/CustomerService';
 import Header from './Header';
 import {Container} from 'react-bootstrap';
+import UsefulFunctions from "../functions/UsefulFunctions";
 
 /**
- * Page of Superuser
- * Component that uses the list Customer in the Context and use the CustomeTable component to show it
- * @param customers
+ * The basic idea is to have an object that reflect all the settings of a table.
+ * This table fields are:
+ *  - fieldNameDb : the name of the fields of the object where the table should adapt to;
+ *  - fieldNameTableHeader : the name of the field in an aesthetic way;
+ *  - pages : the total number of pages based on a limit of 10 per page;
+ *  - pageList (useState): the starter pages when the table is load;
+ *  - setPage() (useState): a function to update the 'pageList' when the user is going to the previous/antecedent page;
+ *  - currentPage (useState): the page where the user are;
+ *  - changeCurrentPage() (useState): function that change the 'currentPage' backward or forward
+ *  - list (useState): the list where the table should adapt to; in this case a list of Customer objects;
+ *  - setList() (useState): function that update the 'list'
+ *  - sortableFields : array of object that contains:
+ *      - field : name of the current field;
+ *      - orderBy (useState) : a boolean that indicate if this 'field' is sortable or not
+ *      - setState() (useState) : function that update 'orderBy' -> true/false
+ *      - orderType (useState) : indicate the type of sort -> asc/desc
+ *      - changeOrderType() (useState) : function that change 'orderType' -> from asc to desc and viceversa
+ *      - state (useState) : state of the button to change the 'orderType': {0,1,2} -> {no state, asc, desc}
+ *      - changeState() (useState) : function that shift the state; in order they are: 0 -> 1 -> 2 -> 0 -> 1 -> ... and so on
+ *  - useEffectDependencies : the variable where the useEffect have to check if they changed to be thrown
  * @param logout
- * @returns {false|JSX.Element}
+ * @returns {JSX.Element}
  * @constructor
  */
 const Customers = ({logout}) => {
 
-    // header of the table
-    const campi = ['nome','cognome','dataNascita','cf', 'email']
-
+    // list of Customer objects
     const [customers, setCustomers] = useState([]);
 
+    // Read at the beginning of the page: [orderBy, setState()]
     const [nome, setNome] = useState(true);
     const [cognome, setCognome] = useState(true);
     const [dataNascita, setDataNascita] = useState(true);
     const [cf, setCf] = useState(true);
     const [email, setEmail] = useState(true);
 
+    // Read at the beginning of the page: [pageList, setPage()]
     const [pagesArray, setPagesArray] = useState([1,2,3]);
 
+    // Read at the beginning of the page: [currentPage, changeCurrentPage()]
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [orderType, setOrderType] = useState('asc');
-
+    // Read at the beginning of the page: [orderType, changeOrderType()]
     const [orderTypeNome, setOrderTypeNome] = useState('asc');
     const [orderTypeCognome, setOrderTypeCognome] = useState('asc');
     const [orderTypeDataNascita, setOrderTypeDataNascita] = useState('asc');
     const [orderTypeCf, setOrderTypeCf] = useState('asc');
     const [orderTypeEmail, setOrderTypeEmail] = useState('asc');
 
+    // Read at the beginning of the page: [state, changeState()]
     const [buttonNameState, setButtonNameState] = useState(0);
     const [buttonSurnameState, setButtonSurnameState] = useState(0);
     const [buttonDateState, setButtonDateState] = useState(0);
     const [buttonCfState, setButtonCfState] = useState(0);
     const [buttonEmailState, setButtonEmailState] = useState(0);
 
-    // functions that switch the orderType between 'asc' and 'desc'
-    const flipOrderType = (type) => {
-        switch (type){
-            case 0:
-                return 'asc'
-            case 1:
-                return 'desc'
-            case 2:
-                return ''
-        }
-    }
+    const { flipOrderType, shiftState } = UsefulFunctions()
 
-    // change the state: {0,1,2} -> {inactive, asc, desc}
-    const shiftState = (state) => {
-        let y = state + 1
-        return y%3
-    }
-
-    // usato per gestire il logout
     const navigate = useNavigate()
 
-    // fetch list of Customers
-    const { customersLength, customQueryCustomers } = CustomerService()
+    // fetch necessary data from CustomerService
+    const { customersLength, customQueryCustomers, changeOrder } = CustomerService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
@@ -161,50 +162,12 @@ const Customers = ({logout}) => {
                 changeState() {
                     setButtonEmailState(shiftState(buttonEmailState))
                 },
-            }]
+            }],
+            useEffectDependencies: [currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
         }
 
     /**
-     * This function is for changing the order settings in the table configuration
-     * @param param
-     * @param index
-     */
-    const changeOrder = (param, index) => {
-        switch (param[index].field) {
-            case 'nome':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'cognome':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'dataNascita':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                //console.log(index)
-                break
-            case 'cf':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'email':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-        }
-    }
-
-    /**
-     * The goal of this useEffect is to check if the list of Customers in the Context are not empty
-     * if not it means maybe that the page was reloaded so the Context lose their data, so we have to fetch them again
-     * and update the Context with this fetched data;
-     * otherwise use the data in the Context;
+     * On render fetch the data
      */
     useEffect( () => {
         const fetchCustomers = async () => {
@@ -231,7 +194,7 @@ const Customers = ({logout}) => {
                     Customers
                     <Button color={'green'} text={'Aggiungi'} onClickDo={move}/>
                 </h3>
-                <CustomTable lista={customers} campi={campi} tableConfigurations={tableConfigurations} changeOrder={changeOrder} />
+                <CustomTable tableConfigurations={tableConfigurations} changeOrder={changeOrder} />
             </Container>
         </>
     ) : (
