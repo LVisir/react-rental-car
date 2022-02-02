@@ -1,10 +1,7 @@
 import { useCustomers, useUpdateCustomers } from './CustomerContext';
+import UsefulFunctions from "../../functions/UsefulFunctions";
 
 const CustomerService = () => {
-
-    let customers = useCustomers()
-
-    let updateCustomers = useUpdateCustomers()
 
     // path to fetch the list of Customer from the server
     const customersPath = 'http://localhost:5001/customer'
@@ -27,7 +24,7 @@ const CustomerService = () => {
     }
 
     // add Customer
-    const addCustomer = async (customer) => {
+/*    const addCustomer = async (customer) => {
         const response = await fetch(
             customersPath,
             {
@@ -46,7 +43,7 @@ const CustomerService = () => {
         // aggiorno tasks aggiungendo il nuovo task
         updateCustomers([...customers, data])
 
-    }
+    }*/
 
     /**
      * This function is for changing the orderType and the buttonState settings in the table configuration
@@ -85,11 +82,10 @@ const CustomerService = () => {
         }
     }
 
-    const fieldNameDb = ['nome','cognome','dataNascita','cf', 'email']
-    const fieldNameTableHeader = ['Nome', 'Cognome', 'Data nascita', 'Cod. fiscale', 'Email']
+    const field = ['nome','cognome','dataNascita','cf', 'email']
+    const fieldHeader = ['Nome', 'Cognome', 'Data nascita', 'Cod. fiscale', 'Email']
 
-
-    return {customersPath, getCustomers, addCustomer, customQueryCustomers, customersLength, changeOrder, fieldNameDb, fieldNameTableHeader}
+    return {customersPath, getCustomers, customQueryCustomers, customersLength, changeOrder, field, fieldHeader}
 };
 
 export default CustomerService;

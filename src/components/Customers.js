@@ -69,7 +69,7 @@ const Customers = ({logout}) => {
     const navigate = useNavigate()
 
     // fetch necessary data from CustomerService
-    const { customersLength, customQueryCustomers, changeOrder } = CustomerService()
+    const { customersLength, customQueryCustomers, changeOrder, field, fieldHeader } = CustomerService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
@@ -77,8 +77,8 @@ const Customers = ({logout}) => {
     // configuration for the table where the data will be showed
     const tableConfigurations =
         {
-            fieldNameDb: ['nome','cognome','dataNascita','cf', 'email'],
-            fieldNameTableHeader: ['Nome', 'Cognome', 'Data nascita', 'Cod. fiscale', 'Email'],
+            fieldNameDb: field,
+            fieldNameTableHeader: fieldHeader,
             pages: {customersLength},
             pageList: {pagesArray},
             setPage(newPagesArray) {
@@ -164,6 +164,7 @@ const Customers = ({logout}) => {
                 },
             }],
             useEffectDependencies: [currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
+            startPath: `http://localhost:5001/customer`,
         }
 
     /**

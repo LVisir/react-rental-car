@@ -42,7 +42,20 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                 return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
             case 2:
                 return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)}  />
+            default:
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)}  />
         }
+    }
+
+    const test = (index, sortableField) => {
+        /*console.log(Object.entries(sortableField.orderBy)[0][1]+' '+Object.entries(sortableField.orderBy)[0][0])*/
+        return (
+            <th key={index}>
+                {
+                    sortStyle(sortableField, index)
+                }
+            </th>
+        )
     }
 
     /**
@@ -67,21 +80,32 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                                     <th>
                                         {tableConfigurations.fieldNameTableHeader[index]}
                                     </th>
-                                    {tableConfigurations.sortableFields.filter((el) => el.orderBy) &&
+                                    {/*{tableConfigurations.sortableFields.map((el) => {
+                                        Object.entries(el.orderBy)[0][1] && sortStyle(el, index)
+                                    })}*/}
+                                    {
+                                        Object.entries(tableConfigurations.sortableFields[index].orderBy)[0][1] &&
                                         <th key={index}>
                                             {
                                                 sortStyle(tableConfigurations.sortableFields[index], index)
                                             }
                                         </th>
                                     }
+                                    {/*{tableConfigurations.sortableFields.filter((el) => el.orderBy) &&
+                                        <th key={index}>
+                                            {
+                                                sortStyle(tableConfigurations.sortableFields[index], index)
+                                            }
+                                        </th>
+                                    }*/}
                                 </React.Fragment>
 
                         )}
-                        {sessionStorage.getItem('superuser')!=null && <th>Azioni</th>}
+                        {/*{sessionStorage.getItem('superuser')!=null && <th>Azioni</th>}*/}
                     </tr>
                 </thead>
                 <tbody>
-                {tableConfigurations.list.customers.map(
+                {Object.entries(tableConfigurations.list)[0][1].map(
                     (el, index) =>
                         <tr key={index} style={{textAlign: 'center'}}>
                             <td key={index}>{index}</td>
@@ -89,7 +113,7 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                                 (innerEl, innerIndex) =>
                                     <td colSpan={`${tableConfigurations.sortableFields.filter((el) => el.field === innerEl).length > 0 ? 2 : 1}`} key={innerIndex}>{el[innerEl]}</td>
                             )}
-                            {sessionStorage.getItem('superuser')!=null && superuserActions()}
+                            {/*{sessionStorage.getItem('superuser')!=null && superuserActions()}*/}
                         </tr>
                 )}
                 </tbody>

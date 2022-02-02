@@ -7,47 +7,161 @@ import { useBookings, useUpdateBookings } from '../service/Booking/BookingContex
 import BookingService from "../service/Booking/BookingService";
 import Header from "./Header";
 import {Container} from "react-bootstrap";
+import UsefulFunctions from "../functions/UsefulFunctions";
 /*import { fetchReservationsByCustomerId } from '../service/Booking/BookingService';*/
 
-/**
- * Component that show all the Bookings of a given Customer
- * retrieve the Bookings from the Context and use the CustomTable to show its
- * @param fetchReservations
- * @param logout
- * @param superusers
- * @param customers
- * @returns {JSX.Element}
- * @constructor
- */
 const Reservations = ({bookingsPath, logout}) => {
 
-    // retrieve the list of bookings from the BookingsContext
-    let bookings = useBookings()
+    const [bookings, setBookings] = useState([]);
 
-    // hook to update the bookings in the BookingsContext
-    const updateBookings = useUpdateBookings()
-
-    const campi = ['inizio','fine','codice','customer','veicolo']
-
-    const {fetchReservationsByCustomerId } = BookingService()
+    const { getBookings, customQueryBookings, bookingsLength, changeOrder, field, fieldHeader } = BookingService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
 
-    /**
-     * The goal of this useEffect is to check if the list of Bookings in the Context are not empty
-     * if not it means maybe that the page was reloaded so the Context lose their data, so we have to fetch them again
-     * and update the Context with this fetched data;
-     * otherwise use the data in the Context;
-     */
-    useEffect(async () => {
-        if(bookings.length === 0){
-            bookings = await fetchReservationsByCustomerId(bookingsPath, sessionStorage.getItem('customer'))
-            updateBookings(bookings)
+    // sortable fields
+    const [codice, setCodice] = useState(true);
+    const [inizio, setInizio] = useState(true);
+    const [fine, setFine] = useState(true);
+    const [customer, setCustomer] = useState(true);
+    const [veicolo, setVeicolo] = useState(true);
+    const [approvazione, setApprovazione] = useState(false);
+
+    // pages shown per page
+    const [pagesArray, setPagesArray] = useState([1,2,3]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // indicates the order of the fields -> {asc|desc}
+    const [orderTypeCodice, setOrderTypeCodice] = useState('asc');
+    const [orderTypeInizio, setOrderTypeInizio] = useState('asc');
+    const [orderTypeFine, setOrderTypeFine] = useState('asc');
+    const [orderTypeCustomer, setOrderTypeCustomer] = useState('asc');
+    const [orderTypeVeicolo, setOrderTypeVeicolo] = useState('asc');
+
+    // state of the button near the fields
+    const [buttonCodiceState, setButtonCodiceState] = useState(0);
+    const [buttonInizioState, setButtonInizioState] = useState(0);
+    const [buttonFineState, setButtonFineState] = useState(0);
+    const [buttonCustomerState, setButtonCustomerState] = useState(0);
+    const [buttonVeicoloState, setButtonVeicoloState] = useState(0);
+
+    const { flipOrderType, shiftState } = UsefulFunctions()
+
+    const navigate = useNavigate()
+
+    // configuration for the table where the data will be showed
+    const tableConfigurations =
+        {
+            fieldNameDb: field,
+            fieldNameTableHeader: fieldHeader,
+            pages: {bookingsLength},
+            pageList: {pagesArray},
+            setPage(newPagesArray) {
+                setPagesArray(newPagesArray)
+            },
+            currentPage: {currentPage},
+            changeCurrentPage(x) {
+                setCurrentPage(x)
+            },
+            list: {bookings},
+            setList(newList) {
+                setBookings(newList)
+            },
+            sortableFields: [{
+                field: 'codice',
+                orderBy: {codice},
+                setState() {
+                    setCodice(!codice)
+                },
+                orderType: {orderTypeCodice},
+                changeOrderType() {
+                    setOrderTypeCodice(flipOrderType(buttonCodiceState))
+                },
+                state: {buttonCodiceState},
+                changeState() {
+                    setButtonCodiceState(shiftState(buttonCodiceState))
+                },
+            }, {
+                field: 'inizio',
+                orderBy: {inizio},
+                setState() {
+                    setInizio(!inizio)
+                },
+                orderType: {orderTypeInizio},
+                changeOrderType() {
+                    setOrderTypeInizio(flipOrderType(buttonInizioState))
+                },
+                state: {buttonInizioState},
+                changeState() {
+                    setButtonInizioState(shiftState(buttonInizioState))
+                },
+            }, {
+                field: 'fine',
+                orderBy: {fine},
+                setState() {
+                    setFine(!fine)
+                },
+                orderType: {orderTypeFine},
+                changeOrderType() {
+                    setOrderTypeFine(flipOrderType(buttonFineState))
+                },
+                state: {buttonFineState},
+                changeState() {
+                    setButtonFineState(shiftState(buttonFineState))
+                },
+            }, {
+                field: 'customer',
+                orderBy: {customer},
+                setState() {
+                    setCustomer(!customer)
+                },
+                orderType: {orderTypeCustomer},
+                changeOrderType() {
+                    setOrderTypeCustomer(flipOrderType(buttonCustomerState))
+                },
+                state: {buttonCustomerState},
+                changeState() {
+                    setButtonCustomerState(shiftState(buttonCustomerState))
+                },
+            }, {
+                field: 'veicolo',
+                orderBy: {veicolo},
+                setState() {
+                    setVeicolo(!veicolo)
+                },
+                orderType: {orderTypeVeicolo},
+                changeOrderType() {
+                    setOrderTypeVeicolo(flipOrderType(buttonVeicoloState))
+                },
+                state: {buttonVeicoloState},
+                changeState() {
+                    setButtonVeicoloState(shiftState(buttonVeicoloState))
+                },
+            }, {
+                field: 'approvazione',
+                orderBy: {approvazione},
+                setState() {
+                    setApprovazione(!approvazione)
+                },
+            }],
+            useEffectDependencies: [currentPage, buttonCodiceState, buttonInizioState, buttonFineState, buttonCustomerState, buttonVeicoloState],
+            startPath: 'http://localhost:5001/prenotazione',
         }
 
-        setLoading(true)
+    /**
+     * On render fetch the data
+     */
+    useEffect( () => {
+        const fetchBookings = async () => {
+            const data = await getBookings('?_limit=10')
 
+            return data
+        }
+
+        fetchBookings().then(r => setBookings(r))
+
+        setLoading(true)
     }, []);
 
     return loading ? (
@@ -55,7 +169,8 @@ const Reservations = ({bookingsPath, logout}) => {
             <Header logout={logout} />
             <Container className={'my-2'}>
                 <h3>Prenotazioni</h3>
-                <CustomTable campi={campi} lista={bookings}/>
+                <CustomTable tableConfigurations={tableConfigurations} changeOrder={changeOrder}/>
+                {/*{console.log(Object.entries(tableConfigurations.sortableFields[5].orderBy)[0][1])}*/}
             </Container>
         </>
     ) : (

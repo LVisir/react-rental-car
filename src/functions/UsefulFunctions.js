@@ -71,7 +71,32 @@ const UsefulFunctions = () => {
         return {sortPath, orderPath}
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath}
+    const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
+        let data
+        if(sortPath!=='' && orderPath!==''){
+            console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
+            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            data = await response.json()
+            //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
+        }
+        else{
+            console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
+            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`))
+            data = await response.json()
+            //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
+        }
+        return data
+    }
+
+    // custom the queries to apply pagination, sorting, filtering ecc
+    const customQuery = async (startPath, endPath) => {
+        console.log(startPath.concat(endPath))
+        const response = await fetch(startPath+endPath)
+        const customers = await response.json()
+        return customers
+    }
+
+    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery}
 
 };
 

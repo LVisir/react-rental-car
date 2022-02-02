@@ -1,12 +1,10 @@
-import {useEffect, useState} from 'react';
-import CustomerService from "../service/Customer/CustomerService";
-import UsefulFunctions from "../functions/UsefulFunctions";
+import {useEffect} from 'react';
+import CustomerService from '../service/Customer/CustomerService';
+import UsefulFunctions from '../functions/UsefulFunctions';
 
 const Pagination = ({tableConfigurations}) => {
 
-    const { customQueryCustomers } = CustomerService()
-
-    const { buildPath } = UsefulFunctions()
+    const { buildPath, askServer, customQuery } = UsefulFunctions()
 
     const { sortPath, orderPath } = buildPath(tableConfigurations.sortableFields)
 
@@ -14,20 +12,11 @@ const Pagination = ({tableConfigurations}) => {
      * If the currentPage changed, send the request by sending some info from the tableConfigurations
      */
     useEffect(() => {
-        const getCustomers = async () => {
-            let data
-            if(sortPath!=='' && orderPath!==''){
-                console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
-                data = await customQueryCustomers(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
-            }
-            else{
-                console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
-                data = await customQueryCustomers(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
-            }
-            return data
+        const getListObjects = async () => {
+            return await askServer(sortPath, orderPath, tableConfigurations, customQuery, tableConfigurations.startPath)
         }
 
-        getCustomers().then(r => tableConfigurations.setList(r))
+        getListObjects().then(r => tableConfigurations.setList(r))
 
     }, tableConfigurations.useEffectDependencies);
 
@@ -65,8 +54,8 @@ const Pagination = ({tableConfigurations}) => {
                             <button className='page-link' style={{cursor: 'pointer'}} onClick={() => tableConfigurations.changeCurrentPage(page)}>{page}</button>
                         </li>)}
                     <li
-                        className={`page-item ${tableConfigurations.pageList.pagesArray[2]===tableConfigurations.pages.customersLength && 'disabled'}`}
-                        style={{cursor: `${tableConfigurations.pageList.pagesArray[2]===tableConfigurations.pages.customersLength ? 'default' : 'pointer'}`}}
+                        className={`page-item ${tableConfigurations.pageList.pagesArray[2] === Object.entries(tableConfigurations.pages)[0][1] && 'disabled'}`}
+                        style={{cursor: `${tableConfigurations.pageList.pagesArray[2] === Object.entries(tableConfigurations.pages)[0][1] ? 'default' : 'pointer'}`}}
                     >
                         <button className='page-link' style={{cursor: 'pointer'}} onClick={() => forward(tableConfigurations.currentPage.currentPage+=1)}>Next</button>
                     </li>
