@@ -34,7 +34,7 @@ const BookingService = () => {
     const bookingsPath = 'http://localhost:5001/prenotazione'
 
     // length of: (all the Prenotazione objects/10) (normally get from BE)
-    const bookingsLength = 3
+    const bookingsLength = 4
 
     /**
      * This function is for changing the orderType and the buttonState settings in the table configuration
