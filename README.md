@@ -1,3 +1,7 @@
+# Import
+To try it, by now, enter as email: 'edoardo.aaab@email.com' password: '1234' (the only Superuser in the db). Try the path '/' and '/Bookings'
+to test the table and how u can interact with it. Other test are not debugged. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
