@@ -147,6 +147,7 @@ const Reservations = ({bookingsPath, logout}) => {
             }],
             useEffectDependencies: [currentPage, buttonCodiceState, buttonInizioState, buttonFineState, buttonCustomerState, buttonVeicoloState],
             startPath: 'http://localhost:5001/prenotazione',
+            tableName: 'PRENOTAZIONE',
         }
 
     /**

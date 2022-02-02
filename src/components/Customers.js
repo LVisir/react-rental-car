@@ -165,6 +165,7 @@ const Customers = ({logout}) => {
             }],
             useEffectDependencies: [currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
             startPath: `http://localhost:5001/customer`,
+            tableName: 'CUSTOMER',
         }
 
     /**

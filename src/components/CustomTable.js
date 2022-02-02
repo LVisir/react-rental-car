@@ -101,7 +101,7 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                                 </React.Fragment>
 
                         )}
-                        {/*{sessionStorage.getItem('superuser')!=null && <th>Azioni</th>}*/}
+                        {sessionStorage.getItem('superuser')!=null  && tableConfigurations.tableName === 'CUSTOMER' && <th>Azioni</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -113,7 +113,7 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                                 (innerEl, innerIndex) =>
                                     <td colSpan={`${tableConfigurations.sortableFields.filter((el) => el.field === innerEl).length > 0 ? 2 : 1}`} key={innerIndex}>{el[innerEl]}</td>
                             )}
-                            {/*{sessionStorage.getItem('superuser')!=null && superuserActions()}*/}
+                            {sessionStorage.getItem('superuser')!=null && tableConfigurations.tableName === 'CUSTOMER' && superuserActions()}
                         </tr>
                 )}
                 </tbody>
