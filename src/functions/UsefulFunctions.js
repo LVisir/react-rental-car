@@ -40,6 +40,12 @@ const UsefulFunctions = () => {
         return {a,b}
     }
 
+    const resetSortAndOrderType = (sortableFields) => {
+        sortableFields.map((element) => {
+            element.reset()
+        })
+    }
+
     // take from the tableConfigurations the fields to sort by and their order type (asc|desc)
     const buildPath = (sortableFields) => {
         let sort = []
@@ -73,18 +79,19 @@ const UsefulFunctions = () => {
 
     const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
         let data
-        if(sortPath!=='' && orderPath!==''){
+        if(tableConfigurations.searchInfoText() === ''){
+            console.log('dio')
             console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
             const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
             data = await response.json()
-            //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
         }
         else{
-            console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10`)
-            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10`))
+            console.log(tableConfigurations.searchInfoText())
+            console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}&${tableConfigurations.searchInfoField()}=${tableConfigurations.searchInfoText()}`)
+            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}&${tableConfigurations.searchInfoField()}=${tableConfigurations.searchInfoText()}`))
             data = await response.json()
-            //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
         }
+
         return data
     }
 
@@ -107,7 +114,7 @@ const UsefulFunctions = () => {
         sortableField.changeState()
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder}
+    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder, resetSortAndOrderType}
 
 };
 

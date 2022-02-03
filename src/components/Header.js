@@ -2,16 +2,24 @@ import {Container, Form, FormControl, Nav, Navbar, NavDropdown, Button} from "re
 import Logout from "./Logout";
 import { useNavigate } from 'react-router-dom';
 import {useEffect, useState} from "react";
+import UsefulFunctions from "../functions/UsefulFunctions";
 
-const Header = ({logout, links, filters}) => {
+const Header = ({logout, links, tableConfigurations}) => {
 
     const navigate = useNavigate()
-    const [filterTitle, setFilterTitle] = useState('Search by: '+filters.filter((element) => element.orderBy())[0].field);
+    const [filterTitle, setFilterTitle] = useState(tableConfigurations.sortableFields.filter((element) => element.hasOwnProperty('orderBy'))[0].field);
 
-/*    useEffect(() => {
+    const [search, setSearch] = useState('');
+    const [searchClicked, setSearchClicked] = useState(false);
 
-    }, [filterTitle]);*/
+    const { resetSortAndOrderType } = UsefulFunctions()
 
+    const searchData = () => {
+        tableConfigurations.setSearchInfoText(search)
+        tableConfigurations.setSearchInfoField(filterTitle)
+        tableConfigurations.currentPage() === 1 ? tableConfigurations.searchButtonClicked() : tableConfigurations.changeCurrentPage(1)
+        setSearch('')
+    }
 
     return (
         <Navbar expand="lg" bg="dark" variant="dark">
@@ -36,21 +44,23 @@ const Header = ({logout, links, filters}) => {
                     >
                         <Logout logout={logout} />
                         <NavDropdown title={filterTitle} id="navbarScrollingDropdown">
-                            {filters.filter((element) => element.orderBy())
+                            {tableConfigurations.sortableFields.filter((element) => element.orderBy())
                                 .map((element) =>
-                                    <NavDropdown.Item key={element.field} onClick={() => setFilterTitle('Search by: '+element.field)}>
+                                    <NavDropdown.Item key={element.field} onClick={() => setFilterTitle(element.field)}>
                                         {element.field}
                                     </NavDropdown.Item>)}
                         </NavDropdown>
                     </Nav>
-                    <Form className="d-flex">
+                    <Form className="d-flex" >
                         <FormControl
                             type="search"
                             placeholder="Search"
                             className="me-2"
                             aria-label="Search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
-                        <Button variant="outline-success">Search</Button>
+                        <Button onClick={() => searchData()} variant="outline-success">Search</Button>
                     </Form>
                 </Navbar.Collapse>
             </Container>

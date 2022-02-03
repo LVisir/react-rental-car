@@ -50,6 +50,10 @@ const Reservations = ({bookingsPath, logout, links}) => {
 
     const navigate = useNavigate()
 
+    const [searchField, setSearchField] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [searchButton, setSearchButton] = useState(false);
+
     // configuration for the table where the data will be showed
     const tableConfigurations =
         {
@@ -57,95 +61,62 @@ const Reservations = ({bookingsPath, logout, links}) => {
             fieldNameTableHeader: fieldHeader,
             pages() {return bookingsLength},
             pageList() {return pagesArray},
-            setPage(newPagesArray) {
-                setPagesArray(newPagesArray)
-            },
+            setPage(newPagesArray) {setPagesArray(newPagesArray)},
             currentPage() {return currentPage},
-            changeCurrentPage(x) {
-                setCurrentPage(x)
-            },
+            changeCurrentPage(x) {setCurrentPage(x)},
             list() {return bookings},
-            setList(newList) {
-                setBookings(newList)
-            },
+            setList(newList) {setBookings(newList)},
+            searchInfoField() { return searchField },
+            setSearchInfoField(x) { setSearchField(x) },
+            searchInfoText() { return searchText },
+            setSearchInfoText(x) { setSearchText(x) },
+            searchButtonClicked() { setSearchButton(!searchButton) },
             sortableFields: [{
                 field: 'codice',
                 orderBy() {return codice},
-                setState() {
-                    setCodice(!codice)
-                },
+                setState() {setCodice(!codice)},
                 orderType() {return orderTypeCodice},
-                changeOrderType() {
-                    setOrderTypeCodice(flipOrderType(buttonCodiceState))
-                },
+                changeOrderType() {setOrderTypeCodice(flipOrderType(buttonCodiceState))},
                 state() {return buttonCodiceState},
-                changeState() {
-                    setButtonCodiceState(shiftState(buttonCodiceState))
-                },
+                changeState() {setButtonCodiceState(shiftState(buttonCodiceState))},
             }, {
                 field: 'inizio',
                 orderBy() {return inizio},
-                setState() {
-                    setInizio(!inizio)
-                },
+                setState() {setInizio(!inizio)},
                 orderType() {return orderTypeInizio},
-                changeOrderType() {
-                    setOrderTypeInizio(flipOrderType(buttonInizioState))
-                },
+                changeOrderType() {setOrderTypeInizio(flipOrderType(buttonInizioState))},
                 state() {return buttonInizioState},
-                changeState() {
-                    setButtonInizioState(shiftState(buttonInizioState))
-                },
+                changeState() {setButtonInizioState(shiftState(buttonInizioState))},
             }, {
                 field: 'fine',
                 orderBy() {return fine},
-                setState() {
-                    setFine(!fine)
-                },
+                setState() {setFine(!fine)},
                 orderType() {return orderTypeFine},
-                changeOrderType() {
-                    setOrderTypeFine(flipOrderType(buttonFineState))
-                },
+                changeOrderType() {setOrderTypeFine(flipOrderType(buttonFineState))},
                 state() {return buttonFineState},
-                changeState() {
-                    setButtonFineState(shiftState(buttonFineState))
-                },
+                changeState() {setButtonFineState(shiftState(buttonFineState))},
             }, {
                 field: 'customer',
                 orderBy() {return customer},
-                setState() {
-                    setCustomer(!customer)
-                },
+                setState() {setCustomer(!customer)},
                 orderType() {return orderTypeCustomer},
-                changeOrderType() {
-                    setOrderTypeCustomer(flipOrderType(buttonCustomerState))
-                },
+                changeOrderType() {setOrderTypeCustomer(flipOrderType(buttonCustomerState))},
                 state() {return buttonCustomerState},
-                changeState() {
-                    setButtonCustomerState(shiftState(buttonCustomerState))
-                },
+                changeState() {setButtonCustomerState(shiftState(buttonCustomerState))},
             }, {
                 field: 'veicolo',
                 orderBy() {return veicolo},
-                setState() {
-                    setVeicolo(!veicolo)
-                },
+                setState() {setVeicolo(!veicolo)},
                 orderType() {return orderTypeVeicolo},
-                changeOrderType() {
-                    setOrderTypeVeicolo(flipOrderType(buttonVeicoloState))
-                },
+                changeOrderType() {setOrderTypeVeicolo(flipOrderType(buttonVeicoloState))},
                 state() {return buttonVeicoloState},
-                changeState() {
-                    setButtonVeicoloState(shiftState(buttonVeicoloState))
-                },
+                changeState() {setButtonVeicoloState(shiftState(buttonVeicoloState))},
             }, {
                 field: 'approvazione',
                 orderBy() {return approvazione},
-                setState() {
-                    setApprovazione(!approvazione)
-                },
+                setState() {setApprovazione(!approvazione)},
             }],
-            useEffectDependencies: [currentPage, buttonCodiceState, buttonInizioState, buttonFineState, buttonCustomerState, buttonVeicoloState],
+            useEffectDependencies: [searchButton, currentPage, buttonCodiceState, buttonInizioState, buttonFineState, buttonCustomerState, buttonVeicoloState],
             startPath: 'http://localhost:5001/prenotazione',
             tableName: 'PRENOTAZIONE',
         }
@@ -167,7 +138,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
 
     return loading ? (
         <>
-            <Header logout={logout} links={links} filters={tableConfigurations.sortableFields}/>
+            <Header logout={logout} links={links} tableConfigurations={tableConfigurations} />
             <Container className={'my-2'}>
                 <h3>Prenotazioni</h3>
                 <CustomTable tableConfigurations={tableConfigurations} />

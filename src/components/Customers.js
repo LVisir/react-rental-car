@@ -74,6 +74,10 @@ const Customers = ({logout, links}) => {
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
 
+    const [searchField, setSearchField] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [searchButton, setSearchButton] = useState(false);
+
     // configuration for the table where the data will be showed
     const tableConfigurations =
         {
@@ -81,89 +85,58 @@ const Customers = ({logout, links}) => {
             fieldNameTableHeader: fieldHeader,
             pages() { return customersLength},
             pageList() {return pagesArray},
-            setPage(newPagesArray) {
-                setPagesArray(newPagesArray)
-            },
+            setPage(newPagesArray) { setPagesArray(newPagesArray) },
             currentPage() {return currentPage},
-            changeCurrentPage(x) {
-                setCurrentPage(x)
-            },
+            changeCurrentPage(x) { setCurrentPage(x) },
             list() {return customers},
-            setList(newList) {
-                setCustomers(newList)
-            },
+            setList(newList) { setCustomers(newList) },
+            searchInfoField() { return searchField },
+            setSearchInfoField(x) { setSearchField(x) },
+            searchInfoText() { return searchText },
+            setSearchInfoText(x) { setSearchText(x) },
+            searchButtonClicked() { setSearchButton(!searchButton) },
             sortableFields: [{
                 field: 'nome',
                 orderBy() {return nome},
-                setState() {
-                    setNome(!nome)
-                },
+                setState() {setNome(!nome)},
                 orderType() {return orderTypeNome},
-                changeOrderType() {
-                    setOrderTypeNome(flipOrderType(buttonNameState))
-                },
+                changeOrderType() {setOrderTypeNome(flipOrderType(buttonNameState))},
                 state() {return buttonNameState},
-                changeState() {
-                    setButtonNameState(shiftState(buttonNameState))
-                },
+                changeState() {setButtonNameState(shiftState(buttonNameState))},
             }, {
                 field: 'cognome',
                 orderBy() {return cognome},
-                setState() {
-                    setCognome(!cognome)
-                },
+                setState() {setCognome(!cognome)},
                 orderType() {return orderTypeCognome},
-                changeOrderType() {
-                    setOrderTypeCognome(flipOrderType(buttonSurnameState))
-                },
+                changeOrderType() {setOrderTypeCognome(flipOrderType(buttonSurnameState))},
                 state() {return buttonSurnameState},
-                changeState() {
-                    setButtonSurnameState(shiftState(buttonSurnameState))
-                },
+                changeState() {setButtonSurnameState(shiftState(buttonSurnameState))},
             }, {
                 field: 'dataNascita',
                 orderBy() {return dataNascita},
-                setState() {
-                    setDataNascita(!dataNascita)
-                },
+                setState() {setDataNascita(!dataNascita)},
                 orderType() {return orderTypeDataNascita},
-                changeOrderType() {
-                    setOrderTypeDataNascita(flipOrderType(buttonDateState))
-                },
+                changeOrderType() {setOrderTypeDataNascita(flipOrderType(buttonDateState))},
                 state() {return buttonDateState},
-                changeState() {
-                    setButtonDateState(shiftState(buttonDateState))
-                },
+                changeState() {setButtonDateState(shiftState(buttonDateState))},
             }, {
                 field: 'cf',
                 orderBy() {return cf},
-                setState() {
-                    setCf(!cf)
-                },
+                setState() {setCf(!cf)},
                 orderType() {return orderTypeCf},
-                changeOrderType() {
-                    setOrderTypeCf(flipOrderType(buttonCfState))
-                },
+                changeOrderType() {setOrderTypeCf(flipOrderType(buttonCfState))},
                 state() {return buttonCfState},
-                changeState() {
-                    setButtonCfState(shiftState(buttonCfState))
-                },
+                changeState() {setButtonCfState(shiftState(buttonCfState))},
             }, {
                 field: 'email',
                 orderBy() {return email},
-                setState() {
-                    setEmail(!email)
-                },
+                setState() {setEmail(!email)},
                 orderType() {return orderTypeEmail},
-                changeOrderType() {
-                    setOrderTypeEmail(flipOrderType(buttonEmailState))
-                },
+                changeOrderType() {setOrderTypeEmail(flipOrderType(buttonEmailState))},
                 state() {return buttonEmailState},
-                changeState() {
-                    setButtonEmailState(shiftState(buttonEmailState))
-                },
+                changeState() {setButtonEmailState(shiftState(buttonEmailState))},
             }],
-            useEffectDependencies: [currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
+            useEffectDependencies: [searchButton, currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
             startPath: `http://localhost:5001/customer`,
             tableName: 'CUSTOMER',
         }
@@ -190,7 +163,7 @@ const Customers = ({logout, links}) => {
     // wait for the customers loading
     return loading ? (
         <>
-            <Header logout={logout} links={links} filters={tableConfigurations.sortableFields}/>
+            <Header logout={logout} links={links} tableConfigurations={tableConfigurations} />
             <Container className={'my-2'}>
                 <h3>
                     Customers

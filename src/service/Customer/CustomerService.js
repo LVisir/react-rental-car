@@ -6,7 +6,7 @@ const CustomerService = () => {
     // path to fetch the list of Customer from the server
     const customersPath = 'http://localhost:5001/customer'
 
-    // normally this length came from the BE
+    // normally this length came from the BE; is the upperBound[(length of customers)/(data per page)]
     const customersLength = 10
 
     // function to fetch the list of Customers
