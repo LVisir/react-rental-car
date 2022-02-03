@@ -22,9 +22,10 @@ const Pagination = ({tableConfigurations}) => {
 
     // change the page forward
     const forward = (k) => {
-        if(tableConfigurations.pageList.pagesArray.at(-1) < tableConfigurations.currentPage.currentPage){
+        k+=1
+        if(tableConfigurations.pageList().at(-1) <= tableConfigurations.currentPage()){
             let x = []
-            tableConfigurations.pageList.pagesArray.map((y) => x.push(y+=1))
+            tableConfigurations.pageList().map((y) => x.push(y+=1))
             tableConfigurations.setPage(x)
         }
         tableConfigurations.changeCurrentPage(k)
@@ -32,9 +33,10 @@ const Pagination = ({tableConfigurations}) => {
 
     // change the page backward
     const backward = (k) => {
-        if(tableConfigurations.pageList.pagesArray[0] > tableConfigurations.currentPage.currentPage){
+        k-=1
+        if(tableConfigurations.pageList()[0] >= tableConfigurations.currentPage()){
             let x = []
-            tableConfigurations.pageList.pagesArray.map((y) => x.push(y-=1))
+            tableConfigurations.pageList().map((y) => x.push(y-=1))
             tableConfigurations.setPage(x)
         }
         tableConfigurations.changeCurrentPage(k)
@@ -45,19 +47,19 @@ const Pagination = ({tableConfigurations}) => {
             <nav aria-label='Page navigation example'>
                 <ul className='pagination justify-content-end'>
                     <li
-                        className={`page-item ${tableConfigurations.pageList.pagesArray[0]===1 && 'disabled'}`}
-                        style={{cursor: `${tableConfigurations.pageList.pagesArray[0]===1 ? 'default' : 'pointer'}`}}>
-                        <button className='page-link' onClick={() => backward(tableConfigurations.currentPage.currentPage-=1)}>Previous</button>
+                        className={`page-item ${tableConfigurations.pageList()[0]===1 && 'disabled'}`}
+                        style={{cursor: `${tableConfigurations.pageList()[0]===1 ? 'default' : 'pointer'}`}}>
+                        <button className='page-link' onClick={() => backward(tableConfigurations.currentPage())}>Previous</button>
                     </li>
-                    {tableConfigurations.pageList.pagesArray.map((page) =>
-                        <li key={page} className={`page-item ${tableConfigurations.currentPage.currentPage === page && 'active'}`}>
+                    {tableConfigurations.pageList().map((page) =>
+                        <li key={page} className={`page-item ${tableConfigurations.currentPage() === page && 'active'}`}>
                             <button className='page-link' style={{cursor: 'pointer'}} onClick={() => tableConfigurations.changeCurrentPage(page)}>{page}</button>
                         </li>)}
                     <li
-                        className={`page-item ${tableConfigurations.pageList.pagesArray[2] === Object.entries(tableConfigurations.pages)[0][1] && 'disabled'}`}
-                        style={{cursor: `${tableConfigurations.pageList.pagesArray[2] === Object.entries(tableConfigurations.pages)[0][1] ? 'default' : 'pointer'}`}}
+                        className={`page-item ${tableConfigurations.pageList()[2] === tableConfigurations.pages() && 'disabled'}`}
+                        style={{cursor: `${tableConfigurations.pageList()[2] === tableConfigurations.pages() ? 'default' : 'pointer'}`}}
                     >
-                        <button className='page-link' style={{cursor: 'pointer'}} onClick={() => forward(tableConfigurations.currentPage.currentPage+=1)}>Next</button>
+                        <button className='page-link' style={{cursor: 'pointer'}} onClick={() => forward(tableConfigurations.currentPage())}>Next</button>
                     </li>
                 </ul>
             </nav>

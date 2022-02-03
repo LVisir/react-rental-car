@@ -4,6 +4,7 @@ import React, {useEffect} from 'react';
 
 import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill } from 'react-icons/bs';
 import Pagination from "./Pagination";
+import UsefulFunctions from "../functions/UsefulFunctions";
 
 /**
  * Tabella che si adatta in base ad un lista data in input ed ai suoi campi di riferimento
@@ -12,12 +13,13 @@ import Pagination from "./Pagination";
  * @returns {JSX.Element}
  * @constructor
  */
-const CustomTable = ({ tableConfigurations, changeOrder }) => {
+const CustomTable = ({ tableConfigurations }) => {
 
 /*    useEffect(() => {
         //console.log(tableConfigurations.sortableFields[2].orderBy['dataNascita'])
     }, [tableConfigurations.sortableFields[2].orderBy]);*/
 
+    const { changeOrder } = UsefulFunctions()
 
     /**
      * Nel caso il Superuser si fosse autenticato allora fornisce tali azioni
@@ -34,16 +36,16 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
     }
 
     // different style based on the 'tableConfigurations.sortableFields.state' value
-    const sortStyle = (sortableFields, index) => {
-        switch (Object.entries(sortableFields.state)[0][1]){
+    const sortStyle = (sortableField, index) => {
+        switch (sortableField.state()){
             case 0:
-                return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
+                return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => changeOrder(sortableField)} />
             case 1:
-                return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)} />
+                return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(sortableField)} />
             case 2:
-                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)}  />
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(sortableField)}  />
             default:
-                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(tableConfigurations.sortableFields, index)}  />
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => changeOrder(sortableField)}  />
         }
     }
 
@@ -84,7 +86,7 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                                         Object.entries(el.orderBy)[0][1] && sortStyle(el, index)
                                     })}*/}
                                     {
-                                        Object.entries(tableConfigurations.sortableFields[index].orderBy)[0][1] &&
+                                        tableConfigurations.sortableFields[index].orderBy() &&
                                         <th key={index}>
                                             {
                                                 sortStyle(tableConfigurations.sortableFields[index], index)
@@ -105,7 +107,7 @@ const CustomTable = ({ tableConfigurations, changeOrder }) => {
                     </tr>
                 </thead>
                 <tbody>
-                {Object.entries(tableConfigurations.list)[0][1].map(
+                {tableConfigurations.list().map(
                     (el, index) =>
                         <tr key={index} style={{textAlign: 'center'}}>
                             <td key={index}>{index}</td>

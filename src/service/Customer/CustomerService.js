@@ -51,41 +51,12 @@ const CustomerService = () => {
      * @param param
      * @param index
      */
-    const changeOrder = (param, index) => {
-        switch (param[index].field) {
-            case 'nome':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'cognome':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'dataNascita':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                //console.log(index)
-                break
-            case 'cf':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-            case 'email':
-                /*param[index].setState()*/
-                param[index].changeOrderType()
-                param[index].changeState()
-                break
-        }
-    }
+
 
     const field = ['nome','cognome','dataNascita','cf', 'email']
     const fieldHeader = ['Nome', 'Cognome', 'Data nascita', 'Cod. fiscale', 'Email']
 
-    return {customersPath, getCustomers, customQueryCustomers, customersLength, changeOrder, field, fieldHeader}
+    return {customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader}
 };
 
 export default CustomerService;

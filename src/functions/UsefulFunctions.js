@@ -45,9 +45,9 @@ const UsefulFunctions = () => {
         let sort = []
         let order = []
         sortableFields.map((element, index) => {
-            if((Object.entries(element.orderBy)[0][1]) && element.hasOwnProperty('orderBy') && (Object.entries(element.state)[0][1])!==0){
+            if(element.orderBy() && element.hasOwnProperty('orderBy') && element.state()!==0){
                 sort.push(element.field)
-                order.push(Object.entries(element['orderType'])[0][1])
+                order.push(element.orderType())
             }
         })
 
@@ -74,14 +74,14 @@ const UsefulFunctions = () => {
     const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
         let data
         if(sortPath!=='' && orderPath!==''){
-            console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
-            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
+            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
             data = await response.json()
             //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
         }
         else{
-            console.log(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
-            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`))
+            console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10`)
+            const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10`))
             data = await response.json()
             //data = await customQuery(startPath, `?_page=${tableConfigurations.currentPage.currentPage}&_limit=10`)
         }
@@ -96,7 +96,18 @@ const UsefulFunctions = () => {
         return customers
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery}
+    /**
+     * This function is for changing the orderType and the buttonState settings in the table configuration
+     * it takes a tableConfigurations and update some of his values
+     * @param param
+     * @param index
+     */
+    const changeOrder = (sortableField) => {
+        sortableField.changeOrderType()
+        sortableField.changeState()
+    }
+
+    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder}
 
 };
 

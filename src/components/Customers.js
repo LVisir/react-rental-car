@@ -69,7 +69,7 @@ const Customers = ({logout}) => {
     const navigate = useNavigate()
 
     // fetch necessary data from CustomerService
-    const { customersLength, customQueryCustomers, changeOrder, field, fieldHeader } = CustomerService()
+    const { customersLength, customQueryCustomers, field, fieldHeader } = CustomerService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
@@ -79,86 +79,86 @@ const Customers = ({logout}) => {
         {
             fieldNameDb: field,
             fieldNameTableHeader: fieldHeader,
-            pages: {customersLength},
-            pageList: {pagesArray},
+            pages() { return customersLength},
+            pageList() {return pagesArray},
             setPage(newPagesArray) {
                 setPagesArray(newPagesArray)
             },
-            currentPage: {currentPage},
+            currentPage() {return currentPage},
             changeCurrentPage(x) {
                 setCurrentPage(x)
             },
-            list: {customers},
+            list() {return customers},
             setList(newList) {
                 setCustomers(newList)
             },
             sortableFields: [{
                 field: 'nome',
-                orderBy: {nome},
+                orderBy() {return nome},
                 setState() {
                     setNome(!nome)
                 },
-                orderType: {orderTypeNome},
+                orderType() {return orderTypeNome},
                 changeOrderType() {
                     setOrderTypeNome(flipOrderType(buttonNameState))
                 },
-                state: {buttonNameState},
+                state() {return buttonNameState},
                 changeState() {
                     setButtonNameState(shiftState(buttonNameState))
                 },
             }, {
                 field: 'cognome',
-                orderBy: {cognome},
+                orderBy() {return cognome},
                 setState() {
                     setCognome(!cognome)
                 },
-                orderType: {orderTypeCognome},
+                orderType() {return orderTypeCognome},
                 changeOrderType() {
                     setOrderTypeCognome(flipOrderType(buttonSurnameState))
                 },
-                state: {buttonSurnameState},
+                state() {return buttonSurnameState},
                 changeState() {
                     setButtonSurnameState(shiftState(buttonSurnameState))
                 },
             }, {
                 field: 'dataNascita',
-                orderBy: {dataNascita},
+                orderBy() {return dataNascita},
                 setState() {
                     setDataNascita(!dataNascita)
                 },
-                orderType: {orderTypeDataNascita},
+                orderType() {return orderTypeDataNascita},
                 changeOrderType() {
                     setOrderTypeDataNascita(flipOrderType(buttonDateState))
                 },
-                state: {buttonDateState},
+                state() {return buttonDateState},
                 changeState() {
                     setButtonDateState(shiftState(buttonDateState))
                 },
             }, {
                 field: 'cf',
-                orderBy: {cf},
+                orderBy() {return cf},
                 setState() {
                     setCf(!cf)
                 },
-                orderType: {orderTypeCf},
+                orderType() {return orderTypeCf},
                 changeOrderType() {
                     setOrderTypeCf(flipOrderType(buttonCfState))
                 },
-                state: {buttonCfState},
+                state() {return buttonCfState},
                 changeState() {
                     setButtonCfState(shiftState(buttonCfState))
                 },
             }, {
                 field: 'email',
-                orderBy: {email},
+                orderBy() {return email},
                 setState() {
                     setEmail(!email)
                 },
-                orderType: {orderTypeEmail},
+                orderType() {return orderTypeEmail},
                 changeOrderType() {
                     setOrderTypeEmail(flipOrderType(buttonEmailState))
                 },
-                state: {buttonEmailState},
+                state() {return buttonEmailState},
                 changeState() {
                     setButtonEmailState(shiftState(buttonEmailState))
                 },
@@ -196,7 +196,7 @@ const Customers = ({logout}) => {
                     Customers
                     <Button color={'green'} text={'Aggiungi'} onClickDo={move}/>
                 </h3>
-                <CustomTable tableConfigurations={tableConfigurations} changeOrder={changeOrder} />
+                <CustomTable tableConfigurations={tableConfigurations} />
             </Container>
         </>
     ) : (

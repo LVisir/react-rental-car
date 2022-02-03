@@ -14,7 +14,7 @@ const Reservations = ({bookingsPath, logout}) => {
 
     const [bookings, setBookings] = useState([]);
 
-    const { getBookings, customQueryBookings, bookingsLength, changeOrder, field, fieldHeader } = BookingService()
+    const { getBookings, customQueryBookings, bookingsLength, field, fieldHeader } = BookingService()
 
     // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
     const [loading, setLoading] = useState(false);
@@ -55,92 +55,92 @@ const Reservations = ({bookingsPath, logout}) => {
         {
             fieldNameDb: field,
             fieldNameTableHeader: fieldHeader,
-            pages: {bookingsLength},
-            pageList: {pagesArray},
+            pages() {return bookingsLength},
+            pageList() {return pagesArray},
             setPage(newPagesArray) {
                 setPagesArray(newPagesArray)
             },
-            currentPage: {currentPage},
+            currentPage() {return currentPage},
             changeCurrentPage(x) {
                 setCurrentPage(x)
             },
-            list: {bookings},
+            list() {return bookings},
             setList(newList) {
                 setBookings(newList)
             },
             sortableFields: [{
                 field: 'codice',
-                orderBy: {codice},
+                orderBy() {return codice},
                 setState() {
                     setCodice(!codice)
                 },
-                orderType: {orderTypeCodice},
+                orderType() {return orderTypeCodice},
                 changeOrderType() {
                     setOrderTypeCodice(flipOrderType(buttonCodiceState))
                 },
-                state: {buttonCodiceState},
+                state() {return buttonCodiceState},
                 changeState() {
                     setButtonCodiceState(shiftState(buttonCodiceState))
                 },
             }, {
                 field: 'inizio',
-                orderBy: {inizio},
+                orderBy() {return inizio},
                 setState() {
                     setInizio(!inizio)
                 },
-                orderType: {orderTypeInizio},
+                orderType() {return orderTypeInizio},
                 changeOrderType() {
                     setOrderTypeInizio(flipOrderType(buttonInizioState))
                 },
-                state: {buttonInizioState},
+                state() {return buttonInizioState},
                 changeState() {
                     setButtonInizioState(shiftState(buttonInizioState))
                 },
             }, {
                 field: 'fine',
-                orderBy: {fine},
+                orderBy() {return fine},
                 setState() {
                     setFine(!fine)
                 },
-                orderType: {orderTypeFine},
+                orderType() {return orderTypeFine},
                 changeOrderType() {
                     setOrderTypeFine(flipOrderType(buttonFineState))
                 },
-                state: {buttonFineState},
+                state() {return buttonFineState},
                 changeState() {
                     setButtonFineState(shiftState(buttonFineState))
                 },
             }, {
                 field: 'customer',
-                orderBy: {customer},
+                orderBy() {return customer},
                 setState() {
                     setCustomer(!customer)
                 },
-                orderType: {orderTypeCustomer},
+                orderType() {return orderTypeCustomer},
                 changeOrderType() {
                     setOrderTypeCustomer(flipOrderType(buttonCustomerState))
                 },
-                state: {buttonCustomerState},
+                state() {return buttonCustomerState},
                 changeState() {
                     setButtonCustomerState(shiftState(buttonCustomerState))
                 },
             }, {
                 field: 'veicolo',
-                orderBy: {veicolo},
+                orderBy() {return veicolo},
                 setState() {
                     setVeicolo(!veicolo)
                 },
-                orderType: {orderTypeVeicolo},
+                orderType() {return orderTypeVeicolo},
                 changeOrderType() {
                     setOrderTypeVeicolo(flipOrderType(buttonVeicoloState))
                 },
-                state: {buttonVeicoloState},
+                state() {return buttonVeicoloState},
                 changeState() {
                     setButtonVeicoloState(shiftState(buttonVeicoloState))
                 },
             }, {
                 field: 'approvazione',
-                orderBy: {approvazione},
+                orderBy() {return approvazione},
                 setState() {
                     setApprovazione(!approvazione)
                 },
@@ -170,7 +170,7 @@ const Reservations = ({bookingsPath, logout}) => {
             <Header logout={logout} />
             <Container className={'my-2'}>
                 <h3>Prenotazioni</h3>
-                <CustomTable tableConfigurations={tableConfigurations} changeOrder={changeOrder}/>
+                <CustomTable tableConfigurations={tableConfigurations} />
                 {/*{console.log(Object.entries(tableConfigurations.sortableFields[5].orderBy)[0][1])}*/}
             </Container>
         </>
