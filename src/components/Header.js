@@ -1,11 +1,22 @@
 import {Container, Form, FormControl, Nav, Navbar, NavDropdown, Button} from "react-bootstrap";
 import Logout from "./Logout";
+import { useNavigate } from 'react-router-dom';
+import {useEffect, useState} from "react";
 
-const Header = ({logout}) => {
+const Header = ({logout, links, filters}) => {
+
+    const navigate = useNavigate()
+    const [filterTitle, setFilterTitle] = useState('Search by: '+filters.filter((element) => element.orderBy())[0].field);
+
+/*    useEffect(() => {
+
+    }, [filterTitle]);*/
+
+
     return (
-        <Navbar bg="light" expand="lg" bg="dark" variant="dark">
+        <Navbar expand="lg" bg="dark" variant="dark">
             <Container fluid className={'my-10'}>
-                <Navbar.Brand href="#">RentalCar</Navbar.Brand>
+                <Navbar.Brand >RentalCar</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
@@ -13,7 +24,7 @@ const Header = ({logout}) => {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Nav.Link href="#action2">Link</Nav.Link>
+                        {links.map((element) => <Nav.Link key={element.name} onClick={() => navigate(element.path)}>{element.name}</Nav.Link>)}
                         <Nav.Link href="#" disabled>
                             Link
                         </Nav.Link>
@@ -24,13 +35,12 @@ const Header = ({logout}) => {
                         navbarScroll
                     >
                         <Logout logout={logout} />
-                        <NavDropdown title="Filtri" id="navbarScrollingDropdown">
-                            <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action5">
-                                Something else here
-                            </NavDropdown.Item>
+                        <NavDropdown title={filterTitle} id="navbarScrollingDropdown">
+                            {filters.filter((element) => element.orderBy())
+                                .map((element) =>
+                                    <NavDropdown.Item key={element.field} onClick={() => setFilterTitle('Search by: '+element.field)}>
+                                        {element.field}
+                                    </NavDropdown.Item>)}
                         </NavDropdown>
                     </Nav>
                     <Form className="d-flex">

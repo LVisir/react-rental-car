@@ -18,14 +18,22 @@ const SuperuserPage = ({logout}) => {
     const { customersPath } = CustomerService()
     const { bookingsPath } = BookingService()
 
+    const links = [{
+        name: 'Prenotazioni',
+        path: '/Bookings',
+    }, {
+        name: 'Customers',
+        path: '/'
+    }]
+
     return (
         <Router>
 
                 <Routes>
                     <Route path="*" element={<Error />} />
-                    <Route path={'/'} element={<Customers customersPath={customersPath} logout={logout}/>} />
+                    <Route path={'/'} element={<Customers customersPath={customersPath} logout={logout} links={links}/>} />
                     {/*<Route path={'/AddCustomer'} element={<AddCustomer logout={logout} />} />*/}
-                    <Route path={'/Bookings'} element={<Reservations bookingsPath={bookingsPath} logout={logout} />} />
+                    <Route path={'/Bookings'} element={<Reservations bookingsPath={bookingsPath} logout={logout} links={links}/>} />
                 </Routes>
 
         </Router>

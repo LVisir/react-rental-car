@@ -32,7 +32,7 @@ import UsefulFunctions from "../functions/UsefulFunctions";
  * @returns {JSX.Element}
  * @constructor
  */
-const Customers = ({logout}) => {
+const Customers = ({logout, links}) => {
 
     // list of Customer objects
     const [customers, setCustomers] = useState([]);
@@ -190,7 +190,7 @@ const Customers = ({logout}) => {
     // wait for the customers loading
     return loading ? (
         <>
-            <Header logout={logout} />
+            <Header logout={logout} links={links} filters={tableConfigurations.sortableFields}/>
             <Container className={'my-2'}>
                 <h3>
                     Customers

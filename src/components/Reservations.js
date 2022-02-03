@@ -10,7 +10,7 @@ import {Container} from "react-bootstrap";
 import UsefulFunctions from "../functions/UsefulFunctions";
 /*import { fetchReservationsByCustomerId } from '../service/Booking/BookingService';*/
 
-const Reservations = ({bookingsPath, logout}) => {
+const Reservations = ({bookingsPath, logout, links}) => {
 
     const [bookings, setBookings] = useState([]);
 
@@ -167,7 +167,7 @@ const Reservations = ({bookingsPath, logout}) => {
 
     return loading ? (
         <>
-            <Header logout={logout} />
+            <Header logout={logout} links={links} filters={tableConfigurations.sortableFields}/>
             <Container className={'my-2'}>
                 <h3>Prenotazioni</h3>
                 <CustomTable tableConfigurations={tableConfigurations} />
