@@ -78,6 +78,10 @@ const Customers = ({logout, links}) => {
     const [searchText, setSearchText] = useState('');
     const [searchButton, setSearchButton] = useState(false);
 
+    const [reset, setReset] = useState(true);
+
+    const [resetButton, setResetButton] = useState(true);
+
     // configuration for the table where the data will be showed
     const tableConfigurations =
         {
@@ -95,6 +99,9 @@ const Customers = ({logout, links}) => {
             searchInfoText() { return searchText },
             setSearchInfoText(x) { setSearchText(x) },
             searchButtonClicked() { setSearchButton(!searchButton) },
+            getSearchButtonState() { return searchButton },
+            getResetButton() { return resetButton },
+            changeResetButton() { setResetButton(!resetButton) },
             sortableFields: [{
                 field: 'nome',
                 orderBy() {return nome},
@@ -103,6 +110,7 @@ const Customers = ({logout, links}) => {
                 changeOrderType() {setOrderTypeNome(flipOrderType(buttonNameState))},
                 state() {return buttonNameState},
                 changeState() {setButtonNameState(shiftState(buttonNameState))},
+                resetState() { setButtonNameState(0)},
             }, {
                 field: 'cognome',
                 orderBy() {return cognome},
@@ -111,6 +119,7 @@ const Customers = ({logout, links}) => {
                 changeOrderType() {setOrderTypeCognome(flipOrderType(buttonSurnameState))},
                 state() {return buttonSurnameState},
                 changeState() {setButtonSurnameState(shiftState(buttonSurnameState))},
+                resetState() { setButtonSurnameState(0)},
             }, {
                 field: 'dataNascita',
                 orderBy() {return dataNascita},
@@ -119,6 +128,7 @@ const Customers = ({logout, links}) => {
                 changeOrderType() {setOrderTypeDataNascita(flipOrderType(buttonDateState))},
                 state() {return buttonDateState},
                 changeState() {setButtonDateState(shiftState(buttonDateState))},
+                resetState() { setButtonDateState(0)},
             }, {
                 field: 'cf',
                 orderBy() {return cf},
@@ -127,6 +137,7 @@ const Customers = ({logout, links}) => {
                 changeOrderType() {setOrderTypeCf(flipOrderType(buttonCfState))},
                 state() {return buttonCfState},
                 changeState() {setButtonCfState(shiftState(buttonCfState))},
+                resetState() { setButtonCfState(0)},
             }, {
                 field: 'email',
                 orderBy() {return email},
@@ -135,6 +146,7 @@ const Customers = ({logout, links}) => {
                 changeOrderType() {setOrderTypeEmail(flipOrderType(buttonEmailState))},
                 state() {return buttonEmailState},
                 changeState() {setButtonEmailState(shiftState(buttonEmailState))},
+                resetState() { setButtonEmailState(0)},
             }],
             useEffectDependencies: [searchButton, currentPage, buttonNameState, buttonSurnameState, buttonDateState, buttonCfState, buttonEmailState],
             startPath: `http://localhost:5001/customer`,

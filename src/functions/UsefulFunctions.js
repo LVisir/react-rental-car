@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 const UsefulFunctions = () => {
 
@@ -77,10 +77,17 @@ const UsefulFunctions = () => {
         return {sortPath, orderPath}
     }
 
+    function usePrevious(value) {
+        const ref = useRef();
+        useEffect(() => {
+            ref.current = value; //assign the value of ref to the argument
+        }, [value]); //this code will run when the value of 'value' changes
+        return ref.current; //in the end, return the current ref value.
+    }
+
     const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
         let data
         if(tableConfigurations.searchInfoText() === ''){
-            console.log('dio')
             console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
             const response = await fetch(startPath.concat(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
             data = await response.json()
@@ -114,7 +121,7 @@ const UsefulFunctions = () => {
         sortableField.changeState()
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder, resetSortAndOrderType}
+    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder, resetSortAndOrderType, usePrevious}
 
 };
 

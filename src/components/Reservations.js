@@ -53,6 +53,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
     const [searchField, setSearchField] = useState('');
     const [searchText, setSearchText] = useState('');
     const [searchButton, setSearchButton] = useState(false);
+    const [resetButton, setResetButton] = useState(true);
 
     // configuration for the table where the data will be showed
     const tableConfigurations =
@@ -71,6 +72,9 @@ const Reservations = ({bookingsPath, logout, links}) => {
             searchInfoText() { return searchText },
             setSearchInfoText(x) { setSearchText(x) },
             searchButtonClicked() { setSearchButton(!searchButton) },
+            getSearchButtonState() { return searchButton },
+            getResetButton() { return resetButton },
+            changeResetButton() { setResetButton(!resetButton) },
             sortableFields: [{
                 field: 'codice',
                 orderBy() {return codice},
@@ -79,6 +83,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
                 changeOrderType() {setOrderTypeCodice(flipOrderType(buttonCodiceState))},
                 state() {return buttonCodiceState},
                 changeState() {setButtonCodiceState(shiftState(buttonCodiceState))},
+                resetState() { setButtonCodiceState(0)},
             }, {
                 field: 'inizio',
                 orderBy() {return inizio},
@@ -87,6 +92,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
                 changeOrderType() {setOrderTypeInizio(flipOrderType(buttonInizioState))},
                 state() {return buttonInizioState},
                 changeState() {setButtonInizioState(shiftState(buttonInizioState))},
+                resetState() { setButtonInizioState(0)},
             }, {
                 field: 'fine',
                 orderBy() {return fine},
@@ -95,6 +101,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
                 changeOrderType() {setOrderTypeFine(flipOrderType(buttonFineState))},
                 state() {return buttonFineState},
                 changeState() {setButtonFineState(shiftState(buttonFineState))},
+                resetState() { setButtonFineState(0)},
             }, {
                 field: 'customer',
                 orderBy() {return customer},
@@ -103,6 +110,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
                 changeOrderType() {setOrderTypeCustomer(flipOrderType(buttonCustomerState))},
                 state() {return buttonCustomerState},
                 changeState() {setButtonCustomerState(shiftState(buttonCustomerState))},
+                resetState() { setButtonCustomerState(0)},
             }, {
                 field: 'veicolo',
                 orderBy() {return veicolo},
@@ -111,6 +119,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
                 changeOrderType() {setOrderTypeVeicolo(flipOrderType(buttonVeicoloState))},
                 state() {return buttonVeicoloState},
                 changeState() {setButtonVeicoloState(shiftState(buttonVeicoloState))},
+                resetState() { setButtonVeicoloState(0)},
             }, {
                 field: 'approvazione',
                 orderBy() {return approvazione},

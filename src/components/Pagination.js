@@ -4,7 +4,10 @@ import UsefulFunctions from '../functions/UsefulFunctions';
 
 const Pagination = ({tableConfigurations}) => {
 
-    const { buildPath, askServer, customQuery } = UsefulFunctions()
+    const { buildPath, askServer, customQuery, usePrevious } = UsefulFunctions()
+
+    const prevList = usePrevious(tableConfigurations.list())
+
 
     const { sortPath, orderPath } = buildPath(tableConfigurations.sortableFields)
 
@@ -15,6 +18,7 @@ const Pagination = ({tableConfigurations}) => {
         const getListObjects = async () => {
             return await askServer(sortPath, orderPath, tableConfigurations, customQuery, tableConfigurations.startPath)
         }
+
 
         getListObjects().then(r => tableConfigurations.setList(r))
 

@@ -8,22 +8,24 @@ import PropTypes from 'prop-types'
  * @returns {JSX.Element}
  * @constructor
  */
-const Button = ({text, color, onClickDo}) => {
+const Button = ({text, color, onClickDo, disable}) => {
     return (
-        <div className={'btn btn-primary btn-sm'} style={{backgroundColor : color, color: 'white'}} onClick={onClickDo}>
+        <button className={'btn btn-primary btn-sm'} style={{backgroundColor : color, color: 'white',}} onClick={onClickDo} disabled={disable}>
             {text}
-        </div>
+        </button>
     );
 };
 
 Button.defaultProps = {
-    color : 'steelblue'
+    color : 'steelblue',
+    disabled : false,
 }
 
 Button.propTypes = {
     text : PropTypes.string,
     color : PropTypes.string,
     onclick : PropTypes.func, //perchè proviene da una funzione
+    disabled: PropTypes.bool,
 }
 
 export default Button;

@@ -3,6 +3,7 @@ import Logout from "./Logout";
 import { useNavigate } from 'react-router-dom';
 import {useEffect, useState} from "react";
 import UsefulFunctions from "../functions/UsefulFunctions";
+import {default as MyButton} from './Button'
 
 const Header = ({logout, links, tableConfigurations}) => {
 
@@ -12,14 +13,36 @@ const Header = ({logout, links, tableConfigurations}) => {
     const [search, setSearch] = useState('');
     const [searchClicked, setSearchClicked] = useState(false);
 
-    const { resetSortAndOrderType } = UsefulFunctions()
+    const { resetSortAndOrderType, usePrevious } = UsefulFunctions()
+
+    const [resetButton, setResetButton] = useState(true);
+
+    const prevSearchButton = usePrevious(tableConfigurations.getSearchButtonState())
 
     const searchData = () => {
         tableConfigurations.setSearchInfoText(search)
         tableConfigurations.setSearchInfoField(filterTitle)
         tableConfigurations.currentPage() === 1 ? tableConfigurations.searchButtonClicked() : tableConfigurations.changeCurrentPage(1)
+        tableConfigurations.changeResetButton()
         setSearch('')
     }
+
+    const reset = () => {
+        tableConfigurations.setSearchInfoText('')
+        tableConfigurations.currentPage() === 1 ? tableConfigurations.searchButtonClicked() : tableConfigurations.changeCurrentPage(1)
+        tableConfigurations.sortableFields.map((element) => element.orderBy() && element.resetState())
+        setSearch('')
+        setResetButton(true)
+        if(!tableConfigurations.getResetButton()){
+            tableConfigurations.changeResetButton()
+        }
+    }
+
+    useEffect(() => {
+        tableConfigurations.sortableFields.map((element) => element.orderBy() && element.state() !== 0 && setResetButton(false))
+        if(!tableConfigurations.getResetButton()) setResetButton(false)
+    }, tableConfigurations.useEffectDependencies);
+
 
     return (
         <Navbar expand="lg" bg="dark" variant="dark">
@@ -43,6 +66,7 @@ const Header = ({logout, links, tableConfigurations}) => {
                         navbarScroll
                     >
                         <Logout logout={logout} />
+                        <MyButton text={'Reset'} disable={resetButton} onClickDo={() => reset()}/>
                         <NavDropdown title={filterTitle} id="navbarScrollingDropdown">
                             {tableConfigurations.sortableFields.filter((element) => element.orderBy())
                                 .map((element) =>
@@ -60,7 +84,7 @@ const Header = ({logout, links, tableConfigurations}) => {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
-                        <Button onClick={() => searchData()} variant="outline-success">Search</Button>
+                        <Button disabled={search===''} onClick={() => searchData()} variant="outline-success" >Search</Button>
                     </Form>
                 </Navbar.Collapse>
             </Container>

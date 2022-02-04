@@ -54,6 +54,8 @@ const Vehicles = ({logout, links}) => {
 
     const [searchButton, setSearchButton] = useState(false);
 
+    const [resetButton, setResetButton] = useState(true);
+
     // configuration for the table
     const tableConfigurations = {
         fieldNameDb: field,
@@ -70,6 +72,9 @@ const Vehicles = ({logout, links}) => {
         searchInfoText() { return searchText },
         setSearchInfoText(x) { setSearchText(x) },
         searchButtonClicked() { setSearchButton(!searchButton) },
+        getSearchButtonState() { return searchButton },
+        getResetButton() { return resetButton },
+        changeResetButton() { setResetButton(!resetButton) },
         sortableFields: [{
             field: 'targa',
             orderBy() { return targa },
@@ -79,6 +84,7 @@ const Vehicles = ({logout, links}) => {
             state() { return buttonTargaState },
             changeState() { setButtonTargaState(shiftState(buttonTargaState)) },
             reset() { setTarga(false)},
+            resetState() { setButtonTargaState(0)},
         }, {
             field: 'modello',
             orderBy() { return modello },
@@ -88,6 +94,7 @@ const Vehicles = ({logout, links}) => {
             state() { return buttonModelloState },
             changeState() { setButtonModelloState(shiftState(buttonModelloState)) },
             reset() { setModello(false)},
+            resetState() { setButtonModelloState(0)},
         }, {
             field: 'tipologia',
             orderBy() { return tipologia },
@@ -97,6 +104,7 @@ const Vehicles = ({logout, links}) => {
             state() { return buttonTipologiaState },
             changeState() { setButtonTipologiaState(shiftState(buttonTipologiaState)) },
             reset() { setTipologia(false)},
+            resetState() { setButtonTipologiaState(0)},
         }, {
             field: 'casaCostruttrice',
             orderBy() { return casaCostruttrice },
@@ -106,6 +114,7 @@ const Vehicles = ({logout, links}) => {
             state() { return buttonCasaCostrState },
             changeState() { setButtonCasaCostrState(shiftState(buttonCasaCostrState)) },
             reset() { setCasaCostruttrice(false)},
+            resetState() { setButtonCasaCostrState(0)},
         }, {
             field: 'annoImmatricolazione',
             orderBy() { return annoImmatricolazione },
@@ -115,6 +124,7 @@ const Vehicles = ({logout, links}) => {
             state() { return buttonAnnoImmState },
             changeState() { setButtonAnnoImmState(shiftState(buttonAnnoImmState))},
             reset() { setAnnoImmatricolazione(false)},
+            resetState() { setButtonAnnoImmState(0)},
         }],
         useEffectDependencies: [searchButton, currentPage, buttonTargaState, buttonModelloState, buttonTipologiaState, buttonAnnoImmState, buttonCasaCostrState],
         startPath: `http://localhost:5001/veicolo`,
