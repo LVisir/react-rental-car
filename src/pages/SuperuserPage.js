@@ -3,7 +3,6 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Error from '../components/Error';
 import Customers from '../components/Customers';
 import CustomerService from '../service/Customer/CustomerService';
-import AddCustomer from "../components/AddCustomer";
 import Reservations from "../components/Reservations";
 import BookingService from "../service/Booking/BookingService";
 import Vehicles from "../components/Vehicles";

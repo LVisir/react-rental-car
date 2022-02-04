@@ -1,12 +1,10 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
-import {useUpdateCustomers } from '../service/Customer/CustomerContext';
-/*import { getCustomers, customersPath } from '../service/Customer/CustomerService';*/
-import {useUpdateBookings} from '../service/Booking/BookingContext';
+import {useUpdateCustomers } from '../context/CustomerContext';
+import {useUpdateBookings} from '../context/BookingContext';
 import BookingService from "../service/Booking/BookingService";
 import CustomerService from "../service/Customer/CustomerService";
-/*import { fetchReservationsByCustomerId, bookingsPath } from '../service/Booking/BookingService';*/
 
 /**
  * Pagina di login che si carica tutti i Customer e i Superuser
@@ -71,12 +69,6 @@ const Login = ({superusers, setToken}) => {
                 return
             }
         }
-
-        //sessionStorage.setItem('page', window.history.length.toString())
-
-        // controllo se è un Superuser o un Customer
-        /*let superuser = superusers.reduce((a, b) => a = b.customer === correctPass ? b.customer : a, 0)*/
-
 
         // se Superuser salvo in sessione e porto alla sua pagina, viceversa per il Customer
         if (customer.role === 'SUPERUSER') {

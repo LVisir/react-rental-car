@@ -1,13 +1,15 @@
 import {useEffect} from 'react';
-import CustomerService from '../service/Customer/CustomerService';
 import UsefulFunctions from '../functions/UsefulFunctions';
 
+/**
+ * Pagination component to manage the pages and the actions on them
+ * @param tableConfigurations
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Pagination = ({tableConfigurations}) => {
 
-    const { buildPath, askServer, customQuery, usePrevious } = UsefulFunctions()
-
-    const prevList = usePrevious(tableConfigurations.list())
-
+    const { buildPath, askServer, customQuery } = UsefulFunctions()
 
     const { sortPath, orderPath } = buildPath(tableConfigurations.sortableFields)
 
@@ -46,6 +48,9 @@ const Pagination = ({tableConfigurations}) => {
         tableConfigurations.changeCurrentPage(k)
     }
 
+    /**
+     * if a 'tableConfigurations.sortablefields' allow the sorting, the column takes two colspan: one for the field and one for the sorting actions
+     */
     return (
         <div>
             <nav aria-label='Page navigation example'>

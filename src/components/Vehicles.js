@@ -4,9 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import VehiclesService from "../service/Vehicles/VehiclesService";
 import Header from "./Header";
 import {Container} from "react-bootstrap";
-import Button from "./Button";
 import CustomTable from "./CustomTable";
 
+/**
+ * Important component: Vehicles: Header, CustomTable
+ * A component that contains the object 'tableConfigurations';
+ * 'tableConfigurations' contains the settings that manage all the actions of the user: sorting, paging, searching ...;
+ * most of 'tableConfigurations' settings are made from the hook 'useState';
+ * thanks to the useEffect and the useState hook, every change in the 'tableConfigurations' fields re-render the page based on the update values;
+ * @param logout
+ * @param links
+ * @returns {number[]|JSX.Element|*[]|string|number|boolean}
+ * @constructor
+ */
 const Vehicles = ({logout, links}) => {
 
     // list of Vehicles objects
@@ -31,32 +41,35 @@ const Vehicles = ({logout, links}) => {
     const [orderTypeTipologia, setOrderTypeTipologia] = useState('asc');
     const [orderTypeCasaCostr, setOrderTypeCasaCostr] = useState('asc');
     const [orderTypeAnnoImm, setOrderTypeAnnoImm] = useState('asc');
-    
-    // state that indicate which button indicate which sort method
+
+    // state that manage the buttons for sorting -> {0, 1, 2} are respectively {no order, asc order, desc order}
     const [buttonTargaState, setButtonTargaState] = useState(0);
     const [buttonModelloState, setButtonModelloState] = useState(0);
     const [buttonTipologiaState, setButtonTipologiaState] = useState(0);
     const [buttonCasaCostrState, setButtonCasaCostrState] = useState(0);
     const [buttonAnnoImmState, setButtonAnnoImmState] = useState(0);
 
+    // state that manage the searching actions
     const [searchField, setSearchField] = useState('');
     const [searchText, setSearchText] = useState('');
+    const [searchButton, setSearchButton] = useState(false);
 
     const { flipOrderType, shiftState, customQuery } = UsefulFunctions()
 
     const navigate = useNavigate()
 
     // function to fetch necessary data from Vehicles
-    const { vehiclesLength, field, fieldHeader, getVehicles, vehiclesPath } = VehiclesService()
+    const { vehiclesLength, field, fieldHeader, vehiclesPath } = VehiclesService()
 
     // state that indicate when the data is load
     const [loading, setLoading] = useState(false);
 
-    const [searchButton, setSearchButton] = useState(false);
-
+    // state that manage the reset actions; his goal is to reset all the settings in the 'tableConfigurations'
     const [resetButton, setResetButton] = useState(true);
 
-    // configuration for the table
+    /**
+     * This table contains all the useState described above and all the functions imported above
+     */
     const tableConfigurations = {
         fieldNameDb: field,
         fieldNameTableHeader: fieldHeader,
@@ -131,6 +144,9 @@ const Vehicles = ({logout, links}) => {
         tableName: 'VEICOLO',
     }
 
+    /**
+     * On render fetch the data
+     */
     useEffect(() => {
         const fetchVehicles = async () => {
 

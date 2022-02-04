@@ -1,4 +1,4 @@
-import { useCustomers, useUpdateCustomers } from './CustomerContext';
+import { useCustomers, useUpdateCustomers } from '../../context/CustomerContext';
 import UsefulFunctions from "../../functions/UsefulFunctions";
 
 const CustomerService = () => {

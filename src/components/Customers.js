@@ -8,28 +8,14 @@ import {Container} from 'react-bootstrap';
 import UsefulFunctions from "../functions/UsefulFunctions";
 
 /**
- * The basic idea is to have an object that reflect all the settings of a table.
- * This table fields are:
- *  - fieldNameDb : the name of the fields of the object where the table should adapt to;
- *  - fieldNameTableHeader : the name of the field in an aesthetic way;
- *  - pages : the total number of pages based on a limit of 10 per page;
- *  - pageList (useState): the starter pages when the table is load;
- *  - setPage() (useState): a function to update the 'pageList' when the user is going to the previous/antecedent page;
- *  - currentPage (useState): the page where the user are;
- *  - changeCurrentPage() (useState): function that change the 'currentPage' backward or forward
- *  - list (useState): the list where the table should adapt to; in this case a list of Customer objects;
- *  - setList() (useState): function that update the 'list'
- *  - sortableFields : array of object that contains:
- *      - field : name of the current field;
- *      - orderBy (useState) : a boolean that indicate if this 'field' is sortable or not
- *      - setState() (useState) : function that update 'orderBy' -> true/false
- *      - orderType (useState) : indicate the type of sort -> asc/desc
- *      - changeOrderType() (useState) : function that change 'orderType' -> from asc to desc and viceversa
- *      - state (useState) : state of the button to change the 'orderType': {0,1,2} -> {no state, asc, desc}
- *      - changeState() (useState) : function that shift the state; in order they are: 0 -> 1 -> 2 -> 0 -> 1 -> ... and so on
- *  - useEffectDependencies : the variable where the useEffect have to check if they changed to be thrown
+ * Important component: Customer: Header, CustomTable
+ * A component that contains the object 'tableConfigurations';
+ * 'tableConfigurations' contains the settings that manage all the actions of the user: sorting, paging, searching ...;
+ * most of 'tableConfigurations' settings are made from the hook 'useState';
+ * thanks to the useEffect and the useState hook, every change in the 'tableConfigurations' fields re-render the page based on the update values;
  * @param logout
- * @returns {JSX.Element}
+ * @param links
+ * @returns {number[]|JSX.Element|*[]|string|number|boolean}
  * @constructor
  */
 const Customers = ({logout, links}) => {
@@ -37,27 +23,27 @@ const Customers = ({logout, links}) => {
     // list of Customer objects
     const [customers, setCustomers] = useState([]);
 
-    // Read at the beginning of the page: [orderBy, setState()]
+    // state that indicate if a certain field are sortable or not
     const [nome, setNome] = useState(true);
     const [cognome, setCognome] = useState(true);
     const [dataNascita, setDataNascita] = useState(true);
     const [cf, setCf] = useState(true);
     const [email, setEmail] = useState(true);
 
-    // Read at the beginning of the page: [pageList, setPage()]
+    // state that manage the number of pages
     const [pagesArray, setPagesArray] = useState([1,2,3]);
 
-    // Read at the beginning of the page: [currentPage, changeCurrentPage()]
+    // state that manage the current page
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Read at the beginning of the page: [orderType, changeOrderType()]
+    // state that manage the order type -> {asc|desc}
     const [orderTypeNome, setOrderTypeNome] = useState('asc');
     const [orderTypeCognome, setOrderTypeCognome] = useState('asc');
     const [orderTypeDataNascita, setOrderTypeDataNascita] = useState('asc');
     const [orderTypeCf, setOrderTypeCf] = useState('asc');
     const [orderTypeEmail, setOrderTypeEmail] = useState('asc');
 
-    // Read at the beginning of the page: [state, changeState()]
+    // state that manage the buttons for sorting -> {0, 1, 2} are respectively {no order, asc order, desc order}
     const [buttonNameState, setButtonNameState] = useState(0);
     const [buttonSurnameState, setButtonSurnameState] = useState(0);
     const [buttonDateState, setButtonDateState] = useState(0);
@@ -68,21 +54,22 @@ const Customers = ({logout, links}) => {
 
     const navigate = useNavigate()
 
-    // fetch necessary data from CustomerService
     const { customersLength, customQueryCustomers, field, fieldHeader } = CustomerService()
 
-    // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
+    // state that manage the loading appearance
     const [loading, setLoading] = useState(false);
 
+    // state that manage the searching actions
     const [searchField, setSearchField] = useState('');
     const [searchText, setSearchText] = useState('');
     const [searchButton, setSearchButton] = useState(false);
 
-    const [reset, setReset] = useState(true);
-
+    // state that manage the reset actions; his goal is to reset all the settings in the 'tableConfigurations'
     const [resetButton, setResetButton] = useState(true);
 
-    // configuration for the table where the data will be showed
+    /**
+     * This table contains all the useState described above and all the functions imported above
+     */
     const tableConfigurations =
         {
             fieldNameDb: field,
@@ -172,7 +159,6 @@ const Customers = ({logout, links}) => {
       navigate('/AddCustomer')
     }
 
-    // wait for the customers loading
     return loading ? (
         <>
             <Header logout={logout} links={links} tableConfigurations={tableConfigurations} />

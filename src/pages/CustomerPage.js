@@ -1,5 +1,3 @@
-import Header from "../components/Header";
-import {Container} from "react-bootstrap";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Error from "../components/Error";
 import Reservations from "../components/Reservations";

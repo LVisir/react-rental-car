@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, Container, Form} from "react-bootstrap";
-import CustomForm from "./CustomForm";
-import {useCustomers, useUpdateCustomers} from "../service/Customer/CustomerContext";
+import {useCustomers, useUpdateCustomers} from "../context/CustomerContext";
 import CustomerService from "../service/Customer/CustomerService";
 import Header from "./Header";
 

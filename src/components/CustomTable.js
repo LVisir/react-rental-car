@@ -1,6 +1,6 @@
 import {Table} from 'react-bootstrap'
 import Button from "./Button";
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill } from 'react-icons/bs';
 import Pagination from "./Pagination";

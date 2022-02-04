@@ -1,25 +1,33 @@
 import {useEffect, useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom'
-import Reservation from './Reservation';
-import Logout from './Logout';
+import { useNavigate } from 'react-router-dom'
 import CustomTable from "./CustomTable";
-import { useBookings, useUpdateBookings } from '../service/Booking/BookingContext';
 import BookingService from "../service/Booking/BookingService";
 import Header from "./Header";
 import {Container} from "react-bootstrap";
 import UsefulFunctions from "../functions/UsefulFunctions";
-/*import { fetchReservationsByCustomerId } from '../service/Booking/BookingService';*/
 
+/**
+ * Important component: Reservations: Header, CustomTable
+ * A component that contains the object 'tableConfigurations';
+ * 'tableConfigurations' contains the settings that manage all the actions of the user: sorting, paging, searching ...;
+ * most of 'tableConfigurations' settings are made from the hook 'useState';
+ * thanks to the useEffect and the useState hook, every change in the 'tableConfigurations' fields re-render the page based on the update values;
+ * @param logout
+ * @param links
+ * @returns {number[]|JSX.Element|*[]|string|number|boolean}
+ * @constructor
+ */
 const Reservations = ({bookingsPath, logout, links}) => {
 
+    // state that manage the list of object Prenotazione
     const [bookings, setBookings] = useState([]);
 
     const { getBookings, customQueryBookings, bookingsLength, field, fieldHeader } = BookingService()
 
-    // dettaglio grafico che mostra 'Loading...' se la pagina non è ancora caricata del tutto
+    // state that indicate when the data is load
     const [loading, setLoading] = useState(false);
 
-    // sortable fields
+    // state that indicate if a field is sortable or not
     const [codice, setCodice] = useState(true);
     const [inizio, setInizio] = useState(true);
     const [fine, setFine] = useState(true);
@@ -30,6 +38,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
     // pages shown per page
     const [pagesArray, setPagesArray] = useState([1,2,3]);
 
+    // page where the user are at this moment
     const [currentPage, setCurrentPage] = useState(1);
 
     // indicates the order of the fields -> {asc|desc}
@@ -39,7 +48,7 @@ const Reservations = ({bookingsPath, logout, links}) => {
     const [orderTypeCustomer, setOrderTypeCustomer] = useState('asc');
     const [orderTypeVeicolo, setOrderTypeVeicolo] = useState('asc');
 
-    // state of the button near the fields
+    // state that manage the buttons for sorting -> {0, 1, 2} are respectively {no order, asc order, desc order}
     const [buttonCodiceState, setButtonCodiceState] = useState(0);
     const [buttonInizioState, setButtonInizioState] = useState(0);
     const [buttonFineState, setButtonFineState] = useState(0);
@@ -50,12 +59,17 @@ const Reservations = ({bookingsPath, logout, links}) => {
 
     const navigate = useNavigate()
 
+    // state that manage the searching actions
     const [searchField, setSearchField] = useState('');
     const [searchText, setSearchText] = useState('');
     const [searchButton, setSearchButton] = useState(false);
+
+    // state that manage the reset actions; his goal is to reset all the settings in the 'tableConfigurations'
     const [resetButton, setResetButton] = useState(true);
 
-    // configuration for the table where the data will be showed
+    /**
+     * This table contains all the useState described above and all the functions imported above
+     */
     const tableConfigurations =
         {
             fieldNameDb: field,
@@ -151,7 +165,6 @@ const Reservations = ({bookingsPath, logout, links}) => {
             <Container className={'my-2'}>
                 <h3>Prenotazioni</h3>
                 <CustomTable tableConfigurations={tableConfigurations} />
-                {/*{console.log(Object.entries(tableConfigurations.sortableFields[5].orderBy)[0][1])}*/}
             </Container>
         </>
     ) : (

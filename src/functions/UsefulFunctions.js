@@ -33,19 +33,6 @@ const UsefulFunctions = () => {
         return y%3
     }
 
-    const test = (x) => {
-        const a=x
-        const b=x
-
-        return {a,b}
-    }
-
-    const resetSortAndOrderType = (sortableFields) => {
-        sortableFields.map((element) => {
-            element.reset()
-        })
-    }
-
     // take from the tableConfigurations the fields to sort by and their order type (asc|desc)
     const buildPath = (sortableFields) => {
         let sort = []
@@ -77,6 +64,7 @@ const UsefulFunctions = () => {
         return {sortPath, orderPath}
     }
 
+    // usePrevious hook
     function usePrevious(value) {
         const ref = useRef();
         useEffect(() => {
@@ -85,6 +73,15 @@ const UsefulFunctions = () => {
         return ref.current; //in the end, return the current ref value.
     }
 
+    /**
+     * this function fetch the data from the server based on the data given in input
+     * @param sortPath
+     * @param orderPath
+     * @param tableConfigurations
+     * @param customQuery
+     * @param startPath
+     * @returns {Promise<*>}
+     */
     const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
         let data
         if(tableConfigurations.searchInfoText() === ''){
@@ -121,7 +118,7 @@ const UsefulFunctions = () => {
         sortableField.changeState()
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, test, buildPath, askServer, customQuery, changeOrder, resetSortAndOrderType, usePrevious}
+    return {logout, token, setToken, flipOrderType, shiftState, buildPath, askServer, customQuery, changeOrder}
 
 };
 

@@ -7,8 +7,8 @@ import Reservations from "./components/Reservations";
 import Header from "./components/Header";
 import {Container} from "react-bootstrap";
 import AddCustomer from "./components/AddCustomer";
-import {CustomersProvider} from "./service/Customer/CustomerContext";
-import {BookingsProvider} from "./service/Booking/BookingContext";
+import {CustomersProvider} from "./context/CustomerContext";
+import {BookingsProvider} from "./context/BookingContext";
 import Error from "./components/Error";
 import LoginPage from "./pages/LoginPage";
 /*import { customersPath } from "./service/Customer/CustomerService";*/

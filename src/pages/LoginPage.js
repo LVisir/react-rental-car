@@ -1,7 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {Container} from "react-bootstrap";
-import Error from "../components/Error";
 import Login from "../components/Login";
 import ErrorLogin from "../components/ErrorLogin";
 
