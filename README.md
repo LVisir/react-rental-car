@@ -5,7 +5,7 @@ means ascending order and the up arrow means descending order. If u want just to
 fields. Try reset. In case you want one single sorting just by pressing the field that u want to sort and unchecked all the other fields I can fix it. 
 The next step will be to work on the ADD, MODIFY, DELETE actions. The links available now are Prenotazioni, Customers, Vehicles. The number of page depends on
 the answer from the server, so because now there isn't any back-end the number of pages are static (depends on (number of element)/10 upper bound, where 10 are the
-number of element per page). 
+number of element per page). During the test, see the console to check the fetch url.
 
 # Getting Started with Create React App
 
