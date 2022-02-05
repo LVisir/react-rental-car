@@ -7,6 +7,9 @@ The next step will be to work on the ADD, MODIFY, DELETE actions. The links avai
 the answer from the server, so because now there isn't any back-end the number of pages are static (depends on (number of element)/10 upper bound, where 10 are the
 number of element per page). During the test, see the console to check the fetch url.
 
+# Next step
+Now that I understand how to use React functions, I will remodel the code in a appropriate way to delete all the possible 'boiler code'.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
