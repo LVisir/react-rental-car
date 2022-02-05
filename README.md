@@ -3,7 +3,7 @@ To try it, by now, enter as email: 'edoardo.aaab@email.com' password: '1234' (th
 paging, searching now work perfectly. You can sort by multiple fields: the icon with the thunder means no order actions, the down arrow
 means ascending order and the up arrow means descending order. If u want just to sort for only one field, u should put the thunder on all the other
 fields. Try reset. In case you want one single sorting just by pressing the field that u want to sort and unchecked all the other fields I can fix it. 
-The next step the next step is written below. The links available now are Prenotazioni, Customers, Vehicles. The number of pages depends on
+The next step is written below. The links available now are Prenotazioni, Customers, Vehicles. The number of pages depends on
 the answer from the server, so because now there isn't any back-end the number of pages are static (depends on (number of element)/10 upper bound, where 10 are the
 number of element per page). During the test, see the console to check the fetch url.
 
