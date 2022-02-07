@@ -1,7 +1,8 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Error from '../components/Error';
-import Customers from '../components/Customers';
+import Customers from '../version_1/Customers';
+import {default as SecondVersioneCustomers} from '../components/Customers'
 import CustomerService from '../service/Customer/CustomerService';
 import Reservations from "../components/Reservations";
 import BookingService from "../service/Booking/BookingService";
@@ -34,7 +35,8 @@ const SuperuserPage = ({logout}) => {
 
                 <Routes>
                     <Route path="*" element={<Error />} />
-                    <Route path={'/'} element={<Customers customersPath={customersPath} logout={logout} links={links}/>} />
+                    {/*<Route path={'/'} element={<Customers customersPath={customersPath} logout={logout} links={links}/>} />*/}
+                    <Route path={'/'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
                     {/*<Route path={'/AddCustomer'} element={<AddCustomer logout={logout} />} />*/}
                     <Route path={'/Bookings'} element={<Reservations bookingsPath={bookingsPath} logout={logout} links={links}/>} />
                     <Route path={'/Vehicles'} element={<Vehicles links={links} logout={logout}/>} />

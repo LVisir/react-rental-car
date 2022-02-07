@@ -2,9 +2,9 @@ import {useEffect, useState} from 'react';
 import UsefulFunctions from '../functions/UsefulFunctions';
 import { useNavigate } from 'react-router-dom';
 import VehiclesService from "../service/Vehicles/VehiclesService";
-import Header from "./Header";
+import Header from "../version_1/Header";
 import {Container} from "react-bootstrap";
-import CustomTable from "./CustomTable";
+import CustomTable from "../version_1/CustomTable";
 
 /**
  * Important component: Vehicles: Header, CustomTable

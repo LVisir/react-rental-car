@@ -107,6 +107,8 @@ const UsefulFunctions = () => {
         return customers
     }
 
+
+
     /**
      * This function is for changing the orderType and the buttonState settings in the table configuration
      * it takes a tableConfigurations and update some of his values
@@ -118,7 +120,44 @@ const UsefulFunctions = () => {
         sortableField.changeState()
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, buildPath, askServer, customQuery, changeOrder}
+    /* ----------------------------------- funzioni aggiornate ------------------------------------*/
+    const buildOrderFieldPath = (fieldObjects) => {
+        let sortPath = ''
+        let orderPath = ''
+
+        fieldObjects.filter(element => element.sortType !=='').map(otherElement => {
+            sortPath = sortPath + otherElement.field + ','
+            orderPath = orderPath + otherElement.sortType + ','
+        })
+        if(sortPath !== '') sortPath = sortPath.slice(0,-1)
+        if(orderPath !== '') orderPath = orderPath.slice(0,-1)
+
+        return { sortPath, orderPath }
+    }
+
+    const getData = async (sortPath, orderPath, tableConfig, startPath) => {
+        let data
+        if(tableConfig.searchText==='' && tableConfig.filterSearchText===''){
+            console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            data = await response.json()
+        }
+        else{
+            console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
+            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
+            data = await response.json()
+        }
+
+
+        return data
+
+    }
+
+    const resetTableSettings = (tableConfig) => {
+
+    }
+
+    return {logout, token, setToken, flipOrderType, shiftState, buildPath, askServer, customQuery, changeOrder, buildOrderFieldPath, getData}
 
 };
 

@@ -1,10 +1,10 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import Customers from "./components/Customers";
+import Customers from "./version_1/Customers";
 import {BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
 import Login from "./components/Login";
 import Reservations from "./components/Reservations";
-import Header from "./components/Header";
+import Header from "./version_1/Header";
 import {Container} from "react-bootstrap";
 import AddCustomer from "./components/AddCustomer";
 import {CustomersProvider} from "./context/CustomerContext";
@@ -35,11 +35,7 @@ const App = () => {
   if(!token){
       return (
           <>
-              <CustomersProvider>
-                  <BookingsProvider>
-                     <LoginPage setToken={setToken} />
-                  </BookingsProvider>
-              </CustomersProvider>
+              <LoginPage setToken={setToken} />
           </>
       )
   }
@@ -48,9 +44,9 @@ const App = () => {
    */
   else if(sessionStorage.getItem('superuser')!==null){
       return (
-          <CustomersProvider>
+          <>
               <SuperuserPage logout={logout} />
-          </CustomersProvider>
+          </>
       )
   }
   /**

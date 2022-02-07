@@ -1,4 +1,4 @@
-import Button from './Button';
+import Button from '../components/Button';
 import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from './CustomTable';

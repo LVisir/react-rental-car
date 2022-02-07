@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {Button, Container, Form} from "react-bootstrap";
 import {useCustomers, useUpdateCustomers} from "../context/CustomerContext";
 import CustomerService from "../service/Customer/CustomerService";
-import Header from "./Header";
+import Header from "../version_1/Header";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
 const AddCustomer = ({logout}) => {

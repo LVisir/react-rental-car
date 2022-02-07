@@ -1,8 +1,8 @@
 import {Container, Form, FormControl, Nav, Navbar, NavDropdown, Button} from "react-bootstrap";
-import Logout from "./Logout";
+import Logout from "../components/Logout";
 import { useNavigate } from 'react-router-dom';
 import {useEffect, useState} from "react";
-import {default as MyButton} from './Button'
+import {default as MyButton} from '../components/Button'
 
 /**
  * Header component that links Vehicles, Reservations, Customers component from the SuperUserPage
@@ -37,7 +37,11 @@ const Header = ({logout, links, tableConfigurations}) => {
     const searchData = () => {
         tableConfigurations.setSearchInfoText(search)
         tableConfigurations.setSearchInfoField(filterTitle)
-        tableConfigurations.currentPage() === 1 ? tableConfigurations.searchButtonClicked() : tableConfigurations.changeCurrentPage(1)
+        if(tableConfigurations.currentPage() === 1) tableConfigurations.searchButtonClicked()
+        else{
+            tableConfigurations.changeCurrentPage(1)
+            tableConfigurations.setPage([1,2,3])
+        }
         tableConfigurations.changeResetButton()
         setSearch('')
     }
@@ -51,7 +55,11 @@ const Header = ({logout, links, tableConfigurations}) => {
      */
     const reset = () => {
         tableConfigurations.setSearchInfoText('')
-        tableConfigurations.currentPage() === 1 ? tableConfigurations.searchButtonClicked() : tableConfigurations.changeCurrentPage(1)
+        if(tableConfigurations.currentPage() === 1) tableConfigurations.searchButtonClicked()
+        else{
+            tableConfigurations.changeCurrentPage(1)
+            tableConfigurations.setPage([1,2,3])
+        }
         tableConfigurations.sortableFields.map((element) => element.orderBy() && element.resetState())
         setSearch('')
         setResetButton(true)

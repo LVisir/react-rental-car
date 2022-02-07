@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
-import {useUpdateCustomers } from '../context/CustomerContext';
 import {useUpdateBookings} from '../context/BookingContext';
 import BookingService from "../service/Booking/BookingService";
 import CustomerService from "../service/Customer/CustomerService";
@@ -23,9 +22,6 @@ const Login = ({superusers, setToken}) => {
     const {fetchReservationsByCustomerId, bookingsPath} = BookingService()
 
     const navigate = useNavigate()
-
-    // hook to update the customers in the CustomersContext
-    const updateCustomers = useUpdateCustomers()
 
     // hook to update the bookings in the BookingsContext
     const updateBookings = useUpdateBookings()
@@ -73,9 +69,6 @@ const Login = ({superusers, setToken}) => {
         // se Superuser salvo in sessione e porto alla sua pagina, viceversa per il Customer
         if (customer.role === 'SUPERUSER') {
             sessionStorage.setItem('superuser', customer.cf)
-
-            // update the customers from the CustomersContext (this function takes a list of Customers and because it is an useState, automatically it will update the customers in the Context)
-            updateCustomers(customersData)
 
             // aggiorno il token che dichiara se qualcuno si è autenticato
             setToken(true)

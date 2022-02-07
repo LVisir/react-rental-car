@@ -1,5 +1,5 @@
 import {Table} from 'react-bootstrap'
-import Button from "./Button";
+import Button from "../components/Button";
 import React from 'react';
 
 import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill } from 'react-icons/bs';
