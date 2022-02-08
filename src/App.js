@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Customers from "./version_1/Customers";
 import {BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
 import Login from "./components/Login";
-import Reservations from "./components/Reservations";
+import Reservations from "./version_1/Reservations";
 import Header from "./version_1/Header";
 import {Container} from "react-bootstrap";
 import AddCustomer from "./components/AddCustomer";

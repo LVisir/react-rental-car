@@ -3,9 +3,11 @@ import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "re
 import Logout from "./Logout";
 import {default as MyButton} from '../components/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
+import {useNavigate} from "react-router-dom";
 
 const Header = ({ logout, links, tableConfig, setTableConfig }) => {
 
+    const navigate = useNavigate()
     const { buildOrderFieldPath, getData } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
@@ -26,17 +28,53 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
         setTableConfig({
             ...tableConfig,
             fieldObjects: tmpFieldObjects,
+            currentPage: 1,
+            disableResetPaginationButton: true,
+            disableResetHeaderButton: true,
+            disableResetTableButton: true,
+            currentPages: [1,2,3],
+            filterSearchText: '',
         })
-        //setSearchButton(!searchButton)
+
+        setFilter(tableConfig.dbFields[0])
     }
 
     const search = () => {
-        setTableConfig({
-            ...tableConfig,
-            filterSearchText: filter,
-            searchText: searchText,
-        })
-        setSearchButton(!searchButton)
+        if(tableConfig.currentPage !== 1){
+            setTableConfig({
+                ...tableConfig,
+                filterSearchText: filter,
+                searchText: searchText,
+                disableResetHeaderButton: false,
+                currentPages: [1,2,3],
+                currentPage: 1,
+            })
+        }
+        else{
+            setTableConfig({
+                ...tableConfig,
+                filterSearchText: filter,
+                searchText: searchText,
+                currentPages: [1,2,3],
+            })
+            setSearchButton(!searchButton)
+        }
+    }
+
+    const disablingResetButton = () => {
+        if(searchText === ''){
+            if(!tableConfig.disableResetTableButton) {
+                return false
+            }
+            else if(!tableConfig.disableResetHeaderButton) {
+                return false
+            }
+            else if(!tableConfig.disableResetPaginationButton) {
+                return false
+            }
+            return true
+        }
+        else return false
     }
 
     useEffect(() => {
@@ -47,7 +85,8 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
 
         getListObjects().then(r => setTableConfig({
             ...tableConfig,
-            list: r
+            list: r,
+            disableResetHeaderButton: false,
         }))
         setSearchText('')
 
@@ -65,7 +104,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
                         navbarScroll
                     >
                         {/* Links to other pages */}
-                        {links.map((element) => <Nav.Link key={element.name} >{element.name}</Nav.Link>)}
+                        {links.map((element) => <Nav.Link key={element.name} onClick={() => navigate(element.path)} >{element.name}</Nav.Link>)}
                         <Nav.Link href="#" disabled>
                             Link
                         </Nav.Link>
@@ -76,7 +115,11 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
                         navbarScroll
                     >
                         <Logout logout={logout} />
-                        <MyButton text={'Reset'} disable={tableConfig.resetButtonDisable} onClickDo={() => reset()} />
+                        <MyButton
+                            text={'Reset'}
+                            disable={disablingResetButton()}
+                            onClickDo={() => reset()}
+                        />
 
                         {/* Filter for searching settings*/}
                         <NavDropdown title={filter} id="navbarScrollingDropdown">

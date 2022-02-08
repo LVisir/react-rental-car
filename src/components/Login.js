@@ -43,7 +43,7 @@ const Login = ({superusers, setToken}) => {
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!email || !pass) {
-            alert('Inserire i dati')
+            alert('You must insert the data')
             return
         }
 
@@ -57,11 +57,11 @@ const Login = ({superusers, setToken}) => {
 
         // controllo se i dati sono corretti ed esistono
         if (customer===0) {
-            alert('Username e/o Password non corretti')
+            alert('Username and/or Password not correct')
             return
         } else {
             if(customer.password!==pass){
-                alert('Username e/o Password non corretti')
+                alert('Username and/or Password not correct')
                 return
             }
         }
@@ -93,7 +93,7 @@ const Login = ({superusers, setToken}) => {
         <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Inserisci email" />
+                <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

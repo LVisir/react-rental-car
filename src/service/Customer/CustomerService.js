@@ -4,7 +4,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 const CustomerService = () => {
 
     // path to fetch the list of Customer from the server
-    const customersPath = 'http://localhost:5001/customer'
+    const customersPath = 'http://localhost:5001/customers'
 
     // normally this length came from the BE; is the upperBound[(length of customers)/(data per page)]
     const customersLength = 10
@@ -53,10 +53,11 @@ const CustomerService = () => {
      */
 
 
-    const field = ['nome','cognome','dataNascita','cf', 'email']
-    const fieldHeader = ['Nome', 'Cognome', 'Data nascita', 'Cod. fiscale', 'Email']
+    const field = ['name','surname','birthDate','cf', 'email']
+    const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email']
+    const filter = ['name','surname','birthDate','cf', 'email']
 
-    return {customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader}
+    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter }
 };
 
 export default CustomerService;

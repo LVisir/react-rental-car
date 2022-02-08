@@ -11,10 +11,23 @@ const Pagination = ({ tableConfig, setTableConfig }) => {
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
         }
 
-        getListObjects().then(r => setTableConfig({
-            ...tableConfig,
-            list: r
-        }))
+        getListObjects().then(r => {
+            if(tableConfig.currentPage !== 1) {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetPaginationButton: false,
+                })
+            }
+            else {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetPaginationButton: true,
+                })
+            }
+        })
+
     }, [tableConfig.currentPage]);
 
     // change the page forward

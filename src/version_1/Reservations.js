@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom'
-import CustomTable from "../version_1/CustomTable";
+import CustomTable from "./CustomTable";
 import BookingService from "../service/Booking/BookingService";
-import Header from "../version_1/Header";
+import Header from "./Header";
 import {Container} from "react-bootstrap";
 import UsefulFunctions from "../functions/UsefulFunctions";
 

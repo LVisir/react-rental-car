@@ -2,7 +2,7 @@
 const VehiclesService = () => {
 
     // path to fetch the list of Vehicles from server
-    const vehiclesPath = 'http://localhost:5001/veicolo'
+    const vehiclesPath = 'http://localhost:5001/vehicles'
 
     // this length came from server; upperBound[listVehicles.length/data per page]
     const vehiclesLength = 10
@@ -14,10 +14,11 @@ const VehiclesService = () => {
         return vehicles
     }
 
-    const field = ['targa','modello','tipologia','casaCostruttrice', 'annoImmatricolazione']
-    const fieldHeader = ['Targa', 'Modello', 'Tipologia', 'Casa costruttrice', 'Anno Immatr.']
+    const field = ['licensePlate','model','typology','manufacturer', 'registrYear']
+    const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year']
+    const filter = ['licensePlate','model','typology','manufacturer', 'registrYear']
 
-    return {vehiclesPath, getVehicles, vehiclesLength, field, fieldHeader};
+    return {vehiclesPath, getVehicles, vehiclesLength, field, fieldHeader, filter};
 };
 
 export default VehiclesService;

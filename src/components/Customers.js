@@ -4,13 +4,16 @@ import UsefulFunctions from "../functions/UsefulFunctions";
 import Button from "./Button";
 import {Container} from "react-bootstrap";
 import CustomTable from "./CustomTable";
+import {useNavigate} from 'react-router-dom';
 import Header from "./Header";
 
 const Customers = ({ logout, links }) => {
 
-    const { field, fieldHeader, customersLength } = CustomerService()
+    const { field, fieldHeader, customersLength, filter, customersPath } = CustomerService()
 
     const { customQuery } = UsefulFunctions()
+
+    const navigate = useNavigate()
 
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
@@ -18,42 +21,44 @@ const Customers = ({ logout, links }) => {
         dataSize: customersLength,
         currentPage: 1,
         currentPages: [1,2,3],
-        searchableFields: field,
+        searchableFields: filter,
         searchText: '',
         filterSearchText: '',
         list: [],
         searchButtonClicked: false,
-        resetButtonDisable: true,
-        startPath: `http://localhost:5001/customer`,
-        tableName: 'CUSTOMER',
+        disableResetHeaderButton: true,
+        disableResetPaginationButton: true,
+        disableResetTableButton: true,
+        startPath: customersPath,
+        tableName: 'CUSTOMERS',
         fieldObjects: [
             {
-                field: 'nome',
-                header: 'Nome',
+                field: field[0],
+                header: fieldHeader[0],
                 sortable: true,
                 sortType: '',
             },
             {
-                field: 'cognome',
-                header: 'Cognome',
+                field: field[1],
+                header: fieldHeader[1],
                 sortable: true,
                 sortType: '',
             },
             {
-                field: 'dataNascita',
-                header: 'Data di nascita',
+                field: field[2],
+                header: fieldHeader[2],
                 sortable: true,
                 sortType: '',
             },
             {
-                field: 'cf',
-                header: 'Cod. fiscale',
+                field: field[3],
+                header: fieldHeader[3],
                 sortable: true,
                 sortType: '',
             },
             {
-                field: 'email',
-                header: 'Email',
+                field: field[4],
+                header: fieldHeader[4],
                 sortable: true,
                 sortType: '',
             }
@@ -62,9 +67,7 @@ const Customers = ({ logout, links }) => {
 
     useEffect(() => {
         const fetchCustomers = async () => {
-            const data = await customQuery(tableConfig.startPath, '?_limit=10')
-
-            return data
+            return await customQuery(tableConfig.startPath, '?_limit=10')
         }
 
         fetchCustomers().then(r => setTableConfig({
@@ -72,7 +75,6 @@ const Customers = ({ logout, links }) => {
             list: r,
         }))
     }, []);
-
 
     return (
         <>

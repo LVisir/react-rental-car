@@ -16,19 +16,23 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
         }
 
-        getListObjects().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-        }))
-        if(tableConfig.fieldObjects.filter(x => x.sortType !== '').length > 0){
-            setTableConfig({
-                ...tableConfig,
-                resetButtonDisable: false,
-            })
-            console.log(tableConfig.resetButtonDisable)
-        }
+        getListObjects().then(r => {
+            if(sortPath !== '') {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetTableButton: false,
+                })
+            }
+            else{
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetTableButton: true,
+                })
+            }
+        })
 
-        console.log(tableConfig)
     }, [tableConfig.fieldObjects]);
 
     const shiftOrderStyle = (fieldObject) => {
@@ -83,13 +87,29 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
         }
     }
 
-    const superuserActions = () => {
-        return (
-            <td>
-                <Button text={'Modifica'}/>
-                <Button text={'Cancella'}/>
-                <Button text={'Prenotazioni'}/>
-            </td>
+    const superuserActions = (tableName) => {
+        switch (tableName){
+            case 'CUSTOMERS':
+                return (
+                    <td>
+                        <Button text={'Edit'}/>
+                        <Button text={'Delete'}/>
+                    </td>
+                )
+            case 'BOOKINGS':
+                return (
+                    <td>
+                        <Button text={'Delete'}/>
+                    </td>
+                )
+        }
+    }
+
+    const acceptDeniedBookingButton = (val) => {
+        return val === 1 ? (
+            <Button text={'Approved'} disable={true} />
+        ) : (
+            <Button text={'Approves'} color={'green'} disable={false} />
         )
     }
 
@@ -114,7 +134,11 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                             }
                         </React.Fragment>
                     )}
-                    {sessionStorage.getItem('superuser')!=null  && tableConfig.tableName === 'CUSTOMER' && <th>Azioni</th>}
+                    {
+                        sessionStorage.getItem('superuser')!=null  &&
+                        (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
+                        <th>Azioni</th>
+                    }
                 </tr>
                 </thead>
                 <tbody>
@@ -125,11 +149,32 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                                 <td key={index}>{index}</td>
                                 {
                                     tableConfig.fieldObjects.map(
-                                        (innerEl, innerIndex) =>
-                                            <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>{el[innerEl.field]}</td>
+                                        (innerEl, innerIndex) => {
+                                            if(tableConfig.tableName !== 'BOOKINGS') {
+                                                return (
+                                                <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
+                                                    {el[innerEl.field]}
+                                                </td>)
+                                            }
+                                            else if(tableConfig.tableName === 'BOOKINGS'){
+                                                return innerEl.field === 'approval' ? (
+                                                    <td key={innerIndex}>
+                                                        {acceptDeniedBookingButton(el[innerEl.field])}
+                                                    </td>
+                                                ) : (
+                                                    <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
+                                                        {el[innerEl.field]}
+                                                    </td>
+                                                )
+                                            }
+                                        }
                                     )
                                 }
-                                {sessionStorage.getItem('superuser')!=null && tableConfig.tableName === 'CUSTOMER' && superuserActions()}
+                                {
+                                    sessionStorage.getItem('superuser')!==null &&
+                                    (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
+                                    superuserActions(tableConfig.tableName)
+                                }
                             </tr>
                     )
                 }

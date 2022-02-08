@@ -3,9 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Error from '../components/Error';
 import Customers from '../version_1/Customers';
 import {default as SecondVersioneCustomers} from '../components/Customers'
-import CustomerService from '../service/Customer/CustomerService';
 import Reservations from "../components/Reservations";
-import BookingService from "../service/Booking/BookingService";
 import Vehicles from "../components/Vehicles";
 
 /**
@@ -16,11 +14,8 @@ import Vehicles from "../components/Vehicles";
  */
 const SuperuserPage = ({logout}) => {
 
-    const { customersPath } = CustomerService()
-    const { bookingsPath } = BookingService()
-
     const links = [{
-        name: 'Prenotazioni',
+        name: 'Bookings',
         path: '/Bookings',
     }, {
         name: 'Customers',
@@ -38,7 +33,7 @@ const SuperuserPage = ({logout}) => {
                     {/*<Route path={'/'} element={<Customers customersPath={customersPath} logout={logout} links={links}/>} />*/}
                     <Route path={'/'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
                     {/*<Route path={'/AddCustomer'} element={<AddCustomer logout={logout} />} />*/}
-                    <Route path={'/Bookings'} element={<Reservations bookingsPath={bookingsPath} logout={logout} links={links}/>} />
+                    <Route path={'/Bookings'} element={<Reservations logout={logout} links={links}/>} />
                     <Route path={'/Vehicles'} element={<Vehicles links={links} logout={logout}/>} />
                 </Routes>
 

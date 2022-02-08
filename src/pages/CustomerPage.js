@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Error from "../components/Error";
-import Reservations from "../components/Reservations";
+import Reservations from "../version_1/Reservations";
 import BookingService from "../service/Booking/BookingService";
 
 const CustomerPage = ({logout}) => {
