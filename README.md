@@ -8,7 +8,7 @@ the answer from the server, so because now there isn't any back-end the number o
 number of element per page). During the test, see the console to check the fetch url.
 
 # Next step
-Now that I understand how to use React functions, I will remodel the code in a appropriate way to delete all the possible 'boiler code'.
+ADD, MODIFY, DELETE actions.
 
 # Getting Started with Create React App
 
