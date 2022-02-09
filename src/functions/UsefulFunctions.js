@@ -5,6 +5,8 @@ const UsefulFunctions = () => {
     // token that indicate if a user is authenticated
     const [token, setToken] = useState((sessionStorage.getItem('customer') !== null || sessionStorage.getItem('superuser') !== null));
 
+    const [error, setError] = useState('');
+
     // logout
     const logout = () => {
 
@@ -135,25 +137,34 @@ const UsefulFunctions = () => {
         return { sortPath, orderPath }
     }
 
-    const getData = async (sortPath, orderPath, tableConfig, startPath) => {
+    /**
+     * The fetch function that is triggered anytime the table page change, the table sort methods change and the search action thrown.
+     * It concatenates the 'startPath' which indicate the path of a specific element from the server, and the 'tableConfig' settings
+     * to fetch the data asked from the user.
+     * The 'signal' is a variable that indicates if this fetch must be thrown or not. Meanwhile a fetch is thrown, if another fetch
+     * is asked, the previous one must be aborted so the 'signal' notify that. If we fall in this case the error thrown is DOMException.
+     * @param sortPath
+     * @param orderPath
+     * @param tableConfig
+     * @param startPath
+     * @param signal
+     * @returns {Promise<*>}
+     */
+    const getData = async (sortPath, orderPath, tableConfig, startPath, signal) => {
         let data
         if(tableConfig.searchText==='' && tableConfig.filterSearchText===''){
             console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
-            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`), { signal: signal })
             data = await response.json()
         }
         else{
             console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
-            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
+            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`), { signal: signal })
             data = await response.json()
         }
 
 
         return data
-
-    }
-
-    const resetTableSettings = (tableConfig) => {
 
     }
 

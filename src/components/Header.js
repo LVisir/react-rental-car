@@ -4,20 +4,28 @@ import Logout from "./Logout";
 import {default as MyButton} from '../components/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
+import useResetFetch from "../customHooks/useResetFetch";
 
 const Header = ({ logout, links, tableConfig, setTableConfig }) => {
 
     const navigate = useNavigate()
+
     const { buildOrderFieldPath, getData } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
+    // state that manage the searching filter
     const [filter, setFilter] = useState(tableConfig.dbFields[0]);
 
     // state that manage the text input in the search button
     const [searchText, setSearchText] = useState('');
 
+    // state that manage when the searchButton has been pressed
     const [searchButton, setSearchButton] = useState(false);
 
+    // custom Hook to trigger the useEffect so the fetch when the reset button is pressed
+    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false)
+
+    // function that reset all the 'tableConfig' settings and trigger the useEffect of the useResetFetch(...)
     const reset = () => {
         setSearchText('')
         let tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
@@ -34,33 +42,36 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
             disableResetTableButton: true,
             currentPages: [1,2,3],
             filterSearchText: '',
+            searchText: '',
         })
 
         setFilter(tableConfig.dbFields[0])
+        setSearchText('')
+        setResetState(!resetState)
+
     }
 
+    /**
+     * Fill the tableConfig with the appropriate data to fetch what the user entered the search input text box
+     */
     const search = () => {
-        if(tableConfig.currentPage !== 1){
-            setTableConfig({
-                ...tableConfig,
-                filterSearchText: filter,
-                searchText: searchText,
-                disableResetHeaderButton: false,
-                currentPages: [1,2,3],
-                currentPage: 1,
-            })
-        }
-        else{
-            setTableConfig({
-                ...tableConfig,
-                filterSearchText: filter,
-                searchText: searchText,
-                currentPages: [1,2,3],
-            })
-            setSearchButton(!searchButton)
-        }
+        setTableConfig({
+            ...tableConfig,
+            filterSearchText: filter,
+            searchText: searchText,
+            disableResetHeaderButton: false,
+            currentPages: [1,2,3],
+            currentPage: 1,
+        })
+        setSearchButton(!searchButton)
     }
 
+    /**
+     * Function that control is the reset button should be disabled or not. He has to be active when the user did a search,
+     * change the order settings or change the page. We have three variables that manage this states. Based on them the button
+     * are/aren't disabled.
+     * @returns {boolean}
+     */
     const disablingResetButton = () => {
         if(searchText === ''){
             if(!tableConfig.disableResetTableButton) {
@@ -74,21 +85,34 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
             }
             return true
         }
-        else return false
+        else {
+            return false
+        }
     }
 
+    // triggered when the useState searchButton has been pressed
     useEffect(() => {
 
+        // variables useful to manage different simultaneously fetch
+        const controller = new AbortController()
+        const signal = controller.signal
+
         const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
+            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
+        // fetch + make available the reset button
         getListObjects().then(r => setTableConfig({
             ...tableConfig,
             list: r,
             disableResetHeaderButton: false,
         }))
         setSearchText('')
+
+        return () => {
+            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
+            controller.abort()
+        }
 
     }, [searchButton]);
 

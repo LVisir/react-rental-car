@@ -1,6 +1,5 @@
 import {Table} from "react-bootstrap";
-import React, {useEffect} from "react";
-
+import React, {useEffect, useState} from "react";
 import Pagination from "./Pagination";
 import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill} from "react-icons/bs";
 import Button from "./Button";
@@ -11,11 +10,20 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
     const { buildOrderFieldPath, getData } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
+    const [sortButton, setSortButton] = useState(false);
+
+    // triggered when the sort button is pressed
     useEffect(() => {
+
+        // variables useful to manage different simultaneously fetch
+        const controller = new AbortController()
+        const signal = controller.signal
+
         const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
+            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
+        // fetch + manage the reset button if it has to be available or not
         getListObjects().then(r => {
             if(sortPath !== '') {
                 setTableConfig({
@@ -33,12 +41,23 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
             }
         })
 
-    }, [tableConfig.fieldObjects]);
+        return () => {
+            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
+            controller.abort()
+        }
 
+
+    }, [sortButton]);
+
+    /**
+     * The order are '' -> 'asc' -> 'desc' -> ... (back to the start like a circle)
+     * @param fieldObject
+     */
     const shiftOrderStyle = (fieldObject) => {
         let tmpFieldObjects
         switch (fieldObject.sortType){
             case '':
+                // a process to update via spread operator an array of object inside an object (tableConfig)
                 tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
                     let returnValue = { ...a }
                     if (a.field === fieldObject.field) returnValue.sortType = 'asc'
@@ -48,6 +67,8 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                     ...tableConfig,
                     fieldObjects: tmpFieldObjects
                 })
+                // trigger the useEffect
+                setSortButton(!sortButton)
                 break
             case 'asc':
                 tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
@@ -59,6 +80,8 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                     ...tableConfig,
                     fieldObjects: tmpFieldObjects
                 })
+                // trigger the useEffect
+                setSortButton(!sortButton)
                 break
             case 'desc':
                 tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
@@ -70,10 +93,13 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                     ...tableConfig,
                     fieldObjects: tmpFieldObjects
                 })
+                // trigger the useEffect
+                setSortButton(!sortButton)
                 break
         }
     }
 
+    // based on the sort type return an appropriate button
     const sortStyle = (fieldObject) => {
         switch (fieldObject.sortType){
             case '':
@@ -87,6 +113,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
         }
     }
 
+    // actions of the superuser based on the type of table
     const superuserActions = (tableName) => {
         switch (tableName){
             case 'CUSTOMERS':
@@ -105,6 +132,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
         }
     }
 
+    // function that gives the appropriate button for the bookings approvals
     const acceptDeniedBookingButton = (val) => {
         return val === 1 ? (
             <Button text={'Approved'} disable={true} />
@@ -119,6 +147,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                 <thead>
                 <tr style={{textAlign: 'center'}} >
                     <th>#</th>
+                    {/* Header of the table based on the tableConfig settings */}
                     {tableConfig.fieldObjects.map((element, index) =>
                         <React.Fragment key={index} >
                             <th>
@@ -134,6 +163,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                             }
                         </React.Fragment>
                     )}
+                    {/* Superuser header layout */}
                     {
                         sessionStorage.getItem('superuser')!=null  &&
                         (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
@@ -143,13 +173,16 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                 </thead>
                 <tbody>
                 {
+                    /* Iterating through the list and creating the corresponding row  */
                     tableConfig.list.map(
                         (el, index) =>
                             <tr key={index} style={{textAlign: 'center'}}>
+                                {/* Insert in the appropriate column the appropriate data */}
                                 <td key={index}>{index}</td>
                                 {
                                     tableConfig.fieldObjects.map(
                                         (innerEl, innerIndex) => {
+                                            /* which column can be sorted */
                                             if(tableConfig.tableName !== 'BOOKINGS') {
                                                 return (
                                                 <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
@@ -157,6 +190,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                                                 </td>)
                                             }
                                             else if(tableConfig.tableName === 'BOOKINGS'){
+                                                /* in the bookings table the approvals must be a button active/disable */
                                                 return innerEl.field === 'approval' ? (
                                                     <td key={innerIndex}>
                                                         {acceptDeniedBookingButton(el[innerEl.field])}
@@ -170,6 +204,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                                         }
                                     )
                                 }
+                                {/* Super user actions layout */}
                                 {
                                     sessionStorage.getItem('superuser')!==null &&
                                     (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
