@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Button from "./Button";
+import Button from "../graphic/Button";
 
 /**
  * Componente Logout che serve appunto per effettuare il logout

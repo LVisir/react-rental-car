@@ -7,8 +7,11 @@ The next step is written below. The links available now are Prenotazioni, Custom
 the answer from the server, so because now there isn't any back-end the number of pages are static (depends on (number of element)/10 upper bound, where 10 are the
 number of element per page). During the test, see the console to check the fetch url.
 
+## Updates
+ADD and DELETE now work perfectly. 
+
 # Next step
-ADD, MODIFY, DELETE actions.
+DELETE doesn't update the UI values. DELETE adjustments need it; MODIFY still not implemented.
 
 # Getting Started with Create React App
 

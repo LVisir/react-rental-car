@@ -1,19 +1,13 @@
-import {useEffect, useState} from 'react';
-import CustomerService from '../service/Customer/CustomerService';
-import UsefulFunctions from "../functions/UsefulFunctions";
-import Button from "./Button";
-import {Container} from "react-bootstrap";
-import CustomTable from "./CustomTable";
-import {useNavigate} from 'react-router-dom';
-import Header from "./Header";
+import { useState } from 'react';
+import CustomerService from '../../service/Customer/CustomerService';
+import AddCustomer from "../add/AddCustomer";
+import { Route, Routes } from 'react-router-dom';
+import Error from "../errors/Error";
+import CustomersTable from "../table/CustomersTable";
 
 const Customers = ({ logout, links }) => {
 
     const { field, fieldHeader, customersLength, filter, customersPath } = CustomerService()
-
-    const { customQuery } = UsefulFunctions()
-
-    const navigate = useNavigate()
 
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
@@ -65,27 +59,13 @@ const Customers = ({ logout, links }) => {
         ]
     });
 
-    useEffect(() => {
-        const fetchCustomers = async () => {
-            return await customQuery(tableConfig.startPath, '?_limit=10')
-        }
-
-        fetchCustomers().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-        }))
-    }, []);
-
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            <Container className={'my-2'}>
-                <h3>
-                    Customers
-                    <Button color={'green'} text={'Aggiungi'} />
-                </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            </Container>
+                <Routes>
+                    <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
+                    <Route path={'AddCustomer'} element={<AddCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                    <Route path={'*'} element={<Error />} />
+                </Routes>
         </>
     );
 };

@@ -1,15 +1,17 @@
-import UsefulFunctions from "../functions/UsefulFunctions";
+import UsefulFunctions from "../../functions/UsefulFunctions";
 import {useEffect, useState} from "react";
-import Header from "./Header";
+import Header from "../Header";
 import {Container} from "react-bootstrap";
-import CustomTable from "./CustomTable";
-import BookingService from "../service/Booking/BookingService";
+import CustomTable from "../table/CustomTable";
+import BookingService from "../../service/Booking/BookingService";
+import {Route, Routes} from "react-router-dom";
+import BookingsTable from "../table/BookingsTable";
+import AddVehicle from "../add/AddVehicle";
+import Error from "../errors/Error";
 
 const Reservations = ({ logout, links }) => {
 
     const { field, fieldHeader, bookingsLength, filter, bookingsPath } = BookingService()
-
-    const { customQuery } = UsefulFunctions()
 
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
@@ -67,26 +69,12 @@ const Reservations = ({ logout, links }) => {
         ]
     });
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            return await customQuery(tableConfig.startPath, '?_limit=10')
-        }
-
-        fetchBookings().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-        }))
-    }, []);
-
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            <Container className={'my-2'}>
-                <h3>
-                    Bookings
-                </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            </Container>
+            <Routes>
+                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
+                <Route path={'*'} element={<Error />} />
+            </Routes>
         </>
     );
 };

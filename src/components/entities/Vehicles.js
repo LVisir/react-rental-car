@@ -1,16 +1,13 @@
-import UsefulFunctions from "../functions/UsefulFunctions";
-import {useEffect, useState} from "react";
-import VehiclesService from "../service/Vehicles/VehiclesService";
-import Header from "./Header";
-import Button from "./Button";
-import {Container} from "react-bootstrap";
-import CustomTable from "./CustomTable";
+import  { useState } from "react";
+import VehiclesService from "../../service/Vehicles/VehiclesService";
+import { Route, Routes } from "react-router-dom";
+import Error from "../errors/Error";
+import VehiclesTable from "../table/VehiclesTable";
+import AddVehicle from "../add/AddVehicle";
 
 const Vehicles = ({ logout, links }) => {
 
     const { field, fieldHeader, vehiclesLength, filter, vehiclesPath } = VehiclesService()
-
-    const { customQuery } = UsefulFunctions()
 
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
@@ -62,27 +59,13 @@ const Vehicles = ({ logout, links }) => {
         ]
     });
 
-    useEffect(() => {
-        const fetchVehicles = async () => {
-            return await customQuery(tableConfig.startPath, '?_limit=10')
-        }
-
-        fetchVehicles().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-        }))
-    }, []);
-
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            <Container className={'my-2'}>
-                <h3>
-                    Vehicles
-                    <Button color={'green'} text={'Aggiungi'} />
-                </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} />
-            </Container>
+            <Routes>
+                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
+                <Route path={'AddVehicle'} element={<AddVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'*'} element={<Error />} />
+            </Routes>
         </>
     );
 };

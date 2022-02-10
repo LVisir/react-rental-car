@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
-import {useUpdateBookings} from '../context/BookingContext';
-import BookingService from "../service/Booking/BookingService";
-import CustomerService from "../service/Customer/CustomerService";
+import {useUpdateBookings} from '../../context/BookingContext';
+import BookingService from "../../service/Booking/BookingService";
+import CustomerService from "../../service/Customer/CustomerService";
 
 /**
  * Pagina di login che si carica tutti i Customer e i Superuser
@@ -70,9 +70,11 @@ const Login = ({superusers, setToken}) => {
         if (customer.role === 'SUPERUSER') {
             sessionStorage.setItem('superuser', customer.cf)
 
+            navigate('/Customers')
+
             // aggiorno il token che dichiara se qualcuno si è autenticato
             setToken(true)
-            navigate('/')
+
         } else {
             sessionStorage.setItem('customer', customer.cf)
 

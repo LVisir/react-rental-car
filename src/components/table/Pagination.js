@@ -1,4 +1,4 @@
-import UsefulFunctions from "../functions/UsefulFunctions";
+import UsefulFunctions from "../../functions/UsefulFunctions";
 import {useEffect, useState} from "react";
 
 const Pagination = ({ tableConfig, setTableConfig }) => {

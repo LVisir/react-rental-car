@@ -1,10 +1,10 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Error from '../components/Error';
-import Customers from '../version_1/Customers';
-import {default as SecondVersioneCustomers} from '../components/Customers'
-import Reservations from "../components/Reservations";
-import Vehicles from "../components/Vehicles";
+import {BrowserRouter as Router, Outlet, Route, Routes} from 'react-router-dom';
+import Error from '../components/errors/Error';
+import {default as SecondVersioneCustomers} from '../components/entities/Customers'
+import Reservations from "../components/entities/Reservations";
+import Vehicles from "../components/entities/Vehicles";
+import AddCustomer from "../components/add/AddCustomer";
 
 /**
  * It wraps the Customers and the Error components to show the homepage of a Superuser
@@ -19,7 +19,7 @@ const SuperuserPage = ({logout}) => {
         path: '/Bookings',
     }, {
         name: 'Customers',
-        path: '/'
+        path: '/Customers'
     }, {
         name: 'Vehicles',
         path: '/Vehicles'
@@ -30,13 +30,10 @@ const SuperuserPage = ({logout}) => {
 
                 <Routes>
                     <Route path="*" element={<Error />} />
-                    {/*<Route path={'/'} element={<Customers customersPath={customersPath} logout={logout} links={links}/>} />*/}
-                    <Route path={'/'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
-                    {/*<Route path={'/AddCustomer'} element={<AddCustomer logout={logout} />} />*/}
-                    <Route path={'/Bookings'} element={<Reservations logout={logout} links={links}/>} />
-                    <Route path={'/Vehicles'} element={<Vehicles links={links} logout={logout}/>} />
+                    <Route path={'/Customers/*'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
+                    <Route path={'/Bookings/*'} element={<Reservations logout={logout} links={links}/>} />
+                    <Route path={'/Vehicles/*'} element={<Vehicles links={links} logout={logout}/>} />
                 </Routes>
-
         </Router>
     );
 };

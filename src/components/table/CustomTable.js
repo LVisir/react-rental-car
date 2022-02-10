@@ -2,15 +2,19 @@ import {Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import Pagination from "./Pagination";
 import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill} from "react-icons/bs";
-import Button from "./Button";
-import UsefulFunctions from "../functions/UsefulFunctions";
+import Button from "../graphic/Button";
+import UsefulFunctions from "../../functions/UsefulFunctions";
+import DeleteDialog from "../confirmDialog/DeleteDialog";
 
 const CustomTable = ({ tableConfig, setTableConfig }) => {
 
-    const { buildOrderFieldPath, getData } = UsefulFunctions()
+    const { buildOrderFieldPath, getData, deleteObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     const [sortButton, setSortButton] = useState(false);
+
+    const [deleteDialog, setDeleteDialog] = useState(false);
+    const [idObject, setIdObject] = useState(null);
 
     // triggered when the sort button is pressed
     useEffect(() => {
@@ -114,19 +118,29 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
     }
 
     // actions of the superuser based on the type of table
-    const superuserActions = (tableName) => {
+    const superuserActions = (tableName, id) => {
         switch (tableName){
             case 'CUSTOMERS':
                 return (
                     <td>
-                        <Button text={'Edit'}/>
-                        <Button text={'Delete'}/>
+                        <Button color={'MediumSlateBlue'} text={'Edit'}/>
+                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
+                            setIdObject(id)
+                            setDeleteDialog(true)
+                        }}/>
                     </td>
                 )
             case 'BOOKINGS':
                 return (
                     <td>
-                        <Button text={'Delete'}/>
+                        <Button color={'MediumSlateBlue'} text={'Delete'}/>
+                    </td>
+                )
+            case 'VEHICLES':
+                return (
+                    <td>
+                        <Button color={'MediumSlateBlue'} text={'Edit'}/>
+                        <Button color={'MediumSlateBlue'} text={'Delete'}/>
                     </td>
                 )
         }
@@ -166,7 +180,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                     {/* Superuser header layout */}
                     {
                         sessionStorage.getItem('superuser')!=null  &&
-                        (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
+                        (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                         <th>Azioni</th>
                     }
                 </tr>
@@ -207,14 +221,16 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                                 {/* Super user actions layout */}
                                 {
                                     sessionStorage.getItem('superuser')!==null &&
-                                    (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS') &&
-                                    superuserActions(tableConfig.tableName)
+                                    (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
+                                    superuserActions(tableConfig.tableName, el['id'])
                                 }
                             </tr>
                     )
                 }
                 </tbody>
             </Table>
+            {/* Confirm message when the user try to delete */}
+            {   deleteDialog && <DeleteDialog bool={deleteDialog} setBool={setDeleteDialog} deleteObject={deleteObject} id={idObject} setId={setIdObject} path={tableConfig.startPath} />  }
             <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig}/>
         </>
     );

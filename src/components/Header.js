@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
-import Logout from "./Logout";
-import {default as MyButton} from '../components/Button'
+import Logout from "./authentication/Logout";
+import {default as MyButton} from './graphic/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
 import useResetFetch from "../customHooks/useResetFetch";
 
-const Header = ({ logout, links, tableConfig, setTableConfig }) => {
+const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch }) => {
 
     const navigate = useNavigate()
 
@@ -23,7 +23,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
     const [searchButton, setSearchButton] = useState(false);
 
     // custom Hook to trigger the useEffect so the fetch when the reset button is pressed
-    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false)
+    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false, throwResetFetch)
 
     // function that reset all the 'tableConfig' settings and trigger the useEffect of the useResetFetch(...)
     const reset = () => {
@@ -101,13 +101,15 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        // fetch + make available the reset button
-        getListObjects().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-            disableResetHeaderButton: false,
-        }))
-        setSearchText('')
+        if(showSearchButton) {
+            // fetch + make available the reset button
+            getListObjects().then(r => setTableConfig({
+                ...tableConfig,
+                list: r,
+                disableResetHeaderButton: false,
+            }))
+            setSearchText('')
+        }
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling
@@ -139,34 +141,35 @@ const Header = ({ logout, links, tableConfig, setTableConfig }) => {
                         navbarScroll
                     >
                         <Logout logout={logout} />
-                        <MyButton
-                            text={'Reset'}
-                            disable={disablingResetButton()}
-                            onClickDo={() => reset()}
-                        />
+                        { showSearchButton &&
+                            <MyButton
+                                text={'Reset'}
+                                disable={disablingResetButton()}
+                                onClickDo={() => reset()}
+                            />
+                        }
 
-                        {/* Filter for searching settings*/}
-                        <NavDropdown title={filter} id="navbarScrollingDropdown">
-                            {tableConfig.searchableFields
-                                .map((element) =>
-                                    <NavDropdown.Item key={element} onClick={() => setFilter(element)}>
-                                        {element}
-                                    </NavDropdown.Item>
-                                )}
-                        </NavDropdown>
+                        { showSearchButton &&
+                            /* Filter for searching settings*/
+                            <NavDropdown title={filter} id="navbarScrollingDropdown">
+                                {tableConfig.searchableFields
+                                    .map((element) => <NavDropdown.Item key={element} onClick={() => setFilter(element)}>{element}</NavDropdown.Item>)}
+                            </NavDropdown>
+                        }
                     </Nav>
-                    {/* Search text input */}
-                    <Form className="d-flex" >
-                        <FormControl
+                    { showSearchButton &&
+                        /* Search text input */
+                        <Form className="d-flex" >
+                            <FormControl
                             type="search"
                             placeholder="Search"
                             className="me-2"
                             aria-label="Search"
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
-                        />
-                        <Button disabled={searchText===''} variant="outline-success" onClick={() => search()}>Search</Button>
-                    </Form>
+                            />
+                            <Button disabled={searchText===''} variant="outline-success" onClick={() => search()}>Search</Button>
+                        </Form>}
                 </Navbar.Collapse>
             </Container>
         </Navbar>

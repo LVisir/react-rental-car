@@ -5,8 +5,6 @@ const UsefulFunctions = () => {
     // token that indicate if a user is authenticated
     const [token, setToken] = useState((sessionStorage.getItem('customer') !== null || sessionStorage.getItem('superuser') !== null));
 
-    const [error, setError] = useState('');
-
     // logout
     const logout = () => {
 
@@ -17,7 +15,7 @@ const UsefulFunctions = () => {
         setToken(false)
     }
 
-    // functions that return the order type based on a certain input
+   /* // functions that return the order type based on a certain input
     const flipOrderType = (type) => {
         switch (type){
             case 0:
@@ -33,9 +31,9 @@ const UsefulFunctions = () => {
     const shiftState = (state) => {
         let y = state + 1
         return y%3
-    }
+    }*/
 
-    // take from the tableConfigurations the fields to sort by and their order type (asc|desc)
+    /*// take from the tableConfigurations the fields to sort by and their order type (asc|desc)
     const buildPath = (sortableFields) => {
         let sort = []
         let order = []
@@ -64,7 +62,7 @@ const UsefulFunctions = () => {
         })
 
         return {sortPath, orderPath}
-    }
+    }*/
 
     // usePrevious hook
     function usePrevious(value) {
@@ -84,7 +82,7 @@ const UsefulFunctions = () => {
      * @param startPath
      * @returns {Promise<*>}
      */
-    const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
+    /*const askServer = async (sortPath, orderPath, tableConfigurations, customQuery, startPath) => {
         let data
         if(tableConfigurations.searchInfoText() === ''){
             console.log(`?_page=${tableConfigurations.currentPage()}&_limit=10&_sort=${sortPath}&_order=${orderPath}`)
@@ -107,7 +105,7 @@ const UsefulFunctions = () => {
         const response = await fetch(startPath+endPath)
         const customers = await response.json()
         return customers
-    }
+    }*/
 
 
 
@@ -117,10 +115,10 @@ const UsefulFunctions = () => {
      * @param param
      * @param index
      */
-    const changeOrder = (sortableField) => {
+/*    const changeOrder = (sortableField) => {
         sortableField.changeOrderType()
         sortableField.changeState()
-    }
+    }*/
 
     /* ----------------------------------- funzioni aggiornate ------------------------------------*/
     const buildOrderFieldPath = (fieldObjects) => {
@@ -168,7 +166,38 @@ const UsefulFunctions = () => {
 
     }
 
-    return {logout, token, setToken, flipOrderType, shiftState, buildPath, askServer, customQuery, changeOrder, buildOrderFieldPath, getData}
+    /**
+     * Add an object to the path given in input
+     * @param object
+     * @param path
+     * @returns {Promise<any>}
+     */
+    const addObject = async (object, path) => {
+
+        const response = await fetch(
+            path,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(object),
+            }
+        )
+
+        const data = await response.json()
+
+        return data
+    }
+
+    const deleteObject = async (id, path) => {
+        await fetch(
+            path+`/${id}`,
+            {method: 'DELETE'}
+        )
+    }
+
+    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject }
 
 };
 

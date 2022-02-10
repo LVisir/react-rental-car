@@ -11,7 +11,7 @@ import UsefulFunctions from "../functions/UsefulFunctions";
  * @param bool
  * @returns {{resetState: unknown, setResetState: (value: unknown) => void}}
  */
-const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool) => {
+const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool, throwFetch) => {
     const [resetState, setResetState] = useState(bool);
 
     const { getData } = UsefulFunctions()
@@ -27,11 +27,13 @@ const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool) =
             return await getData(data.sortPath, data.orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        // normal call because the reset() function in Header.js reset all the table settings
-        getListObjects().then(r => setTableConfig({
-            ...tableConfig,
-            list: r,
-        }))
+        if(throwFetch) {
+            // normal call because the reset() function in Header.js reset all the table settings
+            getListObjects().then(r => setTableConfig({
+                ...tableConfig,
+                list: r,
+            }))
+        }
         setSearchText('')
 
         return () => {
