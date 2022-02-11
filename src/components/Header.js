@@ -5,12 +5,13 @@ import {default as MyButton} from './graphic/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
 import useResetFetch from "../customHooks/useResetFetch";
+import PropTypes from 'prop-types'
 
-const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch }) => {
+const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch, objectList, setObjectList }) => {
 
     const navigate = useNavigate()
 
-    const { buildOrderFieldPath, getData } = UsefulFunctions()
+    const { buildOrderFieldPath, getData, resetTableConfig } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     // state that manage the searching filter
@@ -23,27 +24,13 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
     const [searchButton, setSearchButton] = useState(false);
 
     // custom Hook to trigger the useEffect so the fetch when the reset button is pressed
-    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false, throwResetFetch)
+    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false, throwResetFetch, setObjectList, objectList)
 
     // function that reset all the 'tableConfig' settings and trigger the useEffect of the useResetFetch(...)
     const reset = () => {
         setSearchText('')
-        let tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
-            let returnValue = { ...a }
-            if(a.sortType !== '') returnValue.sortType = ''
-            return returnValue
-        })
-        setTableConfig({
-            ...tableConfig,
-            fieldObjects: tmpFieldObjects,
-            currentPage: 1,
-            disableResetPaginationButton: true,
-            disableResetHeaderButton: true,
-            disableResetTableButton: true,
-            currentPages: [1,2,3],
-            filterSearchText: '',
-            searchText: '',
-        })
+
+        resetTableConfig(tableConfig, setTableConfig)
 
         setFilter(tableConfig.dbFields[0])
         setSearchText('')
@@ -103,11 +90,14 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
 
         if(showSearchButton) {
             // fetch + make available the reset button
-            getListObjects().then(r => setTableConfig({
-                ...tableConfig,
-                list: r,
-                disableResetHeaderButton: false,
-            }))
+            getListObjects().then(r => {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetHeaderButton: false,
+                })
+                showSearchButton && setObjectList(r)
+            })
             setSearchText('')
         }
 
@@ -175,5 +165,15 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         </Navbar>
     );
 };
+
+Header.propTypes = {
+    setObjectList: PropTypes.func,
+    objectList: PropTypes.array
+}
+
+Header.defaultProps = {
+    setObjectList: () => {},
+    objectList: []
+}
 
 export default Header;

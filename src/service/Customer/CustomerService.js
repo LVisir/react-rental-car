@@ -16,6 +16,12 @@ const CustomerService = () => {
         return customers
     }
 
+    const getCustomerById = async (id) => {
+        const response = await fetch(customersPath+`/${id}`)
+        const customer = await response.json()
+        return customer
+    }
+
     // custom the queries to apply pagination, sorting, filtering ecc
     const customQueryCustomers = async (path) => {
         const response = await fetch(customersPath.concat(path))
@@ -57,7 +63,7 @@ const CustomerService = () => {
     const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email']
     const filter = ['name','surname','birthDate','cf', 'email']
 
-    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter }
+    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById }
 };
 
 export default CustomerService;

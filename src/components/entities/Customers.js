@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import CustomerService from '../../service/Customer/CustomerService';
-import AddCustomer from "../add/AddCustomer";
+import AddUpdateCustomer from "../addUpdate/AddUpdateCustomer";
 import { Route, Routes } from 'react-router-dom';
 import Error from "../errors/Error";
 import CustomersTable from "../table/CustomersTable";
@@ -59,13 +59,16 @@ const Customers = ({ logout, links }) => {
         ]
     });
 
+    const [customers, setCustomers] = useState(tableConfig.list);
+
     return (
         <>
-                <Routes>
-                    <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
-                    <Route path={'AddCustomer'} element={<AddCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
-                    <Route path={'*'} element={<Error />} />
-                </Routes>
+            <Routes>
+                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} /> } />
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'*'} element={<Error />} />
+            </Routes>
         </>
     );
 };

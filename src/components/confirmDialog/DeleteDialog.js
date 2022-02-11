@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import PropTypes from 'prop-types'
 
-const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path }) => {
+const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path, objectList, setObjectList, updateTable, setUpdateTable }) => {
     const [show, setShow] = useState(bool);
 
     const handleConfirm = () => {
@@ -12,6 +12,8 @@ const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path }) => {
         }
 
         doDelete()
+        setUpdateTable(!updateTable)
+        setObjectList(objectList.filter((entity) => entity.id !== id))
         setShow(false)
         setBool(false)
     };

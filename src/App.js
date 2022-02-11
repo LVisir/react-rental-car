@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
 import Login from "./components/authentication/Login";
 import {Container} from "react-bootstrap";
-import AddCustomer from "./components/add/AddCustomer";
+import AddUpdateCustomer from "./components/addUpdate/AddUpdateCustomer";
 import {CustomersProvider} from "./context/CustomerContext";
 import {BookingsProvider} from "./context/BookingContext";
 import Error from "./components/errors/Error";

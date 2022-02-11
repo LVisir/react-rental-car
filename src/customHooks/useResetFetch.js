@@ -9,9 +9,12 @@ import UsefulFunctions from "../functions/UsefulFunctions";
  * @param setTableConfig
  * @param setSearchText
  * @param bool
+ * @param throwFetch
+ * @param setObjectList
+ * @param objectList
  * @returns {{resetState: unknown, setResetState: (value: unknown) => void}}
  */
-const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool, throwFetch) => {
+const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool, throwFetch, setObjectList, objectList) => {
     const [resetState, setResetState] = useState(bool);
 
     const { getData } = UsefulFunctions()
@@ -29,10 +32,13 @@ const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool, t
 
         if(throwFetch) {
             // normal call because the reset() function in Header.js reset all the table settings
-            getListObjects().then(r => setTableConfig({
-                ...tableConfig,
-                list: r,
-            }))
+            getListObjects().then(r => {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                })
+                objectList !== [] && setObjectList(r)
+            })
         }
         setSearchText('')
 

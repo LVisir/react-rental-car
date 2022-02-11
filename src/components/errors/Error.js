@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-const Error = () => {
+const Error = ({ homePath }) => {
     return (
         <div>
             <h1 style={{ color: "red", fontSize: 100 }}>404</h1>

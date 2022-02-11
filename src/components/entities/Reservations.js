@@ -6,7 +6,7 @@ import CustomTable from "../table/CustomTable";
 import BookingService from "../../service/Booking/BookingService";
 import {Route, Routes} from "react-router-dom";
 import BookingsTable from "../table/BookingsTable";
-import AddVehicle from "../add/AddVehicle";
+import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 import Error from "../errors/Error";
 
 const Reservations = ({ logout, links }) => {
@@ -69,10 +69,12 @@ const Reservations = ({ logout, links }) => {
         ]
     });
 
+    const [bookings, setBookings] = useState(tableConfig.list);
+
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
+                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} bookings={bookings} setBookings={setBookings} /> } />
                 <Route path={'*'} element={<Error />} />
             </Routes>
         </>

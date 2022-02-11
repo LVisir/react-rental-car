@@ -3,7 +3,7 @@ import VehiclesService from "../../service/Vehicles/VehiclesService";
 import { Route, Routes } from "react-router-dom";
 import Error from "../errors/Error";
 import VehiclesTable from "../table/VehiclesTable";
-import AddVehicle from "../add/AddVehicle";
+import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 
 const Vehicles = ({ logout, links }) => {
 
@@ -59,11 +59,14 @@ const Vehicles = ({ logout, links }) => {
         ]
     });
 
+    const [vehicles, setVehicles] = useState(tableConfig.list);
+
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} /> } />
-                <Route path={'AddVehicle'} element={<AddVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} /> } />
+                <Route path={'AddVehicle'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
                 <Route path={'*'} element={<Error />} />
             </Routes>
         </>

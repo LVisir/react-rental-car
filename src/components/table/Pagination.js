@@ -1,7 +1,7 @@
 import UsefulFunctions from "../../functions/UsefulFunctions";
 import {useEffect, useState} from "react";
 
-const Pagination = ({ tableConfig, setTableConfig }) => {
+const Pagination = ({ tableConfig, setTableConfig, setObjectList }) => {
 
     const { buildOrderFieldPath, getData } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
@@ -35,6 +35,7 @@ const Pagination = ({ tableConfig, setTableConfig }) => {
                     disableResetPaginationButton: true,
                 })
             }
+            setObjectList(r)
         })
 
         return () => {

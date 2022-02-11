@@ -190,14 +190,51 @@ const UsefulFunctions = () => {
         return data
     }
 
+    const updateObject = async (object, path) => {
+        const response = await fetch(
+            path,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(object),
+            }
+        )
+
+        const data = await response.json()
+
+        return data
+    }
+
     const deleteObject = async (id, path) => {
         await fetch(
             path+`/${id}`,
             {method: 'DELETE'}
         )
+
     }
 
-    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject }
+    const resetTableConfig = (tableConfig, setTableConfig) => {
+        let tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
+            let returnValue = { ...a }
+            if(a.sortType !== '') returnValue.sortType = ''
+            return returnValue
+        })
+        setTableConfig({
+            ...tableConfig,
+            fieldObjects: tmpFieldObjects,
+            currentPage: 1,
+            disableResetPaginationButton: true,
+            disableResetHeaderButton: true,
+            disableResetTableButton: true,
+            currentPages: [1,2,3],
+            filterSearchText: '',
+            searchText: '',
+        })
+    }
+
+    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject }
 
 };
 

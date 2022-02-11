@@ -14,11 +14,17 @@ const VehiclesService = () => {
         return vehicles
     }
 
+    const getVehicleById = async (id) => {
+        const response = await fetch(vehiclesPath+`/${id}`)
+        const vehicles = await response.json()
+        return vehicles
+    }
+
     const field = ['licensePlate','model','typology','manufacturer', 'registrYear']
     const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year']
     const filter = ['licensePlate','model','typology','manufacturer', 'registrYear']
 
-    return {vehiclesPath, getVehicles, vehiclesLength, field, fieldHeader, filter};
+    return { vehiclesPath, getVehicles, vehiclesLength, field, fieldHeader, filter, getVehicleById };
 };
 
 export default VehiclesService;

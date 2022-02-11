@@ -4,7 +4,7 @@ import Error from '../components/errors/Error';
 import {default as SecondVersioneCustomers} from '../components/entities/Customers'
 import Reservations from "../components/entities/Reservations";
 import Vehicles from "../components/entities/Vehicles";
-import AddCustomer from "../components/add/AddCustomer";
+import AddUpdateCustomer from "../components/addUpdate/AddUpdateCustomer";
 
 /**
  * It wraps the Customers and the Error components to show the homepage of a Superuser

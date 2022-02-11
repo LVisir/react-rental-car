@@ -5,13 +5,16 @@ import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningCharg
 import Button from "../graphic/Button";
 import UsefulFunctions from "../../functions/UsefulFunctions";
 import DeleteDialog from "../confirmDialog/DeleteDialog";
+import { useNavigate } from "react-router-dom";
 
-const CustomTable = ({ tableConfig, setTableConfig }) => {
+const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList }) => {
 
     const { buildOrderFieldPath, getData, deleteObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+    const navigate = useNavigate()
 
     const [sortButton, setSortButton] = useState(false);
+    const [confirmDeleteButton, setConfirmDeleteButton] = useState(false);
 
     const [deleteDialog, setDeleteDialog] = useState(false);
     const [idObject, setIdObject] = useState(null);
@@ -43,6 +46,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                     disableResetTableButton: true,
                 })
             }
+            setObjectList(r)
         })
 
         return () => {
@@ -51,7 +55,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
         }
 
 
-    }, [sortButton]);
+    }, [sortButton, confirmDeleteButton]);
 
     /**
      * The order are '' -> 'asc' -> 'desc' -> ... (back to the start like a circle)
@@ -123,24 +127,34 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
             case 'CUSTOMERS':
                 return (
                     <td>
-                        <Button color={'MediumSlateBlue'} text={'Edit'}/>
+                        <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
+                            navigate(`/Customers/ModifyCustomer/${id}`)
+                        }}/>
+                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
+                            setIdObject(id)
+                            setDeleteDialog(true)
+                        }} />
+                    </td>
+                )
+            case 'BOOKINGS':
+                return (
+                    <td>
                         <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
                             setIdObject(id)
                             setDeleteDialog(true)
                         }}/>
                     </td>
                 )
-            case 'BOOKINGS':
-                return (
-                    <td>
-                        <Button color={'MediumSlateBlue'} text={'Delete'}/>
-                    </td>
-                )
             case 'VEHICLES':
                 return (
                     <td>
-                        <Button color={'MediumSlateBlue'} text={'Edit'}/>
-                        <Button color={'MediumSlateBlue'} text={'Delete'}/>
+                        <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
+                            navigate(`/Vehicles/ModifyVehicle/${id}`)
+                        }}/>
+                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
+                            setIdObject(id)
+                            setDeleteDialog(true)
+                        }} />
                     </td>
                 )
         }
@@ -188,7 +202,7 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                 <tbody>
                 {
                     /* Iterating through the list and creating the corresponding row  */
-                    tableConfig.list.map(
+                    objectList.map(
                         (el, index) =>
                             <tr key={index} style={{textAlign: 'center'}}>
                                 {/* Insert in the appropriate column the appropriate data */}
@@ -230,8 +244,15 @@ const CustomTable = ({ tableConfig, setTableConfig }) => {
                 </tbody>
             </Table>
             {/* Confirm message when the user try to delete */}
-            {   deleteDialog && <DeleteDialog bool={deleteDialog} setBool={setDeleteDialog} deleteObject={deleteObject} id={idObject} setId={setIdObject} path={tableConfig.startPath} />  }
-            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig}/>
+            {
+                deleteDialog &&
+                <DeleteDialog bool={deleteDialog} setBool={setDeleteDialog} deleteObject={deleteObject}
+                              id={idObject} setId={setIdObject} path={tableConfig.startPath}
+                              objectList={objectList} setObjectList={setObjectList}
+                              updateTable={confirmDeleteButton} setUpdateTable={setConfirmDeleteButton}
+                />
+            }
+            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} setObjectList={setObjectList} />
         </>
     );
 };
