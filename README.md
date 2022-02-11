@@ -8,10 +8,10 @@ the answer from the server, so because now there isn't any back-end the number o
 number of element per page). During the test, see the console to check the fetch url.
 
 ## Updates
-ADD and DELETE now work perfectly. 
+ADD, DELETE and UPDATE works perfectly on Vehicles and Customers page.
 
 # Next step
-DELETE doesn't update the UI values. DELETE adjustments need it; MODIFY still not implemented.
+APPROVES and DELETE action for Bookings page; testing; start to build Customer login version.
 
 # Getting Started with Create React App
 
