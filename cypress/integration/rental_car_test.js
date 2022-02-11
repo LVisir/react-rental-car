@@ -1,8 +1,9 @@
+/*
 describe('test rental car', () => {
 
-    /**
+    /!**
      * Log in Superuser
-     */
+     *!/
     it('superuser log in', () => {
         // visito l'url dell'app
         cy.visit('http://localhost:3000/')
@@ -18,12 +19,12 @@ describe('test rental car', () => {
 
     })
 
-    /**
+    /!**
      * Add Customer
-     * 1 - go to /AddCustomer
+     * 1 - go to /AddUpdateCustomer
      * 2 - fill the form
      * 3 - add
-     */
+     *!/
     it('add customer', () => {
 
         cy.findByText(/aggiungi/i).click()
@@ -44,9 +45,9 @@ describe('test rental car', () => {
 
     })
 
-    /**
+    /!**
      * Logout
-     */
+     *!/
     it.skip('logout', () => {
 
         // faccio il logout
@@ -54,9 +55,9 @@ describe('test rental car', () => {
 
     })
 
-    /**
+    /!**
      * Log in Customer
-     */
+     *!/
     it.skip('customer loggato', () => {
         // visito l'url dell'app
         cy.visit('http://localhost:3000/')
@@ -83,13 +84,13 @@ describe('test rental car', () => {
         cy.findByRole('link', {  name: /go home/i}).click()
     })
 
-    /**
+    /!**
      * Logout
-     */
+     *!/
     it.skip('logout', () => {
 
         // faccio il logout
         cy.findByText(/logout/i).click()
 
     })
-})
+})*/
