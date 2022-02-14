@@ -11,7 +11,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
 
     const navigate = useNavigate()
 
-    const { buildOrderFieldPath, getData, resetTableConfig } = UsefulFunctions()
+    const { buildOrderFieldPath, getData, resetTableConfig, usePrevious } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     // state that manage the searching filter
@@ -23,8 +23,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
     // state that manage when the searchButton has been pressed
     const [searchButton, setSearchButton] = useState(false);
 
-    // custom Hook to trigger the useEffect so the fetch when the reset button is pressed
-    const {resetState, setResetState} = useResetFetch({sortPath, orderPath}, tableConfig, setTableConfig, setSearchText, false, throwResetFetch, setObjectList, objectList)
+    const [resetState, setResetState] = useState(false);
 
     // function that reset all the 'tableConfig' settings and trigger the useEffect of the useResetFetch(...)
     const reset = () => {
@@ -37,6 +36,38 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         setResetState(!resetState)
 
     }
+
+    const previousResetState = usePrevious(resetState)
+    const previousSearchState = usePrevious(searchButton)
+
+    useEffect(() => {
+        // variables useful to manage different simultaneously fetch
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        const getListObjects = async () => {
+            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+        }
+
+        if(previousResetState !== undefined) {
+            // normal call because the reset() function in Header.js reset all the table settings
+            getListObjects().then(r => {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                })
+                objectList !== [] && setObjectList(r)
+            })
+        }
+
+        setSearchText('')
+
+        return () => {
+            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
+            controller.abort()
+        }
+    }, [resetState]);
+
 
     /**
      * Fill the tableConfig with the appropriate data to fetch what the user entered the search input text box
@@ -54,7 +85,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
     }
 
     /**
-     * Function that control is the reset button should be disabled or not. He has to be active when the user did a search,
+     * Function that control if the reset button should be disabled or not. He has to be active when the user did a search,
      * change the order settings or change the page. We have three variables that manage this states. Based on them the button
      * are/aren't disabled.
      * @returns {boolean}
@@ -77,6 +108,8 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         }
     }
 
+
+
     // triggered when the useState searchButton has been pressed
     useEffect(() => {
 
@@ -89,15 +122,17 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         }
 
         if(showSearchButton) {
-            // fetch + make available the reset button
-            getListObjects().then(r => {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetHeaderButton: false,
+            if(previousSearchState !== undefined) {
+                // fetch + make available the reset button
+                getListObjects().then(r => {
+                    setTableConfig({
+                        ...tableConfig,
+                        list: r,
+                        disableResetHeaderButton: false,
+                    })
+                    showSearchButton && setObjectList(r)
                 })
-                showSearchButton && setObjectList(r)
-            })
+            }
             setSearchText('')
         }
 

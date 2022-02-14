@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList }) => {
 
-    const { buildOrderFieldPath, getData, deleteObject } = UsefulFunctions()
+
+    const { buildOrderFieldPath, getData, deleteObject, usePrevious, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const navigate = useNavigate()
 
@@ -18,6 +19,8 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
 
     const [deleteDialog, setDeleteDialog] = useState(false);
     const [idObject, setIdObject] = useState(null);
+
+    const previousSortButtonState = usePrevious(sortButton)
 
     // triggered when the sort button is pressed
     useEffect(() => {
@@ -30,24 +33,25 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        // fetch + manage the reset button if it has to be available or not
-        getListObjects().then(r => {
-            if(sortPath !== '') {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetTableButton: false,
-                })
-            }
-            else{
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetTableButton: true,
-                })
-            }
-            setObjectList(r)
-        })
+        if(previousSortButtonState !== undefined) {
+            // fetch + manage the reset button if it has to be available or not
+            getListObjects().then(r => {
+                if (sortPath !== '') {
+                    setTableConfig({
+                        ...tableConfig,
+                        list: r,
+                        disableResetTableButton: false,
+                    })
+                } else {
+                    setTableConfig({
+                        ...tableConfig,
+                        list: r,
+                        disableResetTableButton: true,
+                    })
+                }
+                setObjectList(r)
+            })
+        }
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling
@@ -160,12 +164,40 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
         }
     }
 
-    // function that gives the appropriate button for the bookings approvals
-    const acceptDeniedBookingButton = (val) => {
-        return val === 1 ? (
+    /**
+     * It gives the appropriate button for the bookings approvals;
+     * it manages the approval click by updating the UI and the BE;
+     * @param approvalValue
+     * @param booking
+     * @returns {JSX.Element}
+     */
+    const acceptDeniedBookingButton = (approvalValue, booking) => {
+        return approvalValue === 1 ? (
             <Button text={'Approved'} disable={true} />
         ) : (
-            <Button text={'Approves'} color={'green'} disable={false} />
+            <Button text={'Approves'} color={'green'} disable={false} onClickDo={() => {
+
+                const updtBooking = {...booking, approval: 1}
+
+                updateObject({...updtBooking}, tableConfig.startPath+`/${booking.id}`).then(() => {
+                    setObjectList(
+                        objectList.map(
+                            (element) =>
+                                element.id === booking.id ? (
+                                    {...element, approval: 1}
+                                ) : (
+                                    element
+                                )
+                        )
+                    )
+                })
+
+                setTableConfig({
+                    ...tableConfig,
+                    list: [...objectList]
+                })
+
+            }}/>
         )
     }
 
@@ -221,7 +253,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                                                 /* in the bookings table the approvals must be a button active/disable */
                                                 return innerEl.field === 'approval' ? (
                                                     <td key={innerIndex}>
-                                                        {acceptDeniedBookingButton(el[innerEl.field])}
+                                                        {acceptDeniedBookingButton(el[innerEl.field], el)}
                                                     </td>
                                                 ) : (
                                                     <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>

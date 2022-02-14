@@ -70,7 +70,7 @@ const Login = ({superusers, setToken}) => {
         if (customer.role === 'SUPERUSER') {
             sessionStorage.setItem('superuser', customer.cf)
 
-            navigate('/Customers')
+            navigate('/Customers', {replace: true})
 
             // aggiorno il token che dichiara se qualcuno si è autenticato
             setToken(true)

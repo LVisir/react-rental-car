@@ -1,5 +1,4 @@
-import {useState} from "react";
-import {Alert, Button} from "react-bootstrap";
+import {Alert} from "react-bootstrap";
 
 const CustomAlert = ({ text }) => {
 

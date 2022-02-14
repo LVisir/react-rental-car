@@ -6,7 +6,7 @@ import CustomAlert from "../alerts/CustomAlert";
 import { useNavigate, useParams } from "react-router-dom";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
 
-const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton }) => {
+const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles }) => {
 
     const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
     const { getVehicleById } = VehiclesService()
@@ -19,6 +19,8 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         const getVehicles = async () => {
             return await getVehicleById(id)
         }
+
+        // it means an update request was made to update a vehicle object
         if( id !== undefined) {
             const data = getVehicles()
             Promise.resolve(data).then(r => {
@@ -94,6 +96,18 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
 
         setVehicleAlreadyExists(false)
 
+        // if this component is loaded because a vehicle update is called the id is defined and the setVehicles has been passed (default [], see below)
+        if(id !== undefined && setVehicles !== []){
+            setVehicles(tableConfig.list.map(
+                (vehicle) =>
+                    vehicle.id === id ? (
+                        {...data}
+                    ) : (
+                        vehicle
+                    )
+            ))
+        }
+
         setLicensePlate('')
         setModel('')
         setTypology('')
@@ -156,5 +170,9 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         </>
     );
 };
+
+AddUpdateVehicle.defaultProps = {
+    setVehicles: []
+}
 
 export default AddUpdateVehicle;

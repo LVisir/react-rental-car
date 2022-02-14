@@ -3,10 +3,12 @@ import {useEffect, useState} from "react";
 
 const Pagination = ({ tableConfig, setTableConfig, setObjectList }) => {
 
-    const { buildOrderFieldPath, getData } = UsefulFunctions()
+    const { buildOrderFieldPath, getData, usePrevious } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     const [currentPage, setCurrentPage] = useState(tableConfig.currentPage);
+
+    const previousCurrentPageState = usePrevious(currentPage)
 
     // triggered when the useState currentPage attached to the current page of the table has been changed
     useEffect(() => {
@@ -19,24 +21,25 @@ const Pagination = ({ tableConfig, setTableConfig, setObjectList }) => {
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        // fetch + manage the reset button if it has to be available or not
-        getListObjects().then(r => {
-            if(tableConfig.currentPage !== 1) {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetPaginationButton: false,
-                })
-            }
-            else {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetPaginationButton: true,
-                })
-            }
-            setObjectList(r)
-        })
+        if(previousCurrentPageState !== undefined) {
+            // fetch + manage the reset button if it has to be available or not
+            getListObjects().then(r => {
+                if (tableConfig.currentPage !== 1) {
+                    setTableConfig({
+                        ...tableConfig,
+                        list: r,
+                        disableResetPaginationButton: false,
+                    })
+                } else {
+                    setTableConfig({
+                        ...tableConfig,
+                        list: r,
+                        disableResetPaginationButton: true,
+                    })
+                }
+                setObjectList(r)
+            })
+        }
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling

@@ -31,6 +31,7 @@ const useResetFetch = (data, tableConfig, setTableConfig, setSearchText, bool, t
         }
 
         if(throwFetch) {
+
             // normal call because the reset() function in Header.js reset all the table settings
             getListObjects().then(r => {
                 setTableConfig({

@@ -66,7 +66,7 @@ const Vehicles = ({ logout, links }) => {
             <Routes>
                 <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} /> } />
                 <Route path={'AddVehicle'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
-                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
+                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} />} />
                 <Route path={'*'} element={<Error />} />
             </Routes>
         </>

@@ -2,9 +2,27 @@ import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import PropTypes from 'prop-types'
 
+/**
+ * Dialog when a delete operation has been asked
+ * @param bool
+ * @param setBool
+ * @param deleteObject
+ * @param id
+ * @param setId
+ * @param path
+ * @param objectList
+ * @param setObjectList
+ * @param updateTable
+ * @param setUpdateTable
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path, objectList, setObjectList, updateTable, setUpdateTable }) => {
     const [show, setShow] = useState(bool);
 
+    /**
+     * After the confirmation update the values and hide the dialog
+     */
     const handleConfirm = () => {
 
         const doDelete = async () => {
@@ -18,6 +36,9 @@ const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path, objectList
         setBool(false)
     };
 
+    /**
+     * After the cancellation hide the dialog
+     */
     const handleCancel = () => {
         setId(null)
         setShow(false)

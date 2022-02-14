@@ -7,7 +7,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomerService from "../../service/Customer/CustomerService";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
-const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton }) => {
+const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers }) => {
 
     const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
     const { getCustomerById } = CustomerService()
@@ -19,6 +19,8 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         const getCustomer = async () => {
             return await getCustomerById(id)
         }
+
+        // it means an update request was made to update a customer object
         if(id !== undefined ) {
             const data = getCustomer()
             Promise.resolve(data).then(r => {
@@ -102,6 +104,20 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 
         setCustAlreadyExists(false)
 
+        // if this component is loaded because a customer update is called the id is defined and the setCustomers has been passed (default [], see below)
+        if(id !== undefined && setCustomers !== []){
+            setCustomers(
+                tableConfig.list.map(
+                    (customer) =>
+                        customer.id === id ? (
+                            {...data}
+                        ) : (
+                            customer
+                        )
+                )
+            )
+        }
+
         setName('')
         setSurname('')
         setBirthDate('')
@@ -115,7 +131,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         setEmailAlert(false)
         setPasswordAlert(false)
 
-        resetTableConfig(tableConfig, setTableConfig)
+        //resetTableConfig(tableConfig, setTableConfig)
         navigate('/Customers')
 
         return
@@ -171,5 +187,9 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         </>
     );
 };
+
+AddUpdateCustomer.defaultProps = {
+    setCustomers: []
+}
 
 export default AddUpdateCustomer;
