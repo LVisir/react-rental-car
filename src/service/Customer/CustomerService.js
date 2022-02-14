@@ -1,6 +1,3 @@
-import { useCustomers, useUpdateCustomers } from '../../context/CustomerContext';
-import UsefulFunctions from "../../functions/UsefulFunctions";
-
 const CustomerService = () => {
 
     // path to fetch the list of Customer from the server
@@ -20,6 +17,11 @@ const CustomerService = () => {
         const response = await fetch(customersPath+`/${id}`)
         const customer = await response.json()
         return customer
+    }
+
+    const getCustomerByEmail = async (email) => {
+        const response = await fetch(customersPath+`?email=${email}`)
+        return await response.json()
     }
 
     // custom the queries to apply pagination, sorting, filtering ecc
@@ -63,7 +65,7 @@ const CustomerService = () => {
     const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email']
     const filter = ['name','surname','birthDate','cf', 'email']
 
-    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById }
+    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById, getCustomerByEmail }
 };
 
 export default CustomerService;

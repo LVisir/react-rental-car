@@ -53,20 +53,42 @@ const UsefulFunctions = () => {
      */
     const getData = async (sortPath, orderPath, tableConfig, startPath, signal) => {
         let data
+        let url = buildPath(sortPath, orderPath, startPath, tableConfig)
         if(tableConfig.searchText==='' && tableConfig.filterSearchText===''){
-            console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
-            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`), { signal: signal })
+            //console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+            console.log(url)
+            const response = await fetch(url, { signal: signal })
             data = await response.json()
         }
         else{
-            console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
-            const response = await fetch(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`), { signal: signal })
+            //console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
+            console.log(url)
+            const response = await fetch(url, { signal: signal })
             data = await response.json()
         }
 
 
         return data
 
+    }
+
+    const buildPath = (sortPath, orderPath, startPath, tableConfig) => {
+        let url = startPath + `?_page=${tableConfig.currentPage}&_limit=10`
+
+        if(sortPath){
+            url = url + `&_sort=${sortPath}`
+        }
+        if(orderPath){
+            url = url + `&_order=${orderPath}`
+        }
+        if(tableConfig.filterSearchText && tableConfig.searchText){
+            url = url + `&${tableConfig.filterSearchText}=${tableConfig.searchText}`
+        }
+        if(tableConfig.role){
+            url = url + `&role=${tableConfig.role}`
+        }
+
+        return url
     }
 
     /**

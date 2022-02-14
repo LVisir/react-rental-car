@@ -6,7 +6,7 @@ import CustomAlert from "../alerts/CustomAlert";
 import { useNavigate, useParams } from "react-router-dom";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
 
-const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles }) => {
+const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles, vehicles }) => {
 
     const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
     const { getVehicleById } = VehiclesService()
@@ -16,13 +16,13 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
     const { id } = useParams()
 
     useEffect(() => {
-        const getVehicles = async () => {
+        const getVehicle = async () => {
             return await getVehicleById(id)
         }
 
         // it means an update request was made to update a vehicle object
         if( id !== undefined) {
-            const data = getVehicles()
+            const data = getVehicle()
             Promise.resolve(data).then(r => {
                 // check if the id passed as url param is valid so check if the object length is higher than 0 otherwise it means no object was returned
                 if(Object.keys(r).length>0){
@@ -75,38 +75,33 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
             return
         }
 
-        let data
+        let updtData = null
 
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
-            data = updateObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath+`/${id}`)
+            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
+            updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => {
+                setVehicles(
+                    vehicles.map(
+                        (element) =>
+                            element.id.toString() === id ? (
+                                {...updtData}
+                            ) : (
+                                element
+                            )
+                    )
+                )
+            })
         }
         else {
-            data = addObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath)
-        }
 
-        /**
-         * conditions that manage when the user tried to add an existing Customer (it is just an example; after the implementation of the BE u must change here
-         * using Promise.resolve(...); see useEffect of this component)
-         */
-        if(data === null){
-            setVehicleAlreadyExists(true)
-            return
+            addObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath).then((r) => {
+                if([...vehicles, r].length < 10) setVehicles([...vehicles, r])
+                resetTableConfig(tableConfig, setTableConfig)
+            })
         }
 
         setVehicleAlreadyExists(false)
-
-        // if this component is loaded because a vehicle update is called the id is defined and the setVehicles has been passed (default [], see below)
-        if(id !== undefined && setVehicles !== []){
-            setVehicles(tableConfig.list.map(
-                (vehicle) =>
-                    vehicle.id === id ? (
-                        {...data}
-                    ) : (
-                        vehicle
-                    )
-            ))
-        }
 
         setLicensePlate('')
         setModel('')
@@ -119,7 +114,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         setManufacturerAlert(false)
         setRegYearAlert(false)
 
-        resetTableConfig(tableConfig, setTableConfig)
+        //resetTableConfig(tableConfig, setTableConfig)
         navigate('/Vehicles')
 
         return
@@ -172,7 +167,8 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
 };
 
 AddUpdateVehicle.defaultProps = {
-    setVehicles: []
+    setVehicles: [],
+    vehicles: []
 }
 
 export default AddUpdateVehicle;

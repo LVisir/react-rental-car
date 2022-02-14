@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import CustomerService from '../../service/Customer/CustomerService';
 import AddUpdateCustomer from "../addUpdate/AddUpdateCustomer";
 import { Route, Routes } from 'react-router-dom';
@@ -9,6 +9,16 @@ const Customers = ({ logout, links }) => {
 
     const { field, fieldHeader, customersLength, filter, customersPath } = CustomerService()
 
+    /**
+     * The tableConfig has all the settings where the table must adapt to:
+     * - dbFields: the name of the property of the customer object
+     * - tableHeaders: the name of the header of the table
+     * - dataSize: the total number of element; it is used to manage the total number of pages
+     * - searchableFields: contains the fields that can be searched
+     * - list: the list of objects
+     * - reset buttons: to manage the reset buttons
+     * - fieldObjects: a list that contains all the setting for each field like the sort and the sort type
+     */
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
         tableHeaders: fieldHeader,
@@ -25,6 +35,7 @@ const Customers = ({ logout, links }) => {
         disableResetTableButton: true,
         startPath: customersPath,
         tableName: 'CUSTOMERS',
+        role: 'CUSTOMER',
         fieldObjects: [
             {
                 field: field[0],
@@ -65,9 +76,9 @@ const Customers = ({ logout, links }) => {
         <>
             <Routes>
                 <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} /> } />
-                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
-                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} />} />
-                <Route path={'*'} element={<Error />} />
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} customers={customers} setCustomers={setCustomers} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} customers={customers} />} />
+                <Route path={'*'} element={ <Error homePath={'/Customers'} /> } />
             </Routes>
         </>
     );

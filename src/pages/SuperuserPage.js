@@ -29,10 +29,10 @@ const SuperuserPage = ({logout}) => {
         <Router>
 
                 <Routes>
-                    <Route path="*" element={<Error />} />
                     <Route path={'/Customers/*'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
                     <Route path={'/Bookings/*'} element={<Reservations logout={logout} links={links}/>} />
                     <Route path={'/Vehicles/*'} element={<Vehicles links={links} logout={logout}/>} />
+                    <Route path="*" element={ <Error homePath={'/Customers'} /> } />
                 </Routes>
         </Router>
     );

@@ -9,6 +9,16 @@ const Vehicles = ({ logout, links }) => {
 
     const { field, fieldHeader, vehiclesLength, filter, vehiclesPath } = VehiclesService()
 
+    /**
+     * The tableConfig has all the settings where the table must adapt to:
+     * - dbFields: the name of the property of the vehicle object
+     * - tableHeaders: the name of the header of the table
+     * - dataSize: the total number of element; it is used to manage the total number of pages
+     * - searchableFields: contains the fields that can be searched
+     * - list: the list of objects
+     * - reset buttons: to manage the reset buttons
+     * - fieldObjects: a list that contains all the setting for each field like the sort and the sort type
+     */
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
         tableHeaders: fieldHeader,
@@ -25,6 +35,7 @@ const Vehicles = ({ logout, links }) => {
         disableResetTableButton: true,
         startPath: vehiclesPath,
         tableName: 'VEHICLES',
+        role: '',
         fieldObjects: [
             {
                 field: field[0],
@@ -65,9 +76,9 @@ const Vehicles = ({ logout, links }) => {
         <>
             <Routes>
                 <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} /> } />
-                <Route path={'AddVehicle'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} />} />
-                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} />} />
-                <Route path={'*'} element={<Error />} />
+                <Route path={'AddVehicle'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles} />} />
+                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles} />} />
+                <Route path={'*'} element={ <Error homePath={'/Customers'} /> } />
             </Routes>
         </>
     );

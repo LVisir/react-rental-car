@@ -8,6 +8,7 @@ const Pagination = ({ tableConfig, setTableConfig, setObjectList }) => {
 
     const [currentPage, setCurrentPage] = useState(tableConfig.currentPage);
 
+    // a variable that contains the previous state of the currentPage that is used to established if the fetch inside the useEffect should be thrown or not
     const previousCurrentPageState = usePrevious(currentPage)
 
     // triggered when the useState currentPage attached to the current page of the table has been changed

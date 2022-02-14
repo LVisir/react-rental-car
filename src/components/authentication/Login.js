@@ -1,8 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
-import {useUpdateBookings} from '../../context/BookingContext';
-import BookingService from "../../service/Booking/BookingService";
+import CustomAlert from '../alerts/CustomAlert';
 import CustomerService from "../../service/Customer/CustomerService";
 
 /**
@@ -19,14 +18,13 @@ const Login = ({superusers, setToken}) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
-    const {fetchReservationsByCustomerId, bookingsPath} = BookingService()
+    const [emptyFieldsAlert, setEmptyFieldsAlert] = useState(false);
+    const [wrongEmailAlert, setWrongEmailAlert] = useState(false);
+    const [wrongPassAlert, setWrongPassAlert] = useState(false);
 
     const navigate = useNavigate()
 
-    // hook to update the bookings in the BookingsContext
-    const updateBookings = useUpdateBookings()
-
-    const { getCustomers, customersPath } = CustomerService()
+    const { getCustomerByEmail } = CustomerService()
 
     /**
      * Phases:
@@ -43,51 +41,76 @@ const Login = ({superusers, setToken}) => {
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!email || !pass) {
-            alert('You must insert the data')
+            if(!email && !pass){
+                setEmptyFieldsAlert(true)
+                setWrongPassAlert(false)
+                setWrongEmailAlert(false)
+            }
+            else if(!email){
+                setEmptyFieldsAlert(false)
+                setWrongPassAlert(false)
+                setWrongEmailAlert(true)
+                document.getElementById('formBasicPassword').select()
+            }
+            else if(!pass){
+                setEmptyFieldsAlert(false)
+                setWrongPassAlert(true)
+                setWrongEmailAlert(false)
+                document.getElementById('formBasicUsername').select()
+            }
+            else {
+                setEmptyFieldsAlert(true)
+                setWrongPassAlert(false)
+                setWrongEmailAlert(false)
+            }
+
             return
         }
 
-        // wait for the array from Promise object
-        const customersData = await getCustomers() // now custs contains a list of Customers
+        const customer = getCustomerByEmail(email)
 
-        // ricavo il Customer con username e pass inseriti nella form (username, pass) --> (nome, cf)
-        /*let correctUsername = customersData.reduce((a, b) => a = b.email === email ? b.cf : a, 0)
-        let correctPass = customersData.reduce((a, b) => a = b.password === pass ? b.cf : a, 0)*/
-        let customer = customersData.reduce((a, b) => a = b.email === email ? b : a, 0)
+        // check if the email exists
+        Promise.resolve(customer).then(r => {
+            if(Object.keys(r).length === 0){
+                setEmptyFieldsAlert(false)
+                setWrongPassAlert(false)
+                setWrongEmailAlert(true)
 
-        // controllo se i dati sono corretti ed esistono
-        if (customer===0) {
-            alert('Username and/or Password not correct')
-            return
-        } else {
-            if(customer.password!==pass){
-                alert('Username and/or Password not correct')
+                document.getElementById('formBasicUsername').select()
                 return
             }
-        }
+            else if(r[0].password !== pass){
+                setEmptyFieldsAlert(false)
+                setWrongPassAlert(true)
+                setWrongEmailAlert(false)
 
-        // se Superuser salvo in sessione e porto alla sua pagina, viceversa per il Customer
-        if (customer.role === 'SUPERUSER') {
-            sessionStorage.setItem('superuser', customer.cf)
+                // select all the password input text
+                document.getElementById('formBasicPassword').select()
+                return
+            }
+            else {
+                if(r[0].role === 'SUPERUSER') {
 
-            navigate('/Customers', {replace: true})
+                    sessionStorage.setItem('superuser', r[0].cf)
+                    navigate('/Customers', {replace: true})
+                    // update the token that declare that someone log in
+                    setToken(true)
+                }
+                else {
+                    sessionStorage.setItem('customer', customer.cf)
 
-            // aggiorno il token che dichiara se qualcuno si è autenticato
-            setToken(true)
+                    /*// fetch of the bookings that it will be the first thing that a Customer will see in his page
+                    const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))
 
-        } else {
-            sessionStorage.setItem('customer', customer.cf)
+                    // update the bookings in the BookingContext from [] to what it fetched at the previous operation
+                    updateBookings(bookingsData)
 
-            // fetch of the bookings that it will be the first thing that a Customer will see in his page
-            const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))
-
-            // update the bookings in the BookingContext from [] to what it fetched at the previous operation
-            updateBookings(bookingsData)
-
-            // update the token to set that a Customer is logged
-            setToken(true)
-            navigate('/')
-        }
+                    // update the token to set that a Customer is logged
+                    setToken(true)
+                    navigate('/')*/
+                }
+            }
+        })
 
     }
 
@@ -97,11 +120,14 @@ const Login = ({superusers, setToken}) => {
                 <Form.Label>Email</Form.Label>
                 <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             </Form.Group>
-
+            { wrongEmailAlert && <CustomAlert text={'Email not valid'} /> }
+            { emptyFieldsAlert && <CustomAlert text={'Invalid fields'} /> }
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" onChange={(e) => setPass(e.target.value)} placeholder="Password" />
             </Form.Group>
+            { wrongPassAlert && <CustomAlert text={'Password not valid'} /> }
+            { emptyFieldsAlert && <CustomAlert text={'Invalid fields'} /> }
             <Button variant="primary" type="submit">
                 Login
             </Button>

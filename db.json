@@ -52,7 +52,7 @@
     },
     {
       "id": 1662282966,
-      "name": "Venita",
+      "name": "Venitarshi",
       "surname": "Blasl",
       "email": "vblasl5@twitter.com",
       "birthDate": "1972-02-06",
@@ -62,7 +62,7 @@
     },
     {
       "id": 5436006557,
-      "name": "Mendel",
+      "name": "Mendelevel",
       "surname": "Pozer",
       "email": "mpozer6@nifty.com",
       "birthDate": "1983-02-11",
@@ -95,7 +95,7 @@
       "name": "Carey",
       "surname": "Ginnell",
       "email": "cginnell9@foxnews.com",
-      "birthDate": "1980-01-25",
+      "birthDate": "1980-01-27",
       "role": "CUSTOMER",
       "password": "6cHiSraK",
       "cf": "ZDLFJB59UWRSOM"
@@ -1019,20 +1019,30 @@
       "role": "SUPERUSER",
       "email": "edoardo.aaab@email.com",
       "password": "1234"
+    },
+    {
+      "name": "Yy",
+      "surname": "Yy",
+      "email": "iuh",
+      "birthDate": "8787-03-08",
+      "role": "CUSTOMER",
+      "password": "iguy",
+      "cf": "iug",
+      "id": 9936935818
     }
   ],
   "vehicles": [
     {
-      "licensePlate": "AA000ZS",
+      "id": 0,
+      "licensePlate": "AA000ZZ",
       "model": "Sunshine",
       "typology": "UTILITARIA",
       "manufacturer": "Mercedes",
-      "registrYear": "2021-12-23",
-      "id": 0
+      "registrYear": "2021-12-23"
     },
     {
       "id": 1,
-      "licensePlate": "AA000AB",
+      "licensePlate": "AA000ABCDEF",
       "model": "Sunshine",
       "typology": "UTILITARIA",
       "manufacturer": "Mercedes",
@@ -1040,7 +1050,7 @@
     },
     {
       "id": 2,
-      "licensePlate": "AA123BD",
+      "licensePlate": "AA123BDHJK",
       "model": "Moonlight",
       "typology": "UTILITARIA",
       "manufacturer": "Toyota",
@@ -1048,7 +1058,7 @@
     },
     {
       "id": 4,
-      "licensePlate": "AS125FG",
+      "licensePlate": "AS125FGTest",
       "model": "Oppo",
       "typology": "UTILITARIA",
       "manufacturer": "Mazda",
@@ -1335,12 +1345,12 @@
       "registrYear": "1997-05-13"
     },
     {
-      "id": 45702,
       "licensePlate": "HW251AB",
       "model": "9-3",
       "typology": "MINIVAN",
       "manufacturer": "Saab",
-      "registrYear": "1990-09-19"
+      "registrYear": "1990-09-30",
+      "id": 45702
     },
     {
       "id": 18034,
@@ -1822,7 +1832,7 @@
       "code": 34,
       "start": "2022-01-24",
       "customer": "KNT",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "SU123JU"
     },
     {
@@ -1831,7 +1841,7 @@
       "code": 67,
       "start": "2029-01-24",
       "customer": "PPO",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "SU123JU"
     },
     {
@@ -1858,7 +1868,7 @@
       "code": 37,
       "start": "2006-01-24",
       "customer": "KNT",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "JK000PG"
     },
     {
@@ -1876,7 +1886,7 @@
       "code": 5318595365,
       "start": "2005-10-01",
       "customer": "FDIFZM65TAHYMT",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "MA514NI"
     },
     {
@@ -2060,15 +2070,6 @@
       "vehicle": "AA123BD"
     },
     {
-      "id": 25,
-      "end": "2002-12-15",
-      "code": 5246282295,
-      "start": "2009-05-14",
-      "customer": "ZDLFJB59UWRSOM",
-      "approval": 0,
-      "vehicle": "AA123BD"
-    },
-    {
       "id": 26,
       "end": "2006-04-26",
       "code": 8125788936,
@@ -2103,15 +2104,6 @@
       "customer": "BSXEIZ20EEXMCX",
       "approval": 0,
       "vehicle": "AA123BD"
-    },
-    {
-      "id": 30,
-      "end": "2007-11-30",
-      "code": 2366307595,
-      "start": "2003-07-21",
-      "customer": "ZDLFJB59UWRSOM",
-      "approval": 0,
-      "vehicle": "JK000PG"
     }
   ]
 }

@@ -9,12 +9,8 @@ const LoginPage = ({setToken}) => {
             <Router>
                 <Container>
                     <Routes>
-                        <Route path='*' element={<ErrorLogin />} />
                         <Route path={'/'} element={<Login setToken={setToken}/>}/>
-                        {/* Quando farai questo Route dentro :customerCf ci può finire qualsiasi cosa
-                                perciò fai un controllo se il cf messo è valido altrimenti porta ad una pagina di errore*/}
-                        {/*<Route path={'/:customerCf'} element={<Login setToken={setToken}/>}/>*/}
-                        {/*<Route path={'/AddUpdateCustomer'} element={<Login setToken={setToken}/>}/>*/}
+                        <Route path='*' element={<ErrorLogin />} />
                     </Routes>
                 </Container>
             </Router>

@@ -29,9 +29,10 @@ const DeleteDialog = ({ bool, setBool, deleteObject, id, setId, path, objectList
             deleteObject(id, path)
         }
 
-        doDelete()
-        setUpdateTable(!updateTable)
-        setObjectList(objectList.filter((entity) => entity.id !== id))
+        doDelete().then(() => {
+            setUpdateTable(!updateTable)
+            //setObjectList(objectList.filter((entity) => entity.id !== id))
+        })
         setShow(false)
         setBool(false)
     };

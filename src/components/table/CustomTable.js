@@ -18,9 +18,12 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
     const [confirmDeleteButton, setConfirmDeleteButton] = useState(false);
 
     const [deleteDialog, setDeleteDialog] = useState(false);
+
     const [idObject, setIdObject] = useState(null);
 
+    //variables that contains the previous state of the sortButton and confirmDeleButton dialog that is used to established if the fetch inside the useEffect should be thrown or not
     const previousSortButtonState = usePrevious(sortButton)
+    const previousDeleteButtonState = usePrevious(confirmDeleteButton)
 
     // triggered when the sort button is pressed
     useEffect(() => {
@@ -59,9 +62,40 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
         }
 
 
-    }, [sortButton, confirmDeleteButton]);
+    }, [sortButton]);
+
+    useEffect(() => {
+        // variables useful to manage different simultaneously fetch
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        const getListObjects = async () => {
+            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+        }
+
+        if(previousDeleteButtonState !== undefined) {
+
+            getListObjects().then(r => {
+
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                })
+
+                setObjectList(objectList.filter((entity) => entity.id !== idObject))
+                /*setObjectList([...r])*/
+            })
+        }
+
+        return () => {
+            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
+            controller.abort()
+        }
+    }, [confirmDeleteButton]);
+
 
     /**
+     * A method that shift the order type base on the actual order type. After, it updates the tableConfig useState.
      * The order are '' -> 'asc' -> 'desc' -> ... (back to the start like a circle)
      * @param fieldObject
      */
@@ -134,10 +168,12 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                         <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
                             navigate(`/Customers/ModifyCustomer/${id}`)
                         }}/>
-                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
-                            setIdObject(id)
-                            setDeleteDialog(true)
-                        }} />
+                        <Button color={'MediumSlateBlue'} text={'Delete'}
+                                onClickDo={() => {
+                                    setIdObject(id)
+                                    setDeleteDialog(true)
+                                }}
+                        />
                     </td>
                 )
             case 'BOOKINGS':

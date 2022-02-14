@@ -37,9 +37,11 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
 
     }
 
+    // variables that contains the previous state of the resetState and searchButton that is used to established if the fetch inside the useEffects should be thrown or not
     const previousResetState = usePrevious(resetState)
     const previousSearchState = usePrevious(searchButton)
 
+    // triggered when the useState resetButton has been pressed
     useEffect(() => {
         // variables useful to manage different simultaneously fetch
         const controller = new AbortController()
@@ -156,9 +158,6 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
                     >
                         {/* Links to other pages */}
                         {links.map((element) => <Nav.Link key={element.name} onClick={() => navigate(element.path)} >{element.name}</Nav.Link>)}
-                        <Nav.Link href="#" disabled>
-                            Link
-                        </Nav.Link>
                     </Nav>
                     <Nav
                         className={'ms-auto my-2 my-lg-0'}

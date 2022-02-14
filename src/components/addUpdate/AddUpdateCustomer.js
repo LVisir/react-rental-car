@@ -7,7 +7,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomerService from "../../service/Customer/CustomerService";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
-const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers }) => {
+const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers }) => {
 
     const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
     const { getCustomerById } = CustomerService()
@@ -84,39 +84,36 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
             return
         }
 
-        let data
-        // if 'id' is set it means an update action has been thrown
-        if(id !== undefined){
-            data = updateObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath+`/${id}`)
-        }
-        else {
-            data = addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath)
-        }
+        let updtCustomer = null
 
         /**
-         * conditions that manage when the user tried to add an existing Customer (it is just an example; after the implementation of the BE u must change here
-         * using Promise.resolve(...); see useEffect of this component)
+         * When u will implement the BE u should check the result of the fetch to see if the data you're putting doesn't exist
          */
-        if(data === null){
-            setCustAlreadyExists(true)
-            return
+
+        // if 'id' is set it means an update action has been thrown
+        if(id !== undefined){
+            updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: birthDate, role: role, password: password, cf: cf}
+            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => {
+                setCustomers(
+                    customers.map(
+                        (element) =>
+                            element.id.toString() === id ? (
+                                {...updtCustomer}
+                            ) : (
+                                element
+                            )
+                    )
+                )
+            })
+        }
+        else {
+            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath).then(r => {
+                if([...customers, r].length < 10) setCustomers([...customers, r])
+                resetTableConfig(tableConfig, setTableConfig)
+            })
         }
 
         setCustAlreadyExists(false)
-
-        // if this component is loaded because a customer update is called the id is defined and the setCustomers has been passed (default [], see below)
-        if(id !== undefined && setCustomers !== []){
-            setCustomers(
-                tableConfig.list.map(
-                    (customer) =>
-                        customer.id === id ? (
-                            {...data}
-                        ) : (
-                            customer
-                        )
-                )
-            )
-        }
 
         setName('')
         setSurname('')
@@ -189,7 +186,8 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 };
 
 AddUpdateCustomer.defaultProps = {
-    setCustomers: []
+    setCustomers: [],
+    customers: []
 }
 
 export default AddUpdateCustomer;
