@@ -30,8 +30,13 @@ const BookingService = () => {
         return bookings
     }
 
+    const getBookingById = async (id) => {
+        const response = await fetch(bookingsPath+`/${id}`)
+        return await response.json()
+    }
+
     // path to fetch the list of Prenotazione from the server
-    const bookingsPath = 'http://localhost:5001/bookings'
+    let bookingsPath = 'http://localhost:5001/bookings'
 
     // length of: (all the Prenotazione objects/10) (normally get from BE)
     const bookingsLength = 4
@@ -40,7 +45,7 @@ const BookingService = () => {
     const fieldHeader = ['Code', 'Start date', 'End date', 'Customer Id', 'Licence number', 'Approval']
     const filter = ['code','start','end','customer', 'vehicle']
 
-    return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter}
+    return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById}
 };
 
 export default BookingService;

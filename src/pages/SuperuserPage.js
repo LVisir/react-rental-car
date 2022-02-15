@@ -25,14 +25,17 @@ const SuperuserPage = ({logout}) => {
         path: '/Vehicles'
     }]
 
+    // path for the error page
+    const homePath = '/Customers'
+
     return (
         <Router>
 
                 <Routes>
-                    <Route path={'/Customers/*'} element={<SecondVersioneCustomers logout={logout} links={links} />} />
-                    <Route path={'/Bookings/*'} element={<Reservations logout={logout} links={links}/>} />
-                    <Route path={'/Vehicles/*'} element={<Vehicles links={links} logout={logout}/>} />
-                    <Route path="*" element={ <Error homePath={'/Customers'} /> } />
+                    <Route path={'/Customers/*'} element={<SecondVersioneCustomers logout={logout} links={links} homePath={homePath} />} />
+                    <Route path={'/Bookings/*'} element={<Reservations logout={logout} links={links}/>} homePath={homePath} />
+                    <Route path={'/Vehicles/*'} element={<Vehicles links={links} logout={logout}/>} homePath={homePath} />
+                    <Route path="*" element={ <Error homePath={'/Customers'} /> } homePath={homePath} />
                 </Routes>
         </Router>
     );

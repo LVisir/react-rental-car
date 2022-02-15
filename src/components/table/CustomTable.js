@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList }) => {
 
 
-    const { buildOrderFieldPath, getData, deleteObject, usePrevious, updateObject } = UsefulFunctions()
+    const { buildOrderFieldPath, getData, deleteObject, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const navigate = useNavigate()
 
@@ -20,10 +20,6 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
     const [deleteDialog, setDeleteDialog] = useState(false);
 
     const [idObject, setIdObject] = useState(null);
-
-    //variables that contains the previous state of the sortButton and confirmDeleButton dialog that is used to established if the fetch inside the useEffect should be thrown or not
-    const previousSortButtonState = usePrevious(sortButton)
-    const previousDeleteButtonState = usePrevious(confirmDeleteButton)
 
     // triggered when the sort button is pressed
     useEffect(() => {
@@ -36,25 +32,24 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        if(previousSortButtonState !== undefined) {
-            // fetch + manage the reset button if it has to be available or not
-            getListObjects().then(r => {
-                if (sortPath !== '') {
-                    setTableConfig({
-                        ...tableConfig,
-                        list: r,
-                        disableResetTableButton: false,
-                    })
-                } else {
-                    setTableConfig({
-                        ...tableConfig,
-                        list: r,
-                        disableResetTableButton: true,
-                    })
-                }
-                setObjectList(r)
-            })
-        }
+
+        // fetch + manage the reset button if it has to be available or not
+        getListObjects().then(r => {
+            if (sortPath !== '') {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetTableButton: false,
+                })
+            } else {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetTableButton: true,
+                })
+            }
+            setObjectList(r)
+        })
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling
@@ -73,19 +68,18 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        if(previousDeleteButtonState !== undefined) {
 
-            getListObjects().then(r => {
+        getListObjects().then(r => {
 
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                })
-
-                setObjectList(objectList.filter((entity) => entity.id !== idObject))
-                /*setObjectList([...r])*/
+            setTableConfig({
+                ...tableConfig,
+                list: r,
             })
-        }
+
+            //setObjectList(objectList.filter((entity) => entity.id !== idObject))
+            setObjectList(r)
+        })
+
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling
@@ -200,6 +194,30 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
         }
     }
 
+    const customerBookingsTableActions = (id) => {
+       return (
+            <td>
+                <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
+                    navigate(`/Bookings/ModifyBooking/${id}`)
+                }} />
+                <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
+                    setIdObject(id)
+                    setDeleteDialog(true)
+                }}/>
+            </td>
+       )
+    }
+
+    const customerVehiclesTableActions = (vehicleLicencePlate) => {
+        return (
+            <td>
+                <Button color={'MediumSlateBlue'} text={'Rent'} onClickDo={() => {
+                    navigate(`/Bookings/AddBooking/${vehicleLicencePlate}`)
+                }} />
+            </td>
+        )
+    }
+
     /**
      * It gives the appropriate button for the bookings approvals;
      * it manages the approval click by updating the UI and the BE;
@@ -208,33 +226,43 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
      * @returns {JSX.Element}
      */
     const acceptDeniedBookingButton = (approvalValue, booking) => {
-        return approvalValue === 1 ? (
-            <Button text={'Approved'} disable={true} />
-        ) : (
-            <Button text={'Approves'} color={'green'} disable={false} onClickDo={() => {
+        if(sessionStorage.getItem('superuser') !== null){
+            return approvalValue === 1 ? (
+                <Button text={'Approved'} disable={true} />
+            ) : (
+                <Button text={'Approves'} color={'green'} disable={false} onClickDo={() => {
 
-                const updtBooking = {...booking, approval: 1}
+                    const updtBooking = {...booking, approval: 1}
 
-                updateObject({...updtBooking}, tableConfig.startPath+`/${booking.id}`).then(() => {
-                    setObjectList(
-                        objectList.map(
-                            (element) =>
-                                element.id === booking.id ? (
-                                    {...element, approval: 1}
-                                ) : (
-                                    element
-                                )
+                    updateObject({...updtBooking}, tableConfig.startPath+`/${booking.id}`).then(() => {
+                        setObjectList(
+                            objectList.map(
+                                (element) =>
+                                    element.id === booking.id ? (
+                                        {...element, approval: 1}
+                                    ) : (
+                                        element
+                                    )
+                            )
                         )
-                    )
-                })
+                    })
 
-                setTableConfig({
-                    ...tableConfig,
-                    list: [...objectList]
-                })
+                    setTableConfig({
+                        ...tableConfig,
+                        list: [...objectList]
+                    })
 
-            }}/>
-        )
+                }}/>
+            )
+        }
+        else if(sessionStorage.getItem('customer') !== null){
+            return approvalValue === 1 ? (
+                <b>Approved</b>
+            ) : (
+                <b>Under approval</b>
+            )
+        }
+
     }
 
     return (
@@ -261,8 +289,13 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                     )}
                     {/* Superuser header layout */}
                     {
-                        sessionStorage.getItem('superuser')!=null  &&
+                        sessionStorage.getItem('superuser') !== null  &&
                         (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
+                        <th>Azioni</th>
+                    }
+                    {
+                        sessionStorage.getItem('customer') !== null &&
+                        (tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                         <th>Azioni</th>
                     }
                 </tr>
@@ -305,6 +338,17 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                                     sessionStorage.getItem('superuser')!==null &&
                                     (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                                     superuserActions(tableConfig.tableName, el['id'])
+                                }
+                                {/* Customer actions layout */}
+                                {
+                                    sessionStorage.getItem('customer') !== null &&
+                                    (tableConfig.tableName === 'BOOKINGS') &&
+                                    customerBookingsTableActions(el['id'])
+                                }
+                                {
+                                    sessionStorage.getItem('customer') !== null &&
+                                    tableConfig.tableName === 'VEHICLES' &&
+                                    customerVehiclesTableActions(el['licensePlate'])
                                 }
                             </tr>
                     )

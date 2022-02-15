@@ -3,8 +3,10 @@ import BookingService from "../../service/Booking/BookingService";
 import {Route, Routes} from "react-router-dom";
 import BookingsTable from "../table/BookingsTable";
 import Error from "../errors/Error";
+import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
+import AddUpdateBooking from "../addUpdate/AddUpdateBooking";
 
-const Reservations = ({ logout, links }) => {
+const Reservations = ({ logout, links, homePath }) => {
 
     const { field, fieldHeader, bookingsLength, filter, bookingsPath } = BookingService()
 
@@ -80,8 +82,37 @@ const Reservations = ({ logout, links }) => {
     return (
         <>
             <Routes>
+
                 <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} bookings={bookings} setBookings={setBookings} /> } />
-                <Route path={'*'} element={ <Error homePath={'/Customers'} /> } />
+
+                { sessionStorage.getItem('customer') !== null &&
+
+                    <Route path={'ModifyBooking/:id'} element={
+
+                        <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
+                                          setTableConfig={setTableConfig}
+                                          tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
+                        />}
+
+                    />
+                }
+
+                { sessionStorage.getItem('customer') !== null &&
+
+                    <Route path={'AddBooking/:vehicleLicencePlate'} element={
+
+                        <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
+                                          setTableConfig={setTableConfig}
+                                          tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
+                        />}
+
+                    />
+                }
+
+                }
+
+                <Route path={'*'} element={ <Error homePath={homePath} /> } />
+
             </Routes>
         </>
     );

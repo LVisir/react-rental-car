@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Error from "../errors/Error";
 import CustomersTable from "../table/CustomersTable";
 
-const Customers = ({ logout, links }) => {
+const Customers = ({ logout, links, homePath }) => {
 
     const { field, fieldHeader, customersLength, filter, customersPath } = CustomerService()
 
@@ -78,7 +78,7 @@ const Customers = ({ logout, links }) => {
                 <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} /> } />
                 <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} customers={customers} setCustomers={setCustomers} />} />
                 <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} customers={customers} />} />
-                <Route path={'*'} element={ <Error homePath={'/Customers'} /> } />
+                <Route path={'*'} element={ <Error homePath={homePath} /> } />
             </Routes>
         </>
     );

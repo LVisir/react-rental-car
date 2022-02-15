@@ -73,7 +73,14 @@ const UsefulFunctions = () => {
     }
 
     const buildPath = (sortPath, orderPath, startPath, tableConfig) => {
-        let url = startPath + `?_page=${tableConfig.currentPage}&_limit=10`
+
+        let url
+
+        if(sessionStorage.getItem('customer') !== null && tableConfig.tableName === 'BOOKINGS'){
+            url = startPath + '?customer=' + sessionStorage.getItem('customer') + `&_page=${tableConfig.currentPage}&_limit=10`
+        }
+
+        else url = startPath + `?_page=${tableConfig.currentPage}&_limit=10`
 
         if(sortPath){
             url = url + `&_sort=${sortPath}`

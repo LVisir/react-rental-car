@@ -5,7 +5,7 @@ import Error from "../errors/Error";
 import VehiclesTable from "../table/VehiclesTable";
 import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 
-const Vehicles = ({ logout, links }) => {
+const Vehicles = ({ logout, links, homePath }) => {
 
     const { field, fieldHeader, vehiclesLength, filter, vehiclesPath } = VehiclesService()
 
@@ -75,10 +75,25 @@ const Vehicles = ({ logout, links }) => {
     return (
         <>
             <Routes>
+
                 <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} /> } />
-                <Route path={'AddVehicle'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles} />} />
-                <Route path={'ModifyVehicle/:id'} element={<AddUpdateVehicle showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles} />} />
-                <Route path={'*'} element={ <Error homePath={'/Customers'} /> } />
+
+                { sessionStorage.getItem('superuser') !== null && <Route path={'AddVehicle'} element={
+                    <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
+                                      setTableConfig={setTableConfig}
+                                      tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
+                    />}
+                /> }
+
+                { sessionStorage.getItem('superuser') !== null && <Route path={'ModifyVehicle/:id'} element={
+                    <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
+                                      setTableConfig={setTableConfig}
+                                      tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
+                    />}
+                /> }
+
+                <Route path={'*'} element={ <Error homePath={homePath} /> } />
+
             </Routes>
         </>
     );

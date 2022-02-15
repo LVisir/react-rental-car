@@ -107,7 +107,7 @@
       "email": "askuddera@fema.gov",
       "birthDate": "1953-01-10",
       "role": "CUSTOMER",
-      "password": "WQ10v8pqC1aw",
+      "password": "1234",
       "cf": "BSXEIZ20EEXMCX"
     },
     {
@@ -1019,16 +1019,6 @@
       "role": "SUPERUSER",
       "email": "edoardo.aaab@email.com",
       "password": "1234"
-    },
-    {
-      "name": "Yy",
-      "surname": "Yy",
-      "email": "iuh",
-      "birthDate": "8787-03-08",
-      "role": "CUSTOMER",
-      "password": "iguy",
-      "cf": "iug",
-      "id": 9936935818
     }
   ],
   "vehicles": [
@@ -1042,7 +1032,7 @@
     },
     {
       "id": 1,
-      "licensePlate": "AA000ABCDEF",
+      "licensePlate": "AA000AB",
       "model": "Sunshine",
       "typology": "UTILITARIA",
       "manufacturer": "Mercedes",
@@ -1050,7 +1040,7 @@
     },
     {
       "id": 2,
-      "licensePlate": "AA123BDHJK",
+      "licensePlate": "AA123BD",
       "model": "Moonlight",
       "typology": "UTILITARIA",
       "manufacturer": "Toyota",
@@ -1908,15 +1898,6 @@
       "vehicle": "MA514NI"
     },
     {
-      "id": 7,
-      "end": "2009-01-09",
-      "code": 1959186088,
-      "start": "2001-06-04",
-      "customer": "BSXEIZ20EEXMCX",
-      "approval": 0,
-      "vehicle": "AA123BD"
-    },
-    {
       "id": 8,
       "end": "2007-10-19",
       "code": "0401146997",
@@ -1929,9 +1910,9 @@
       "id": 9,
       "end": "2007-09-22",
       "code": 8312768080,
-      "start": "2011-01-15",
+      "start": "2011-01-18",
       "customer": "BSXEIZ20EEXMCX",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "AA123BD"
     },
     {
@@ -1985,7 +1966,7 @@
       "code": "0047854695",
       "start": "2008-12-29",
       "customer": "FDIFZM65TAHYMT",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "SU123JU"
     },
     {
@@ -1994,15 +1975,6 @@
       "code": 4236357998,
       "start": "2009-11-06",
       "customer": "AWFLYJ29AIYLZZ",
-      "approval": 0,
-      "vehicle": "AA123BD"
-    },
-    {
-      "id": 17,
-      "end": "2007-10-30",
-      "code": 6130191667,
-      "start": "2011-12-30",
-      "customer": "ZDLFJB59UWRSOM",
       "approval": 0,
       "vehicle": "AA123BD"
     },
@@ -2093,17 +2065,35 @@
       "code": 1951777829,
       "start": "2001-12-14",
       "customer": "BSXEIZ20EEXMCX",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "AA123BD"
     },
     {
-      "id": 29,
+      "id": 30,
       "end": "2009-09-19",
-      "code": 1581894504,
+      "code": 1231594604,
       "start": "2012-01-27",
       "customer": "BSXEIZ20EEXMCX",
       "approval": 0,
       "vehicle": "AA123BD"
+    },
+    {
+      "id": 36,
+      "end": "2017-03-31",
+      "code": 9229924,
+      "start": "2017-03-15",
+      "customer": "BSXEIZ20EEXMCX",
+      "approval": 0,
+      "vehicle": "MA514NI"
+    },
+    {
+      "end": "2022-02-19",
+      "code": 7783381,
+      "start": "2022-02-18",
+      "customer": "BSXEIZ20EEXMCX",
+      "approval": 1,
+      "vehicle": "AA000ZZ",
+      "id": 37
     }
   ]
 }

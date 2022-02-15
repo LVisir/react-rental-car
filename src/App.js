@@ -49,11 +49,9 @@ const App = () => {
        */
       else if(sessionStorage.getItem('customer')!==null){
           return (
-              <CustomersProvider>
-                  <BookingsProvider>
-                      <CustomerPage logout={logout} />
-                  </BookingsProvider>
-              </CustomersProvider>
+              <>
+                  <CustomerPage logout={logout} />
+              </>
           )
       }
     }

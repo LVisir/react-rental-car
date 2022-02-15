@@ -95,10 +95,10 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         }
         else {
 
-            addObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath).then((r) => {
+            addObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath)/*.then((r) => {
                 if([...vehicles, r].length < 10) setVehicles([...vehicles, r])
                 resetTableConfig(tableConfig, setTableConfig)
-            })
+            })*/
         }
 
         setVehicleAlreadyExists(false)

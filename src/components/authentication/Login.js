@@ -97,7 +97,10 @@ const Login = ({superusers, setToken}) => {
                     setToken(true)
                 }
                 else {
-                    sessionStorage.setItem('customer', customer.cf)
+                    sessionStorage.setItem('customer', r[0].cf)
+
+                    navigate('/Bookings', {replace: true})
+                    setToken(true)
 
                     /*// fetch of the bookings that it will be the first thing that a Customer will see in his page
                     const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))

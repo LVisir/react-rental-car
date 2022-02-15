@@ -107,10 +107,10 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
             })
         }
         else {
-            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath).then(r => {
+            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath)/*.then(r => {
                 if([...customers, r].length < 10) setCustomers([...customers, r])
                 resetTableConfig(tableConfig, setTableConfig)
-            })
+            })*/
         }
 
         setCustAlreadyExists(false)
