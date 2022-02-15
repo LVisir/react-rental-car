@@ -7,7 +7,7 @@ import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 
 const Vehicles = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, vehiclesLength, filter, vehiclesPath } = VehiclesService()
+    const { field, fieldHeader, vehiclesLength, filter, vehiclesPath, advancedGetVehicles } = VehiclesService()
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -76,12 +76,13 @@ const Vehicles = ({ logout, links, homePath }) => {
         <>
             <Routes>
 
-                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} /> } />
+                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} getData={advancedGetVehicles} /> } />
 
                 { sessionStorage.getItem('superuser') !== null && <Route path={'AddVehicle'} element={
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
                                       tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
+                                      getData={advancedGetVehicles}
                     />}
                 /> }
 
@@ -89,6 +90,7 @@ const Vehicles = ({ logout, links, homePath }) => {
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
                                       tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
+                                      getData={advancedGetVehicles}
                     />}
                 /> }
 

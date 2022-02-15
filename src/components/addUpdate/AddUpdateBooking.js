@@ -6,7 +6,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import CustomAlert from "../alerts/CustomAlert";
 import BookingService from "../../service/Booking/BookingService";
 
-const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setBookings, bookings }) => {
+const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setBookings, bookings, getData }) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -44,7 +44,6 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             })
         }
         else{
-            console.log(vehicleLicencePlate)
             setLoading(false)
         }
 
@@ -129,7 +128,7 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
         </>
     ) : (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} getData={getData} />
             <Container className={'my-2'}>
                 <h3>Edit booking</h3><br/>
                 <Form onSubmit={onSubmit}>

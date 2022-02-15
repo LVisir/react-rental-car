@@ -7,11 +7,11 @@ import {useNavigate} from "react-router-dom";
 import useResetFetch from "../customHooks/useResetFetch";
 import PropTypes from 'prop-types'
 
-const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch, objectList, setObjectList }) => {
+const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch, objectList, setObjectList, getData }) => {
 
     const navigate = useNavigate()
 
-    const { buildOrderFieldPath, getData, resetTableConfig, usePrevious } = UsefulFunctions()
+    const { buildOrderFieldPath, resetTableConfig } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     // state that manage the searching filter
@@ -37,10 +37,6 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
 
     }
 
-    // variables that contains the previous state of the resetState and searchButton that is used to established if the fetch inside the useEffects should be thrown or not
-    const previousResetState = usePrevious(resetState)
-    const previousSearchState = usePrevious(searchButton)
-
     // triggered when the useState resetButton has been pressed
     useEffect(() => {
         // variables useful to manage different simultaneously fetch
@@ -51,16 +47,15 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-        if(previousResetState !== undefined) {
-            // normal call because the reset() function in Header.js reset all the table settings
-            getListObjects().then(r => {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                })
-                objectList !== [] && setObjectList(r)
+
+        // normal call because the reset() function in Header.js reset all the table settings
+        getListObjects().then(r => {
+            setTableConfig({
+                ...tableConfig,
+                list: r,
             })
-        }
+            objectList !== [] && setObjectList(r)
+        })
 
         setSearchText('')
 
@@ -124,19 +119,17 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         }
 
         if(showSearchButton) {
-            if(previousSearchState !== undefined) {
-                // fetch + make available the reset button
-                getListObjects().then(r => {
-                    setTableConfig({
-                        ...tableConfig,
-                        list: r,
-                        disableResetHeaderButton: false,
-                    })
-                    showSearchButton && setObjectList(r)
+            // fetch + make available the reset button
+            getListObjects().then(r => {
+                setTableConfig({
+                    ...tableConfig,
+                    list: r,
+                    disableResetHeaderButton: false,
                 })
-            }
-            setSearchText('')
+                showSearchButton && setObjectList(r)
+            })
         }
+        setSearchText('')
 
         return () => {
             // when this useEffect is thrown, first abort the previous fetch if it is still in calling

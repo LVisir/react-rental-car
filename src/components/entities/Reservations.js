@@ -8,7 +8,7 @@ import AddUpdateBooking from "../addUpdate/AddUpdateBooking";
 
 const Reservations = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, bookingsLength, filter, bookingsPath } = BookingService()
+    const { field, fieldHeader, bookingsLength, filter, bookingsPath, advancedGetBookings } = BookingService()
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -83,7 +83,7 @@ const Reservations = ({ logout, links, homePath }) => {
         <>
             <Routes>
 
-                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} bookings={bookings} setBookings={setBookings} /> } />
+                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} bookings={bookings} setBookings={setBookings} getData={advancedGetBookings} /> } />
 
                 { sessionStorage.getItem('customer') !== null &&
 
@@ -92,6 +92,7 @@ const Reservations = ({ logout, links, homePath }) => {
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
                                           tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
+                                          getData={advancedGetBookings}
                         />}
 
                     />
@@ -104,6 +105,7 @@ const Reservations = ({ logout, links, homePath }) => {
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
                                           tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
+                                          getData={advancedGetBookings}
                         />}
 
                     />

@@ -1,3 +1,5 @@
+import UsefulFunctions from "../../functions/UsefulFunctions";
+
 const BookingService = () => {
 
     // fetch delle prenotazioni dal server dato un certo cf
@@ -15,6 +17,9 @@ const BookingService = () => {
         return prenotazioni
     }
 // -------------------------------------------------------------------------------- da qui sotto usa queste funzioni da ora in poi
+
+    const { getData, updateObject, deleteObject } = UsefulFunctions()
+
     // fetch of the list of Prenotazione objects
     const getBookings = async () => {
         const response = await fetch(bookingsPath)
@@ -35,6 +40,60 @@ const BookingService = () => {
         return await response.json()
     }
 
+    const advancedGetBookings = async (sortPath, orderPath, tableConfig, startPath, signal) => {
+        const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
+
+        let disable
+
+        data.map(
+            (x) => {
+                if(sessionStorage.getItem('superuser') !== null){
+                    disable = x.approval === 1
+                    x.actions = [
+                        {
+                            actionName: 'Approves',
+                            onClick() {
+                                updateObject({...x, approval: 1}, bookingsPath+`/${x.id}`)
+                            },
+                            disable: disable,
+                            color: 'MediumSlateBlue'
+                        },
+                        {
+                            actionName: 'Delete',
+                            onClick() {
+                                deleteObject(x.id, bookingsPath)
+                            },
+                            disable: false,
+                            color: 'MediumSlateBlue'
+                        }
+                    ]
+                }
+                if(sessionStorage.getItem('customer') !== null){
+                    x.actions = [
+                        {
+                            actionName: 'Delete',
+                            onClick() {
+                                deleteObject(x.id, bookingsPath)
+                            },
+                            disable: false,
+                            color: 'MediumSlateBlue'
+                        },
+                        {
+                            actionName: 'Edit',
+                            onClick() {
+                                return `/Bookings/ModifyBooking/${x.id}`
+                            },
+                            disable: false,
+                            color: 'MediumSlateBlue'
+                        }
+                    ]
+                }
+            }
+        )
+
+        return data
+    }
+
     // path to fetch the list of Prenotazione from the server
     let bookingsPath = 'http://localhost:5001/bookings'
 
@@ -45,7 +104,7 @@ const BookingService = () => {
     const fieldHeader = ['Code', 'Start date', 'End date', 'Customer Id', 'Licence number', 'Approval']
     const filter = ['code','start','end','customer', 'vehicle']
 
-    return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById}
+    return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById, advancedGetBookings}
 };
 
 export default BookingService;

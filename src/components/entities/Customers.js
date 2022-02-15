@@ -7,7 +7,7 @@ import CustomersTable from "../table/CustomersTable";
 
 const Customers = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, customersLength, filter, customersPath } = CustomerService()
+    const { field, fieldHeader, customersLength, filter, customersPath, advancedGetCustomers } = CustomerService()
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -75,9 +75,9 @@ const Customers = ({ logout, links, homePath }) => {
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} /> } />
-                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} customers={customers} setCustomers={setCustomers} />} />
-                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} customers={customers} />} />
+                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} getData={advancedGetCustomers} /> } />
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} customers={customers} setCustomers={setCustomers} getData={advancedGetCustomers} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} customers={customers} getData={advancedGetCustomers} />} />
                 <Route path={'*'} element={ <Error homePath={homePath} /> } />
             </Routes>
         </>

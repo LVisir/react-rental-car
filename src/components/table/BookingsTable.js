@@ -6,9 +6,9 @@ import {Container} from "react-bootstrap";
 import Button from "../graphic/Button";
 import CustomTable from "./CustomTable";
 
-const BookingsTable = ({ logout, links, tableConfig, setTableConfig, bookings, setBookings }) => {
+const BookingsTable = ({ logout, links, tableConfig, setTableConfig, bookings, setBookings, getData }) => {
 
-    const { buildOrderFieldPath, getData } = UsefulFunctions()
+    const { buildOrderFieldPath } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
     useEffect(() => {
@@ -32,12 +32,12 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, bookings, s
 
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} objectList={bookings} setObjectList={setBookings} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} objectList={bookings} setObjectList={setBookings} getData={getData} />
             <Container className={'my-2'}>
                 <h3>
                     Bookings
                 </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} objectList={bookings} setObjectList={setBookings} />
+                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} objectList={bookings} setObjectList={setBookings} getData={getData} />
             </Container>
         </>
     );

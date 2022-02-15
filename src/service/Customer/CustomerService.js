@@ -1,4 +1,8 @@
+import UsefulFunctions from "../../functions/UsefulFunctions";
+
 const CustomerService = () => {
+
+    const { getData, updateObject, deleteObject } = UsefulFunctions()
 
     // path to fetch the list of Customer from the server
     const customersPath = 'http://localhost:5001/customers'
@@ -53,19 +57,42 @@ const CustomerService = () => {
 
     }*/
 
-    /**
-     * This function is for changing the orderType and the buttonState settings in the table configuration
-     * it takes a tableConfigurations and update some of his values
-     * @param param
-     * @param index
-     */
+    const advancedGetCustomers = async (sortPath, orderPath, tableConfig, startPath, signal) => {
+        const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
+
+        data.map(
+            (x) => {
+                x.actions = [
+                    {
+                        actionName: 'Edit',
+                        onClick() {
+                            return `/Customers/ModifyCustomer/${x.id}`
+                        },
+                        disable: false,
+                        color: 'MediumSlateBlue'
+                    },
+                    {
+                        actionName: 'Delete',
+                        onClick() {
+                            deleteObject(x.id, customersPath)
+                        },
+                        disable: false,
+                        color: 'MediumSlateBlue'
+                    }
+                ]
+            }
+        )
+
+        return data
+
+    }
 
 
     const field = ['name','surname','birthDate','cf', 'email']
     const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email']
     const filter = ['name','surname','birthDate','cf', 'email']
 
-    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById, getCustomerByEmail }
+    return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById, getCustomerByEmail, advancedGetCustomers }
 };
 
 export default CustomerService;

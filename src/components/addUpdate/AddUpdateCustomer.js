@@ -7,7 +7,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomerService from "../../service/Customer/CustomerService";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
-const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers }) => {
+const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers, getData }) => {
 
     const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
     const { getCustomerById } = CustomerService()
@@ -141,7 +141,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         )
     : (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} getData={getData} />
             <Container className={'my-2'}>
                 <h3>Insert Customer</h3><br/>
                 { custAlreadyExists && <CustomAlert text={'Customer already exists'} /> }

@@ -7,15 +7,17 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 import DeleteDialog from "../confirmDialog/DeleteDialog";
 import { useNavigate } from "react-router-dom";
 
-const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList }) => {
+const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, getData }) => {
 
 
-    const { buildOrderFieldPath, getData, deleteObject, updateObject } = UsefulFunctions()
+    const { buildOrderFieldPath, deleteObject, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const navigate = useNavigate()
 
+    // buttons of the page with their appropriate useEffect
     const [sortButton, setSortButton] = useState(false);
     const [confirmDeleteButton, setConfirmDeleteButton] = useState(false);
+    const [actionButton, setActionButton] = useState(false);
 
     const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -60,6 +62,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
     }, [sortButton]);
 
     useEffect(() => {
+
         // variables useful to manage different simultaneously fetch
         const controller = new AbortController()
         const signal = controller.signal
@@ -87,6 +90,36 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
         }
     }, [confirmDeleteButton]);
 
+    useEffect(() => {
+
+        // variables useful to manage different simultaneously fetch
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        const getListObjects = async () => {
+            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+        }
+
+
+        getListObjects().then(r => {
+
+            setTableConfig({
+                ...tableConfig,
+                list: r,
+            })
+
+            /*console.log(r)*/
+
+            //setObjectList(objectList.filter((entity) => entity.id !== idObject))
+            setObjectList(r)
+        })
+
+
+        return () => {
+            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
+            controller.abort()
+        }
+    }, [actionButton]);
 
     /**
      * A method that shift the order type base on the actual order type. After, it updates the tableConfig useState.
@@ -265,6 +298,16 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
 
     }
 
+    const executeActions = (func, action) => {
+        if(action === 'Edit'){
+            navigate(func())
+        }
+        else{
+            func()
+            setActionButton(!actionButton)
+        }
+    }
+
     return (
         <>
             <Table striped bordered hover>
@@ -287,8 +330,9 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                             }
                         </React.Fragment>
                     )}
+
                     {/* Superuser header layout */}
-                    {
+                    {/*{
                         sessionStorage.getItem('superuser') !== null  &&
                         (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                         <th>Azioni</th>
@@ -297,7 +341,10 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                         sessionStorage.getItem('customer') !== null &&
                         (tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                         <th>Azioni</th>
-                    }
+                    }*/}
+
+                    <th>Actions</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -312,14 +359,14 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                                     tableConfig.fieldObjects.map(
                                         (innerEl, innerIndex) => {
                                             /* which column can be sorted */
-                                            if(tableConfig.tableName !== 'BOOKINGS') {
+                                            /*if(tableConfig.tableName !== 'BOOKINGS') {
                                                 return (
                                                 <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
                                                     {el[innerEl.field]}
                                                 </td>)
                                             }
                                             else if(tableConfig.tableName === 'BOOKINGS'){
-                                                /* in the bookings table the approvals must be a button active/disable */
+                                                /!* in the bookings table the approvals must be a button active/disable *!/
                                                 return innerEl.field === 'approval' ? (
                                                     <td key={innerIndex}>
                                                         {acceptDeniedBookingButton(el[innerEl.field], el)}
@@ -329,18 +376,39 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                                                         {el[innerEl.field]}
                                                     </td>
                                                 )
-                                            }
+                                            }*/
+                                            return (
+                                                <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
+                                                    {el[innerEl.field]}
+                                                </td>)
                                         }
                                     )
                                 }
+
+                                <td key={index*10+15}>
+                                    {
+                                        el.actions.map(
+                                            (action, innerIndex) => {
+                                                return (
+                                                    <React.Fragment key={innerIndex}>
+                                                        <Button text={action.actionName} onClickDo={() => executeActions(action.onClick, action.actionName)} disable={action.disable} color={action.color} />
+                                                    </React.Fragment>
+                                                )
+                                            })
+                                    }
+                                </td>
+
+
                                 {/* Super user actions layout */}
-                                {
+                                {/*{
                                     sessionStorage.getItem('superuser')!==null &&
                                     (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
                                     superuserActions(tableConfig.tableName, el['id'])
-                                }
+                                }*/}
+
+
                                 {/* Customer actions layout */}
-                                {
+                                {/*{
                                     sessionStorage.getItem('customer') !== null &&
                                     (tableConfig.tableName === 'BOOKINGS') &&
                                     customerBookingsTableActions(el['id'])
@@ -349,7 +417,9 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                                     sessionStorage.getItem('customer') !== null &&
                                     tableConfig.tableName === 'VEHICLES' &&
                                     customerVehiclesTableActions(el['licensePlate'])
-                                }
+                                }*/}
+
+
                             </tr>
                     )
                 }
@@ -364,7 +434,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList })
                               updateTable={confirmDeleteButton} setUpdateTable={setConfirmDeleteButton}
                 />
             }
-            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} setObjectList={setObjectList} />
+            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} setObjectList={setObjectList} getData={getData} />
         </>
     );
 };
