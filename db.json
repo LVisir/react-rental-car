@@ -2167,8 +2167,20 @@
       "code": "0044673548",
       "start": "2002-03-30",
       "customer": "AWFLYJ29AIYLZZ",
-      "approval": 0,
-      "vehicle": "JK000PG"
+      "approval": 1,
+      "vehicle": "JK000PG",
+      "actions": [
+        {
+          "actionName": "Approves",
+          "disable": false,
+          "color": "MediumSlateBlue"
+        },
+        {
+          "actionName": "Delete",
+          "disable": false,
+          "color": "MediumSlateBlue"
+        }
+      ]
     },
     {
       "id": 22,

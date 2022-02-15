@@ -53,7 +53,7 @@ const BookingService = () => {
                         {
                             actionName: 'Approves',
                             onClick() {
-                                updateObject({...x, approval: 1}, bookingsPath+`/${x.id}`)
+                                return updateObject({...x, approval: 1}, bookingsPath+`/${x.id}`)
                             },
                             disable: disable,
                             color: 'MediumSlateBlue'

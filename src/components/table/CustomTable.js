@@ -302,6 +302,9 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
         if(action === 'Edit'){
             navigate(func())
         }
+        else if(action === 'Approves'){
+            func().then(() => setActionButton(!actionButton))
+        }
         else{
             func()
             setActionButton(!actionButton)
