@@ -40,7 +40,8 @@ const VehiclesService = () => {
                                 return `/Vehicles/ModifyVehicle/${x.id}`
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'navigate'
                         },
                         {
                             actionName: 'Delete',
@@ -48,7 +49,8 @@ const VehiclesService = () => {
                                 return deleteObject(x.id, vehiclesPath)
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'action'
                         }
                     ]
                 }
@@ -60,7 +62,8 @@ const VehiclesService = () => {
                                 return `/Bookings/AddBooking/${x.licensePlate}`
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'navigate'
                         }
                     ]
                 }

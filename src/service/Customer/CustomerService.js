@@ -69,7 +69,8 @@ const CustomerService = () => {
                             return `/Customers/ModifyCustomer/${x.id}`
                         },
                         disable: false,
-                        color: 'MediumSlateBlue'
+                        color: 'MediumSlateBlue',
+                        actionType: 'navigate'
                     },
                     {
                         actionName: 'Delete',
@@ -77,7 +78,8 @@ const CustomerService = () => {
                             return deleteObject(x.id, customersPath)
                         },
                         disable: false,
-                        color: 'MediumSlateBlue'
+                        color: 'MediumSlateBlue',
+                        actionType: 'action'
                     }
                 ]
             }

@@ -56,7 +56,8 @@ const BookingService = () => {
                                 return updateObject({id: x.id, end: x.end, code: x.code, start: x.start, customer: x.customer, approval: 1, vehicle: x.vehicle}, bookingsPath+`/${x.id}`)
                             },
                             disable: disable,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'action'
                         },
                         {
                             actionName: 'Delete',
@@ -64,7 +65,8 @@ const BookingService = () => {
                                 return deleteObject(x.id, bookingsPath)
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'action'
                         }
                     ]
                 }
@@ -76,7 +78,8 @@ const BookingService = () => {
                                 return deleteObject(x.id, bookingsPath)
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'action'
                         },
                         {
                             actionName: 'Edit',
@@ -84,7 +87,8 @@ const BookingService = () => {
                                 return `/Bookings/ModifyBooking/${x.id}`
                             },
                             disable: false,
-                            color: 'MediumSlateBlue'
+                            color: 'MediumSlateBlue',
+                            actionType: 'navigate'
                         }
                     ]
                 }

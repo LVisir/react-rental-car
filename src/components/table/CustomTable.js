@@ -180,16 +180,12 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
         }
     }
 
-    const executeActions = (func, action) => {
-        if(action === 'Edit' || action === 'Rent'){
-            navigate(func())
-        }
-        else if(action === 'Approves' || action === 'Delete'){
+    const executeActions = (func, actionType) => {
+        if(actionType === 'action'){
             func().then(() => setActionButton(!actionButton))
         }
-        else{
-            func()
-            setActionButton(!actionButton)
+        else if(actionType === 'navigate'){
+            navigate(func())
         }
     }
 
@@ -245,7 +241,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                                             (action, innerIndex) => {
                                                 return (
                                                     <React.Fragment key={innerIndex}>
-                                                        <Button text={action.actionName} onClickDo={() => executeActions(action.onClick, action.actionName)} disable={action.disable} color={action.color} />
+                                                        <Button text={action.actionName} onClickDo={() => executeActions(action.onClick, action.actionType)} disable={action.disable} color={action.color} />
                                                     </React.Fragment>
                                                 )
                                             })

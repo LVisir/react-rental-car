@@ -1004,7 +1004,7 @@
   "vehicles": [
     {
       "id": 0,
-      "licensePlate": "AA000ZZP",
+      "licensePlate": "AA000AA",
       "model": "Sunshine",
       "typology": "UTILITARIA",
       "manufacturer": "Mercedes",
@@ -1057,22 +1057,6 @@
       "typology": "SUV",
       "manufacturer": "Ferrari",
       "registrYear": "2000-01-01"
-    },
-    {
-      "id": 8,
-      "licensePlate": "SU123JUE",
-      "model": "Ricecotton",
-      "typology": "UTILITARIA",
-      "manufacturer": "Swift",
-      "registrYear": "1983-01-04"
-    },
-    {
-      "id": 97778,
-      "licensePlate": "TQ000SU",
-      "model": "XC70",
-      "typology": "UTILITARIA",
-      "manufacturer": "Volvo",
-      "registrYear": "1995-02-11"
     },
     {
       "id": 96181,
@@ -1847,7 +1831,7 @@
       "code": "0508598708",
       "start": "2003-02-06",
       "customer": "FDIFZM65TAHYMT",
-      "approval": 0,
+      "approval": 1,
       "vehicle": "SU123JU"
     },
     {
@@ -1867,15 +1851,6 @@
       "customer": "TLIVJI48DEPLQO",
       "approval": 1,
       "vehicle": "JK000PG"
-    },
-    {
-      "id": 35,
-      "end": "2001-09-27",
-      "code": 8980572418,
-      "start": "2007-01-19",
-      "customer": "FDIFZM65TAHYMT",
-      "approval": 0,
-      "vehicle": "MA514NI"
     },
     {
       "id": 8,
@@ -2025,19 +2000,19 @@
       "id": 28,
       "end": "1983-08-23",
       "code": 1951777829,
-      "start": "1979-12-14",
+      "start": "1945-06-14",
       "customer": "BSXEIZ20EEXMCX",
       "approval": 0,
       "vehicle": "AA123BD"
     },
     {
-      "id": 30,
-      "end": "2009-09-19",
-      "code": 1231594604,
-      "start": "2012-01-27",
+      "end": "2022-02-10",
+      "code": 6790489,
+      "start": "2022-02-09",
       "customer": "BSXEIZ20EEXMCX",
       "approval": 0,
-      "vehicle": "AA123BD"
+      "vehicle": "IW824IR",
+      "id": 34
     }
   ]
 }
