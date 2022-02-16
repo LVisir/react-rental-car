@@ -19,16 +19,24 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, customers,
         const signal = controller.signal
 
         const fetchCustomers = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+            setCustomers(data)
+            setTableConfig({
+                ...tableConfig,
+                list: data,
+            })
         }
 
-        fetchCustomers().then(r => {
+        /*fetchCustomers().then(r => {
             setTableConfig({
                 ...tableConfig,
                 list: r,
             })
             setCustomers(r)
-        })
+        })*/
+
+        fetchCustomers()
+
     }, []);
 
     return (

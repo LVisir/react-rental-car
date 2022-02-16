@@ -10,8 +10,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
     const [loading, setLoading] = useState(true);
 
-    const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
-
+    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
+    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getBookingById } = BookingService()
 
     const { id, vehicleLicencePlate } = useParams()
@@ -86,18 +86,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 approval: approval,
                 vehicle: vehicle
             }
-            updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => {
-                setBookings(
-                    bookings.map(
-                        (element) =>
-                            element.id.toString() === id ? (
-                                {...updtBooking}
-                            ) : (
-                                element
-                            )
-                    )
-                )
-            })
+            updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+                .then((r) => setBookings(r))
         }
         else{
             // on BE u will implement the code auto generator
@@ -108,7 +98,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 customer: sessionStorage.getItem('customer'),
                 approval: 0,
                 vehicle: vehicleLicencePlate
-            }, tableConfig.startPath)
+            }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+                .then((r) => setBookings(r))
         }
 
         setEndDate('')

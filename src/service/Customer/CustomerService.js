@@ -74,7 +74,7 @@ const CustomerService = () => {
                     {
                         actionName: 'Delete',
                         onClick() {
-                            deleteObject(x.id, customersPath)
+                            return deleteObject(x.id, customersPath)
                         },
                         disable: false,
                         color: 'MediumSlateBlue'

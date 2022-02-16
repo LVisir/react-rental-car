@@ -97,22 +97,16 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
         const signal = controller.signal
 
         const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+            setObjectList(data)
+            setTableConfig({
+                ...tableConfig,
+                list: data,
+            })
         }
 
 
-        getListObjects().then(r => {
-
-            setTableConfig({
-                ...tableConfig,
-                list: r,
-            })
-
-            /*console.log(r)*/
-
-            //setObjectList(objectList.filter((entity) => entity.id !== idObject))
-            setObjectList(r)
-        })
+        getListObjects()
 
 
         return () => {
@@ -186,123 +180,11 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
         }
     }
 
-    // actions of the superuser based on the type of table
-    const superuserActions = (tableName, id) => {
-        switch (tableName){
-            case 'CUSTOMERS':
-                return (
-                    <td>
-                        <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
-                            navigate(`/Customers/ModifyCustomer/${id}`)
-                        }}/>
-                        <Button color={'MediumSlateBlue'} text={'Delete'}
-                                onClickDo={() => {
-                                    setIdObject(id)
-                                    setDeleteDialog(true)
-                                }}
-                        />
-                    </td>
-                )
-            case 'BOOKINGS':
-                return (
-                    <td>
-                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
-                            setIdObject(id)
-                            setDeleteDialog(true)
-                        }}/>
-                    </td>
-                )
-            case 'VEHICLES':
-                return (
-                    <td>
-                        <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
-                            navigate(`/Vehicles/ModifyVehicle/${id}`)
-                        }}/>
-                        <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
-                            setIdObject(id)
-                            setDeleteDialog(true)
-                        }} />
-                    </td>
-                )
-        }
-    }
-
-    const customerBookingsTableActions = (id) => {
-       return (
-            <td>
-                <Button color={'MediumSlateBlue'} text={'Edit'} onClickDo={() => {
-                    navigate(`/Bookings/ModifyBooking/${id}`)
-                }} />
-                <Button color={'MediumSlateBlue'} text={'Delete'} onClickDo={() => {
-                    setIdObject(id)
-                    setDeleteDialog(true)
-                }}/>
-            </td>
-       )
-    }
-
-    const customerVehiclesTableActions = (vehicleLicencePlate) => {
-        return (
-            <td>
-                <Button color={'MediumSlateBlue'} text={'Rent'} onClickDo={() => {
-                    navigate(`/Bookings/AddBooking/${vehicleLicencePlate}`)
-                }} />
-            </td>
-        )
-    }
-
-    /**
-     * It gives the appropriate button for the bookings approvals;
-     * it manages the approval click by updating the UI and the BE;
-     * @param approvalValue
-     * @param booking
-     * @returns {JSX.Element}
-     */
-    const acceptDeniedBookingButton = (approvalValue, booking) => {
-        if(sessionStorage.getItem('superuser') !== null){
-            return approvalValue === 1 ? (
-                <Button text={'Approved'} disable={true} />
-            ) : (
-                <Button text={'Approves'} color={'green'} disable={false} onClickDo={() => {
-
-                    const updtBooking = {...booking, approval: 1}
-
-                    updateObject({...updtBooking}, tableConfig.startPath+`/${booking.id}`).then(() => {
-                        setObjectList(
-                            objectList.map(
-                                (element) =>
-                                    element.id === booking.id ? (
-                                        {...element, approval: 1}
-                                    ) : (
-                                        element
-                                    )
-                            )
-                        )
-                    })
-
-                    setTableConfig({
-                        ...tableConfig,
-                        list: [...objectList]
-                    })
-
-                }}/>
-            )
-        }
-        else if(sessionStorage.getItem('customer') !== null){
-            return approvalValue === 1 ? (
-                <b>Approved</b>
-            ) : (
-                <b>Under approval</b>
-            )
-        }
-
-    }
-
     const executeActions = (func, action) => {
-        if(action === 'Edit'){
+        if(action === 'Edit' || action === 'Rent'){
             navigate(func())
         }
-        else if(action === 'Approves'){
+        else if(action === 'Approves' || action === 'Delete'){
             func().then(() => setActionButton(!actionButton))
         }
         else{
@@ -334,18 +216,6 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                         </React.Fragment>
                     )}
 
-                    {/* Superuser header layout */}
-                    {/*{
-                        sessionStorage.getItem('superuser') !== null  &&
-                        (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
-                        <th>Azioni</th>
-                    }
-                    {
-                        sessionStorage.getItem('customer') !== null &&
-                        (tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
-                        <th>Azioni</th>
-                    }*/}
-
                     <th>Actions</th>
 
                 </tr>
@@ -361,25 +231,6 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                                 {
                                     tableConfig.fieldObjects.map(
                                         (innerEl, innerIndex) => {
-                                            /* which column can be sorted */
-                                            /*if(tableConfig.tableName !== 'BOOKINGS') {
-                                                return (
-                                                <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
-                                                    {el[innerEl.field]}
-                                                </td>)
-                                            }
-                                            else if(tableConfig.tableName === 'BOOKINGS'){
-                                                /!* in the bookings table the approvals must be a button active/disable *!/
-                                                return innerEl.field === 'approval' ? (
-                                                    <td key={innerIndex}>
-                                                        {acceptDeniedBookingButton(el[innerEl.field], el)}
-                                                    </td>
-                                                ) : (
-                                                    <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
-                                                        {el[innerEl.field]}
-                                                    </td>
-                                                )
-                                            }*/
                                             return (
                                                 <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
                                                     {el[innerEl.field]}
@@ -401,42 +252,11 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                                     }
                                 </td>
 
-
-                                {/* Super user actions layout */}
-                                {/*{
-                                    sessionStorage.getItem('superuser')!==null &&
-                                    (tableConfig.tableName === 'CUSTOMERS' || tableConfig.tableName === 'BOOKINGS' || tableConfig.tableName === 'VEHICLES') &&
-                                    superuserActions(tableConfig.tableName, el['id'])
-                                }*/}
-
-
-                                {/* Customer actions layout */}
-                                {/*{
-                                    sessionStorage.getItem('customer') !== null &&
-                                    (tableConfig.tableName === 'BOOKINGS') &&
-                                    customerBookingsTableActions(el['id'])
-                                }
-                                {
-                                    sessionStorage.getItem('customer') !== null &&
-                                    tableConfig.tableName === 'VEHICLES' &&
-                                    customerVehiclesTableActions(el['licensePlate'])
-                                }*/}
-
-
                             </tr>
                     )
                 }
                 </tbody>
             </Table>
-            {/* Confirm message when the user try to delete */}
-            {
-                deleteDialog &&
-                <DeleteDialog bool={deleteDialog} setBool={setDeleteDialog} deleteObject={deleteObject}
-                              id={idObject} setId={setIdObject} path={tableConfig.startPath}
-                              objectList={objectList} setObjectList={setObjectList}
-                              updateTable={confirmDeleteButton} setUpdateTable={setConfirmDeleteButton}
-                />
-            }
             <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} setObjectList={setObjectList} getData={getData} />
         </>
     );

@@ -9,7 +9,8 @@ import CustomerService from "../../service/Customer/CustomerService";
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
 const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers, getData }) => {
 
-    const { addObject, resetTableConfig, updateObject } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
+    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getCustomerById } = CustomerService()
     const [loading, setLoading] = useState(true);
 
@@ -93,21 +94,14 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
             updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: birthDate, role: role, password: password, cf: cf}
-            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => {
-                setCustomers(
-                    customers.map(
-                        (element) =>
-                            element.id.toString() === id ? (
-                                {...updtCustomer}
-                            ) : (
-                                element
-                            )
-                    )
-                )
-            })
+            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+                .then((r) => setCustomers(r))
         }
         else {
-            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath)/*.then(r => {
+            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+                .then((r) => setCustomers(r))
+
+            /*.then(r => {
                 if([...customers, r].length < 10) setCustomers([...customers, r])
                 resetTableConfig(tableConfig, setTableConfig)
             })*/

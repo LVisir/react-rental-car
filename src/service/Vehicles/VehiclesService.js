@@ -30,8 +30,6 @@ const VehiclesService = () => {
     const advancedGetVehicles = async (sortPath, orderPath, tableConfig, startPath, signal) => {
         const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
 
-        let vehicleLicencePlate
-
         data.map(
             (x) => {
                 if(sessionStorage.getItem('superuser') !== null) {
@@ -47,7 +45,7 @@ const VehiclesService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                deleteObject(x.id, vehiclesPath)
+                                return deleteObject(x.id, vehiclesPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue'
@@ -55,12 +53,11 @@ const VehiclesService = () => {
                     ]
                 }
                 else if(sessionStorage.getItem('customer') !== null) {
-                    vehicleLicencePlate = x.licensePlate
                     x.actions = [
                         {
                             actionName: 'Rent',
                             onClick() {
-                                return `/Bookings/AddBooking/${vehicleLicencePlate}`
+                                return `/Bookings/AddBooking/${x.licensePlate}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue'

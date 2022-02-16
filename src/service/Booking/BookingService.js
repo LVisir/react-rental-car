@@ -53,7 +53,7 @@ const BookingService = () => {
                         {
                             actionName: 'Approves',
                             onClick() {
-                                return updateObject({...x, approval: 1}, bookingsPath+`/${x.id}`)
+                                return updateObject({id: x.id, end: x.end, code: x.code, start: x.start, customer: x.customer, approval: 1, vehicle: x.vehicle}, bookingsPath+`/${x.id}`)
                             },
                             disable: disable,
                             color: 'MediumSlateBlue'
@@ -61,7 +61,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                deleteObject(x.id, bookingsPath)
+                                return deleteObject(x.id, bookingsPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue'
@@ -73,7 +73,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                deleteObject(x.id, bookingsPath)
+                                return deleteObject(x.id, bookingsPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue'
