@@ -8,7 +8,7 @@ import VehiclesService from "../../service/Vehicles/VehiclesService";
 
 const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles, vehicles, getData }) => {
 
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject, dateFormat, dateFormatReverse } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getVehicleById } = VehiclesService()
     const navigate = useNavigate()
@@ -80,33 +80,14 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
 
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
-            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
+            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: dateFormat(registrYear)}
             updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setVehicles(r))
-
-
-            /*.then(() => {
-                setVehicles(
-                    vehicles.map(
-                        (element) =>
-                            element.id.toString() === id ? (
-                                {...updtData}
-                            ) : (
-                                element
-                            )
-                    )
-                )
-            })*/
         }
         else {
 
-            addObject({licensePlate, model, typology, manufacturer, registrYear}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+            addObject({licensePlate, model, typology, manufacturer, registrYear: dateFormat(registrYear)}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setVehicles(r))
-
-            /*.then((r) => {
-                if([...vehicles, r].length < 10) setVehicles([...vehicles, r])
-                resetTableConfig(tableConfig, setTableConfig)
-            })*/
         }
 
         setVehicleAlreadyExists(false)
@@ -162,7 +143,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                     { manufacturerAlert && <CustomAlert text={'Manufacturer name not valid'} /> }
                     <Form.Group className="mb-3" controlId="formRegistrYear">
                         <Form.Label>Year of registration</Form.Label>
-                        <Form.Control type='date' onChange={(e) => setRegistrYear(e.target.value)} placeholder="Insert the year of registration" value={registrYear} />
+                        <Form.Control type='date' onChange={(e) => setRegistrYear(e.target.value)} placeholder="Insert the year of registration" value={dateFormatReverse(registrYear)} />
                     </Form.Group>
                     { regYearAlert && <CustomAlert text={'Registration year not valid'} />}
                     <Button variant="primary" type="submit">

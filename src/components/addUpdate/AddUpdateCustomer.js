@@ -9,7 +9,7 @@ import CustomerService from "../../service/Customer/CustomerService";
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
 const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers, getData }) => {
 
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject, dateFormat, dateFormatReverse } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getCustomerById } = CustomerService()
     const [loading, setLoading] = useState(true);
@@ -74,6 +74,8 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
     const onSubmit = (e) => {
         e.preventDefault()
 
+        console.log(Array.from(birthDate).reverse().join(''))
+
         // field blank control
         if(!name || !surname || !cf || !email || !password || !birthDate){
             !name ? setNameAlert(true) : setNameAlert(false)
@@ -93,18 +95,13 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
-            updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: birthDate, role: role, password: password, cf: cf}
+            updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: dateFormat(birthDate), role: role, password: password, cf: cf}
             updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setCustomers(r))
         }
         else {
-            addObject({name, surname, email, birthDate, role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+            addObject({name, surname, email, birthDate: dateFormat(birthDate), role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setCustomers(r))
-
-            /*.then(r => {
-                if([...customers, r].length < 10) setCustomers([...customers, r])
-                resetTableConfig(tableConfig, setTableConfig)
-            })*/
         }
 
         setCustAlreadyExists(false)
@@ -152,7 +149,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
                     { surnameAlert && <CustomAlert text={'Surname not valid'}/> }
                     <Form.Group className="mb-3" controlId="formBirthDate">
                         <Form.Label>Date of birth</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setBirthDate(e.target.value)} value={birthDate} />
+                        <Form.Control type="date" onChange={(e) => setBirthDate(e.target.value)} value={dateFormatReverse(birthDate)} />
                     </Form.Group>
                     { birthDateAlert && <CustomAlert text={'Date of birth not valid'} /> }
                     <Form.Group className="mb-3" controlId="formEmail">

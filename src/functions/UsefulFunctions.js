@@ -77,7 +77,7 @@ const UsefulFunctions = () => {
         let url
 
         if(sessionStorage.getItem('customer') !== null && tableConfig.tableName === 'BOOKINGS'){
-            url = startPath + '?customer=' + sessionStorage.getItem('customer') + `&_page=${tableConfig.currentPage}&_limit=10`
+            url = startPath + '?userId=' + sessionStorage.getItem('customer') + `&_page=${tableConfig.currentPage}&_limit=10`
         }
 
         else url = startPath + `?_page=${tableConfig.currentPage}&_limit=10`
@@ -166,7 +166,22 @@ const UsefulFunctions = () => {
         })
     }
 
-    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious }
+    /**
+     * Format the date rom YYYY-MM-DD to DD-MM-YYYY
+     * @param date
+     * @returns {string}
+     */
+    const dateFormat = (date) => {
+        let x = Array.from(date)
+        return x.slice(8, 10).join('') + '-' + x.slice(5, 8).join('') + x.slice(0, 4).join('')
+    }
+
+    const dateFormatReverse = (date) => {
+        let x = Array.from(date)
+        return x.slice(6,10).join('') + '-' + x.slice(3,6).join('') + x.slice(0,2).join('')
+    }
+
+    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious, dateFormat, dateFormatReverse }
 
 };
 

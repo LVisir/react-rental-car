@@ -1,11 +1,13 @@
 import UsefulFunctions from "../../functions/UsefulFunctions";
+import Paths from "../../Paths";
 
 const VehiclesService = () => {
 
     const { getData, updateObject, deleteObject } = UsefulFunctions()
+    const { basePath } = Paths()
 
     // path to fetch the list of Vehicles from server
-    const vehiclesPath = 'http://localhost:5001/vehicles'
+    const vehiclesPath = basePath+'/vehicles'
 
     // this length came from server; upperBound[listVehicles.length/data per page]
     const vehiclesLength = 10

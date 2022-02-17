@@ -1,11 +1,13 @@
 import UsefulFunctions from "../../functions/UsefulFunctions";
+import Paths from "../../Paths";
 
 const CustomerService = () => {
 
     const { getData, updateObject, deleteObject } = UsefulFunctions()
+    const { basePath } = Paths()
 
     // path to fetch the list of Customer from the server
-    const customersPath = 'http://localhost:5001/customers'
+    const customersPath = basePath+'/users'
 
     // normally this length came from the BE; is the upperBound[(length of customers)/(data per page)]
     const customersLength = 10

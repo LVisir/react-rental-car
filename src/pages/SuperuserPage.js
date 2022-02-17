@@ -25,8 +25,8 @@ const SuperuserPage = ({logout}) => {
         path: '/Vehicles'
     }]
 
-    // path for the error page
-    const homePath = '/Customers'
+    // path for the 'come back to home' for error page
+    const homePath = '/Bookings'
 
     return (
         <Router>

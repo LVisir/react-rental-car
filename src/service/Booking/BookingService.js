@@ -1,4 +1,5 @@
 import UsefulFunctions from "../../functions/UsefulFunctions";
+import Paths from "../../Paths";
 
 const BookingService = () => {
 
@@ -19,6 +20,10 @@ const BookingService = () => {
 // -------------------------------------------------------------------------------- da qui sotto usa queste funzioni da ora in poi
 
     const { getData, updateObject, deleteObject } = UsefulFunctions()
+    const { basePath } = Paths()
+
+    // path to fetch the list of Prenotazione from the server
+    let bookingsPath = basePath+'/bookings'
 
     // fetch of the list of Prenotazione objects
     const getBookings = async () => {
@@ -53,7 +58,7 @@ const BookingService = () => {
                         {
                             actionName: 'Approves',
                             onClick() {
-                                return updateObject({id: x.id, end: x.end, code: x.code, start: x.start, customer: x.customer, approval: 1, vehicle: x.vehicle}, bookingsPath+`/${x.id}`)
+                                return updateObject({id: x.id, end: x.end, start: x.start, userId: x.userId, approval: 1, vehicleId: x.vehicleId}, bookingsPath+`/${x.id}`)
                             },
                             disable: disable,
                             color: 'MediumSlateBlue',
@@ -98,15 +103,12 @@ const BookingService = () => {
         return data
     }
 
-    // path to fetch the list of Prenotazione from the server
-    let bookingsPath = 'http://localhost:5001/bookings'
-
     // length of: (all the Prenotazione objects/10) (normally get from BE)
     const bookingsLength = 4
 
-    const field = ['code','start','end','customer', 'vehicle', 'approval']
-    const fieldHeader = ['Code', 'Start date', 'End date', 'Customer Id', 'Licence number', 'Approval']
-    const filter = ['code','start','end','customer', 'vehicle']
+    const field = ['start','end','userId', 'vehicleId', 'approval']
+    const fieldHeader = ['Start date', 'End date', 'Customer Id', 'Vehicle Licence n.', 'Approval']
+    const filter = ['start','end','userId', 'vehicleId']
 
     return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById, advancedGetBookings}
 };

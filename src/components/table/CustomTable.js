@@ -51,6 +51,8 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                 })
             }
             setObjectList(r)
+        }).catch((error) => {
+            console.log('Two or more fetch asked together:',error)
         })
 
         return () => {
@@ -106,7 +108,9 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
         }
 
 
-        getListObjects()
+        getListObjects().catch((error) => {
+            console.log('Two or more fetch asked together:',error)
+        })
 
 
         return () => {

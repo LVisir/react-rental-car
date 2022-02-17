@@ -10,7 +10,7 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
     const [loading, setLoading] = useState(true);
 
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject, dateFormat, dateFormatReverse } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getBookingById } = BookingService()
 
@@ -27,14 +27,13 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             Promise.resolve(data).then(r => {
                 // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
                 // check if this request is made by the actual logged customer
-                if(Object.keys(r).length>0 && r['customer'] === sessionStorage.getItem('customer')){
+                if(Object.keys(r).length>0 && r['userId'] === sessionStorage.getItem('customer')){
                     setStartDate(r['start'])
                     setEndDate(r['end'])
                     setIdBooking(r['id'])
-                    setCode(r['code'])
-                    setCustomer(r['customer'])
+                    setCustomer(r['userId'])
                     setApproval(r['approval'])
-                    setVehicle(r['vehicle'])
+                    setVehicle(r['vehicleId'])
                     setLoading(false)
                 }
                 else{
@@ -79,25 +78,23 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
         if(id !== undefined){
             updtBooking = {
                 id: id,
-                end: endDate,
-                code: code,
-                start: startDate,
-                customer: customer,
+                end: dateFormat(endDate),
+                start: dateFormat(startDate),
+                userId: customer,
                 approval: approval,
-                vehicle: vehicle
+                vehicleId: vehicle
             }
             updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setBookings(r))
         }
         else{
-            // on BE u will implement the code auto generator
+
             addObject({
-                end: endDate,
-                code: Math.floor(Math.random()*10000000),
-                start: startDate,
-                customer: sessionStorage.getItem('customer'),
+                end: dateFormat(endDate),
+                start: dateFormat(startDate),
+                userId: sessionStorage.getItem('customer'),
                 approval: 0,
-                vehicle: vehicleLicencePlate
+                vehicleId: vehicleLicencePlate
             }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setBookings(r))
         }
@@ -125,12 +122,12 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formStartDate">
                         <Form.Label>Start date</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setStartDate(e.target.value)} value={startDate} />
+                        <Form.Control type="date" onChange={(e) => setStartDate(e.target.value)} value={dateFormatReverse(startDate)} />
                     </Form.Group>
                     { startDateAlert && <CustomAlert text={'Date not valid'} /> }
                     <Form.Group className="mb-3" controlId="formEndDate">
                         <Form.Label>End date</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setEndDate(e.target.value)} value={endDate} />
+                        <Form.Control type="date" onChange={(e) => setEndDate(e.target.value)} value={dateFormatReverse(endDate)} />
                     </Form.Group>
                     { endDateAlert && <CustomAlert text={'Date not valid'} /> }
                     <Button variant="primary" type="submit">

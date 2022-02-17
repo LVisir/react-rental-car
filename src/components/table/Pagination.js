@@ -36,6 +36,8 @@ const Pagination = ({ tableConfig, setTableConfig, setObjectList, getData }) => 
                 })
             }
             setObjectList(r)
+        }).catch((error) => {
+            console.log('Two or more fetch asked together:',error)
         })
 
         return () => {
