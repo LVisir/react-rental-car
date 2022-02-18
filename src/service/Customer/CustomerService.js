@@ -92,9 +92,9 @@ const CustomerService = () => {
     }
 
 
-    const field = ['name','surname','birthDate','cf', 'email']
-    const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email']
-    const filter = ['name','surname','birthDate','cf', 'email']
+    const field = ['name','surname','birthDate','cf', 'email', 'id']
+    const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id']
+    const filter = ['name','surname','birthDate','cf', 'email', 'id']
 
     return { customersPath, getCustomers, customQueryCustomers, customersLength, field, fieldHeader, filter, getCustomerById, getCustomerByEmail, advancedGetCustomers }
 };

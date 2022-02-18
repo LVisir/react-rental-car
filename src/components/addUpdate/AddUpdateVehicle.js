@@ -31,7 +31,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                     setModel(r['model'])
                     setTypology(r['typology'])
                     setManufacturer(r['manufacturer'])
-                    setRegistrYear(r['registrYear'])
+                    setRegistrYear(dateFormatReverse(r['registrYear']))
                     setLoading(false)
                 }
                 else {
@@ -143,7 +143,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                     { manufacturerAlert && <CustomAlert text={'Manufacturer name not valid'} /> }
                     <Form.Group className="mb-3" controlId="formRegistrYear">
                         <Form.Label>Year of registration</Form.Label>
-                        <Form.Control type='date' onChange={(e) => setRegistrYear(e.target.value)} placeholder="Insert the year of registration" value={dateFormatReverse(registrYear)} />
+                        <Form.Control type='date' onChange={(e) => setRegistrYear(e.target.value)} placeholder="Insert the year of registration" value={registrYear} />
                     </Form.Group>
                     { regYearAlert && <CustomAlert text={'Registration year not valid'} />}
                     <Button variant="primary" type="submit">

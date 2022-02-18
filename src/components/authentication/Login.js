@@ -91,13 +91,13 @@ const Login = ({superusers, setToken}) => {
             else {
                 if(r[0].role === 'SUPERUSER') {
 
-                    sessionStorage.setItem('superuser', r[0].userId)
+                    sessionStorage.setItem('superuser', r[0].id)
                     navigate('/Bookings', {replace: true})
                     // update the token that declare that someone log in
                     setToken(true)
                 }
                 else {
-                    sessionStorage.setItem('customer', r[0].cf)
+                    sessionStorage.setItem('customer', r[0].id)
 
                     navigate('/Bookings', {replace: true})
                     setToken(true)

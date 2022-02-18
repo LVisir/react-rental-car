@@ -66,6 +66,12 @@ const Customers = ({ logout, links, homePath }) => {
                 header: fieldHeader[4],
                 sortable: true,
                 sortType: '',
+            },
+            {
+                field: field[5],
+                header: fieldHeader[5],
+                sortable: true,
+                sortType: '',
             }
         ]
     });

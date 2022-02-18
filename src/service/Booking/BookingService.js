@@ -106,9 +106,9 @@ const BookingService = () => {
     // length of: (all the Prenotazione objects/10) (normally get from BE)
     const bookingsLength = 4
 
-    const field = ['start','end','userId', 'vehicleId', 'approval']
-    const fieldHeader = ['Start date', 'End date', 'Customer Id', 'Vehicle Licence n.', 'Approval']
-    const filter = ['start','end','userId', 'vehicleId']
+    const field = ['start','end','userId', 'vehicleId', 'id', 'approval']
+    const fieldHeader = ['Start date', 'End date', 'Customer Id', 'Vehicle Id', 'Booking Id', 'Approval']
+    const filter = ['start','end','userId', 'vehicleId', 'id']
 
     return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById, advancedGetBookings}
 };

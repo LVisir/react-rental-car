@@ -19,7 +19,6 @@ const Pagination = ({ tableConfig, setTableConfig, setObjectList, getData }) => 
             return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
         }
 
-
         // fetch + manage the reset button if it has to be available or not
         getListObjects().then(r => {
             if (tableConfig.currentPage !== 1) {

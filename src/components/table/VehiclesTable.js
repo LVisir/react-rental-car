@@ -37,7 +37,9 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, vehicles, s
             <Container className={'my-2'}>
                 <h3>
                     Vehicles
-                    <Button className={'btn btn-primary'} color={'green'} text={'Add'} onClickDo={() => {navigate('/Vehicles/AddVehicle')}}/>
+                    { sessionStorage.getItem('superuser') && <Button className={'btn btn-primary'} color={'green'} text={'Add'} onClickDo={() => {
+                        navigate('/Vehicles/AddVehicle')
+                    }}/> }
                 </h3>
                 <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} objectList={vehicles} setObjectList={setVehicles} getData={getData} />
             </Container>

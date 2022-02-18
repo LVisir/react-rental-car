@@ -30,7 +30,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
                     setName(r['name'])
                     setSurname(r['surname'])
                     setEmail(r['email'])
-                    setBirthDate(r['birthDate'])
+                    setBirthDate(dateFormatReverse(r['birthDate']))
                     setPassword(r['password'])
                     setCf(r['cf'])
                     setLoading(false)
@@ -149,7 +149,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
                     { surnameAlert && <CustomAlert text={'Surname not valid'}/> }
                     <Form.Group className="mb-3" controlId="formBirthDate">
                         <Form.Label>Date of birth</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setBirthDate(e.target.value)} value={dateFormatReverse(birthDate)} />
+                        <Form.Control type="date" onChange={(e) => setBirthDate(e.target.value)} value={birthDate} />
                     </Form.Group>
                     { birthDateAlert && <CustomAlert text={'Date of birth not valid'} /> }
                     <Form.Group className="mb-3" controlId="formEmail">

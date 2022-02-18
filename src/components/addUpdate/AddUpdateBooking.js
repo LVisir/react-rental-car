@@ -28,8 +28,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
                 // check if this request is made by the actual logged customer
                 if(Object.keys(r).length>0 && r['userId'] === sessionStorage.getItem('customer')){
-                    setStartDate(r['start'])
-                    setEndDate(r['end'])
+                    setStartDate(dateFormatReverse(r['start']))
+                    setEndDate(dateFormatReverse(r['end']))
                     setIdBooking(r['id'])
                     setCustomer(r['userId'])
                     setApproval(r['approval'])
@@ -122,12 +122,12 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formStartDate">
                         <Form.Label>Start date</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setStartDate(e.target.value)} value={dateFormatReverse(startDate)} />
+                        <Form.Control type="date" onChange={(e) => setStartDate(e.target.value)} value={startDate} />
                     </Form.Group>
                     { startDateAlert && <CustomAlert text={'Date not valid'} /> }
                     <Form.Group className="mb-3" controlId="formEndDate">
                         <Form.Label>End date</Form.Label>
-                        <Form.Control type="date" onChange={(e) => setEndDate(e.target.value)} value={dateFormatReverse(endDate)} />
+                        <Form.Control type="date" onChange={(e) => setEndDate(e.target.value)} value={endDate} />
                     </Form.Group>
                     { endDateAlert && <CustomAlert text={'Date not valid'} /> }
                     <Button variant="primary" type="submit">

@@ -25,9 +25,9 @@ const VehiclesService = () => {
         return vehicles
     }
 
-    const field = ['licensePlate','model','typology','manufacturer', 'registrYear']
-    const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year']
-    const filter = ['licensePlate','model','typology','manufacturer', 'registrYear']
+    const field = ['licensePlate','model','typology','manufacturer', 'registrYear', 'id']
+    const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id']
+    const filter = ['licensePlate','model','typology','manufacturer', 'registrYear', 'id']
 
     const advancedGetVehicles = async (sortPath, orderPath, tableConfig, startPath, signal) => {
         const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
@@ -61,7 +61,7 @@ const VehiclesService = () => {
                         {
                             actionName: 'Rent',
                             onClick() {
-                                return `/Bookings/AddBooking/${x.licensePlate}`
+                                return `/Bookings/AddBooking/${x.id}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
