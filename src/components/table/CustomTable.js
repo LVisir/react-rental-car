@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, getData }) => {
 
 
-    const { buildOrderFieldPath, deleteObject, updateObject } = UsefulFunctions()
+    const { buildOrderFieldPath, deleteObject, updateObject, dateFormat } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const navigate = useNavigate()
 
@@ -233,7 +233,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                                         (innerEl, innerIndex) => {
                                             return (
                                                 <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
-                                                    {el[innerEl.field]}
+                                                    {isNaN(Date.parse(el[innerEl.field])) ? el[innerEl.field] : dateFormat(el[innerEl.field]) } {/* check if it is a date; if yes format from yyyy-mm-dd to gg-mm-yyy */}
                                                 </td>)
                                         }
                                     )

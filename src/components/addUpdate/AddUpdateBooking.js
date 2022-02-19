@@ -10,7 +10,7 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
     const [loading, setLoading] = useState(true);
 
-    const { addObject, buildOrderFieldPath, updateObject, dateFormat, dateFormatReverse } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getBookingById } = BookingService()
 
@@ -28,8 +28,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
                 // check if this request is made by the actual logged customer
                 if(Object.keys(r).length>0 && r['userId'] === sessionStorage.getItem('customer')){
-                    setStartDate(dateFormatReverse(r['start']))
-                    setEndDate(dateFormatReverse(r['end']))
+                    setStartDate(r['start'])
+                    setEndDate(r['end'])
                     setIdBooking(r['id'])
                     setCustomer(r['userId'])
                     setApproval(r['approval'])
@@ -78,8 +78,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
         if(id !== undefined){
             updtBooking = {
                 id: id,
-                end: dateFormat(endDate),
-                start: dateFormat(startDate),
+                end: endDate,
+                start: startDate,
                 userId: customer,
                 approval: approval,
                 vehicleId: vehicle
@@ -90,8 +90,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
         else{
 
             addObject({
-                end: dateFormat(endDate),
-                start: dateFormat(startDate),
+                end: endDate,
+                start: startDate,
                 userId: sessionStorage.getItem('customer'),
                 approval: 0,
                 vehicleId: vehicleLicencePlate

@@ -8,7 +8,7 @@ import VehiclesService from "../../service/Vehicles/VehiclesService";
 
 const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles, vehicles, getData }) => {
 
-    const { addObject, buildOrderFieldPath, updateObject, dateFormat, dateFormatReverse } = UsefulFunctions()
+    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getVehicleById } = VehiclesService()
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                     setModel(r['model'])
                     setTypology(r['typology'])
                     setManufacturer(r['manufacturer'])
-                    setRegistrYear(dateFormatReverse(r['registrYear']))
+                    setRegistrYear(r['registrYear'])
                     setLoading(false)
                 }
                 else {
@@ -80,13 +80,13 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
 
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
-            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: dateFormat(registrYear)}
+            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
             updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setVehicles(r))
         }
         else {
 
-            addObject({licensePlate, model, typology, manufacturer, registrYear: dateFormat(registrYear)}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
+            addObject({licensePlate, model, typology, manufacturer, registrYear: registrYear}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
                 .then((r) => setVehicles(r))
         }
 
