@@ -45,8 +45,8 @@ const BookingService = () => {
         return await response.json()
     }
 
-    const advancedGetBookings = async (sortPath, orderPath, tableConfig, startPath, signal) => {
-        const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
+    const advancedGetBookings = async (sortPath, orderPath, tableConfig, startPath, page = 0, searchText = '', filterSearchText = '') => {
+        const data = await getData(sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText)
 
         let disable
 

@@ -6,7 +6,7 @@ import Button from "../graphic/Button";
 import CustomTable from "./CustomTable";
 import {useNavigate} from "react-router-dom";
 
-const CustomersTable = ({ logout, links, tableConfig, setTableConfig, customers, setCustomers, getData }) => {
+const CustomersTable = ({ logout, links, tableConfig, setTableConfig, getData }) => {
 
     const { buildOrderFieldPath } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
@@ -19,21 +19,16 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, customers,
         const signal = controller.signal
 
         const fetchCustomers = async () => {
-            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-            setCustomers(data)
-            setTableConfig({
-                ...tableConfig,
-                list: data,
-            })
-        }
+            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
 
-        /*fetchCustomers().then(r => {
-            setTableConfig({
-                ...tableConfig,
-                list: r,
+            setTableConfig(prevTableConfig => {
+                return {
+                    ...prevTableConfig,
+                    list: data,
+                }
             })
-            setCustomers(r)
-        })*/
+
+        }
 
         fetchCustomers()
 
@@ -41,13 +36,13 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, customers,
 
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} objectList={customers} setObjectList={setCustomers} getData={getData} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getData} />
             <Container className={'my-2'}>
                 <h3>
                     Customers
                     <Button className={'btn btn-primary'} color={'green'} text={'Add'} onClickDo={() => {navigate('/Customers/AddCustomer')}}/>
                 </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} objectList={customers} setObjectList={setCustomers} getData={getData} />
+                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getData} />
             </Container>
         </>
     );

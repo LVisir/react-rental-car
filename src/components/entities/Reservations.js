@@ -77,13 +77,11 @@ const Reservations = ({ logout, links, homePath }) => {
         ]
     });
 
-    const [bookings, setBookings] = useState(tableConfig.list);
-
     return (
         <>
             <Routes>
 
-                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} bookings={bookings} setBookings={setBookings} getData={advancedGetBookings} /> } />
+                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetBookings} /> } />
 
                 { sessionStorage.getItem('customer') !== null &&
 
@@ -91,8 +89,7 @@ const Reservations = ({ logout, links, homePath }) => {
 
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
-                                          tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
-                                          getData={advancedGetBookings}
+                                          tableConfig={tableConfig} getData={advancedGetBookings}
                         />}
 
                     />
@@ -104,8 +101,7 @@ const Reservations = ({ logout, links, homePath }) => {
 
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
-                                          tableConfig={tableConfig} setBookings={setBookings} bookings={bookings}
-                                          getData={advancedGetBookings}
+                                          tableConfig={tableConfig} getData={advancedGetBookings}
                         />}
 
                     />

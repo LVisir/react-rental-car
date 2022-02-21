@@ -6,7 +6,7 @@ import {Container} from "react-bootstrap";
 import Button from "../graphic/Button";
 import CustomTable from "./CustomTable";
 
-const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, vehicles, setVehicles, getData }) => {
+const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, getData }) => {
 
     const { buildOrderFieldPath } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
@@ -19,21 +19,22 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, vehicles, s
         const signal = controller.signal
 
         const fetchVehicles = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
+
+            setTableConfig(prevTableConfig => {
+                return {
+                    ...prevTableConfig,
+                    list: data,
+                }
+            })
         }
 
-        fetchVehicles().then(r => {
-            setTableConfig({
-                ...tableConfig,
-                list: r,
-            })
-            setVehicles(r)
-        })
+        fetchVehicles()
     }, []);
 
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} objectList={vehicles} setObjectList={setVehicles} getData={getData} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getData} />
             <Container className={'my-2'}>
                 <h3>
                     Vehicles
@@ -41,7 +42,7 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, vehicles, s
                         navigate('/Vehicles/AddVehicle')
                     }}/> }
                 </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} objectList={vehicles} setObjectList={setVehicles} getData={getData} />
+                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getData} />
             </Container>
         </>
     );

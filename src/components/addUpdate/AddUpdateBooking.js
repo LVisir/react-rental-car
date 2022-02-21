@@ -6,7 +6,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import CustomAlert from "../alerts/CustomAlert";
 import BookingService from "../../service/Booking/BookingService";
 
-const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setBookings, bookings, getData }) => {
+const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -84,8 +84,10 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 approval: approval,
                 vehicleId: vehicle
             }
-            updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setBookings(r))
+            updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfigList => {
+                    return {...prevTableConfigList, list: r}
+                }))
         }
         else{
 
@@ -95,8 +97,10 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 userId: sessionStorage.getItem('customer'),
                 approval: 0,
                 vehicleId: vehicleLicencePlate
-            }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setBookings(r))
+            }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfigList => {
+                    return {...prevTableConfigList, list: r}
+                }))
         }
 
         setEndDate('')

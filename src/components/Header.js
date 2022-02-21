@@ -1,18 +1,16 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import {Button, Container, Form, FormControl, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import Logout from "./authentication/Logout";
 import {default as MyButton} from './graphic/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
-import useResetFetch from "../customHooks/useResetFetch";
 import PropTypes from 'prop-types'
 
-const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, throwResetFetch, objectList, setObjectList, getData }) => {
+const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const navigate = useNavigate()
 
-    const { buildOrderFieldPath, resetTableConfig } = UsefulFunctions()
-    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+    const { buildOrderFieldPath } = UsefulFunctions()
 
     // state that manage the searching filter
     const [filter, setFilter] = useState(tableConfig.dbFields[0]);
@@ -20,65 +18,62 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
     // state that manage the text input in the search button
     const [searchText, setSearchText] = useState('');
 
-    // state that manage when the searchButton has been pressed
-    const [searchButton, setSearchButton] = useState(false);
-
-    const [resetState, setResetState] = useState(false);
-
     // function that reset all the 'tableConfig' settings and trigger the useEffect of the useResetFetch(...)
-    const reset = () => {
+    const reset = async () => {
         setSearchText('')
 
-        resetTableConfig(tableConfig, setTableConfig)
+        let tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
+            let returnValue = { ...a }
+            if(a.sortType !== '') returnValue.sortType = ''
+            return returnValue
+        })
+
+        const { sortPath, orderPath } = buildOrderFieldPath(tmpFieldObjects)
+
+        const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, 1, '', '')
+
+        setTableConfig(prevTableConfig => {
+            return {
+                ...prevTableConfig,
+                fieldObjects: tmpFieldObjects,
+                disableResetPaginationButton: true,
+                disableResetHeaderButton: true,
+                disableResetTableButton: true,
+                currentPages: [1,2,3],
+                filterSearchText: '',
+                currentPage: 1,
+                searchText: '',
+                list: data
+            }
+        })
 
         setFilter(tableConfig.dbFields[0])
         setSearchText('')
-        setResetState(!resetState)
 
     }
-
-    // triggered when the useState resetButton has been pressed
-    useEffect(() => {
-        // variables useful to manage different simultaneously fetch
-        const controller = new AbortController()
-        const signal = controller.signal
-
-        const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-        }
-
-
-        // normal call because the reset() function in Header.js reset all the table settings
-        getListObjects().then(r => {
-            setTableConfig({
-                ...tableConfig,
-                list: r,
-            })
-            objectList !== [] && setObjectList(r)
-        })
-
-        setSearchText('')
-
-        return () => {
-            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
-            controller.abort()
-        }
-    }, [resetState]);
-
 
     /**
      * Fill the tableConfig with the appropriate data to fetch what the user entered the search input text box
      */
-    const search = () => {
-        setTableConfig({
-            ...tableConfig,
-            filterSearchText: filter,
-            searchText: searchText,
-            disableResetHeaderButton: false,
-            currentPages: [1,2,3],
-            currentPage: 1,
+    const search = async () => {
+
+        const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+        const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, 1, searchText, filter)
+
+        setTableConfig(prevTableConfig => {
+            return {
+                ...prevTableConfig,
+                filterSearchText: filter,
+                searchText: searchText,
+                disableResetHeaderButton: false,
+                currentPages: [1,2,3],
+                currentPage: 1,
+                list: data
+            }
         })
-        setSearchButton(!searchButton)
+
+        setSearchText('')
     }
 
     /**
@@ -105,7 +100,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
         }
     }
 
-
+/*
 
     // triggered when the useState searchButton has been pressed
     useEffect(() => {
@@ -136,7 +131,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
             controller.abort()
         }
 
-    }, [searchButton]);
+    }, [searchButton]);*/
 
     return (
         <Navbar expand="lg" bg="dark" variant="dark">

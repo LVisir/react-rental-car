@@ -6,7 +6,7 @@ import CustomAlert from "../alerts/CustomAlert";
 import { useNavigate, useParams } from "react-router-dom";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
 
-const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setVehicles, vehicles, getData }) => {
+const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
@@ -81,13 +81,23 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
             updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
-            updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setVehicles(r))
+            updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfig => {
+                    return {
+                        ...prevTableConfig,
+                        list: r,
+                    }
+                }))
         }
         else {
 
-            addObject({licensePlate, model, typology, manufacturer, registrYear: registrYear}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setVehicles(r))
+            addObject({licensePlate, model, typology, manufacturer, registrYear: registrYear}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfig => {
+                    return {
+                        ...prevTableConfig,
+                        list: r,
+                    }
+                }))
         }
 
         setVehicleAlreadyExists(false)

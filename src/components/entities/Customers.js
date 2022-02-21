@@ -76,14 +76,12 @@ const Customers = ({ logout, links, homePath }) => {
         ]
     });
 
-    const [customers, setCustomers] = useState(tableConfig.list);
-
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} customers={customers} setCustomers={setCustomers} getData={advancedGetCustomers} /> } />
-                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} customers={customers} setCustomers={setCustomers} getData={advancedGetCustomers} />} />
-                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} setCustomers={setCustomers} customers={customers} getData={advancedGetCustomers} />} />
+                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetCustomers} /> } />
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={advancedGetCustomers} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={advancedGetCustomers} />} />
                 <Route path={'*'} element={ <Error homePath={homePath} /> } />
             </Routes>
         </>

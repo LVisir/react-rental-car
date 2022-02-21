@@ -1,123 +1,45 @@
 import {Table} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Pagination from "./Pagination";
 import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill} from "react-icons/bs";
 import Button from "../graphic/Button";
 import UsefulFunctions from "../../functions/UsefulFunctions";
-import DeleteDialog from "../confirmDialog/DeleteDialog";
 import { useNavigate } from "react-router-dom";
 
-const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, getData }) => {
+const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
 
-    const { buildOrderFieldPath, deleteObject, updateObject, dateFormat } = UsefulFunctions()
-    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+    const { buildOrderFieldPath, dateFormat } = UsefulFunctions()
+
     const navigate = useNavigate()
 
-    // buttons of the page with their appropriate useEffect
-    const [sortButton, setSortButton] = useState(false);
-    const [confirmDeleteButton, setConfirmDeleteButton] = useState(false);
-    const [actionButton, setActionButton] = useState(false);
+    /**
+     *
+     * @param fieldObjects
+     * @returns {Promise<void>}
+     */
+    const sort = async (fieldObjects) => {
 
-    const [deleteDialog, setDeleteDialog] = useState(false);
+        const newFieldObjects = shiftOrderStyle(fieldObjects)
 
-    const [idObject, setIdObject] = useState(null);
-
-    // triggered when the sort button is pressed
-    useEffect(() => {
-
-        // variables useful to manage different simultaneously fetch
-        const controller = new AbortController()
-        const signal = controller.signal
+        const { sortPath, orderPath } = buildOrderFieldPath(newFieldObjects)
 
         const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-        }
+            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
 
+            let disableResetTableButton = false
 
-        // fetch + manage the reset button if it has to be available or not
-        getListObjects().then(r => {
-            if (sortPath !== '') {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetTableButton: false,
-                })
-            } else {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetTableButton: true,
-                })
+            if (sortPath === '') {
+                disableResetTableButton = !disableResetTableButton
             }
-            setObjectList(r)
-        }).catch((error) => {
-            console.log('Two or more fetch asked together:',error)
-        })
 
-        return () => {
-            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
-            controller.abort()
-        }
-
-
-    }, [sortButton]);
-
-    useEffect(() => {
-
-        // variables useful to manage different simultaneously fetch
-        const controller = new AbortController()
-        const signal = controller.signal
-
-        const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-        }
-
-
-        getListObjects().then(r => {
-
-            setTableConfig({
-                ...tableConfig,
-                list: r,
-            })
-
-            //setObjectList(objectList.filter((entity) => entity.id !== idObject))
-            setObjectList(r)
-        })
-
-
-        return () => {
-            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
-            controller.abort()
-        }
-    }, [confirmDeleteButton]);
-
-    useEffect(() => {
-
-        // variables useful to manage different simultaneously fetch
-        const controller = new AbortController()
-        const signal = controller.signal
-
-        const getListObjects = async () => {
-            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-            setObjectList(data)
-            setTableConfig({
-                ...tableConfig,
-                list: data,
+            setTableConfig(prevFieldObjects => {
+                return {...prevFieldObjects, fieldObjects: newFieldObjects, list: data, disableResetTableButton: disableResetTableButton}
             })
         }
 
-
-        getListObjects().catch((error) => {
-            console.log('Two or more fetch asked together:',error)
-        })
-
-
-        return () => {
-            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
-            controller.abort()
-        }
-    }, [actionButton]);
+        getListObjects()
+    }
 
     /**
      * A method that shift the order type base on the actual order type. After, it updates the tableConfig useState.
@@ -134,59 +56,68 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                     if (a.field === fieldObject.field) returnValue.sortType = 'asc'
                     return returnValue
                 })
-                setTableConfig({
-                    ...tableConfig,
-                    fieldObjects: tmpFieldObjects
-                })
-                // trigger the useEffect
-                setSortButton(!sortButton)
-                break
+
+                return tmpFieldObjects
             case 'asc':
                 tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
                     let returnValue = { ...a }
                     if (a.field === fieldObject.field) returnValue.sortType = 'desc'
                     return returnValue
                 })
-                setTableConfig({
-                    ...tableConfig,
-                    fieldObjects: tmpFieldObjects
-                })
-                // trigger the useEffect
-                setSortButton(!sortButton)
-                break
+
+                return tmpFieldObjects
+
             case 'desc':
                 tmpFieldObjects = tableConfig.fieldObjects.map((a) => {
                     let returnValue = { ...a }
                     if (a.field === fieldObject.field) returnValue.sortType = ''
                     return returnValue
                 })
-                setTableConfig({
-                    ...tableConfig,
-                    fieldObjects: tmpFieldObjects
-                })
-                // trigger the useEffect
-                setSortButton(!sortButton)
-                break
+
+                return tmpFieldObjects
+
         }
     }
 
-    // based on the sort type return an appropriate button
+    /**
+     *
+     * @param fieldObject
+     * @returns {JSX.Element}
+     */
     const sortStyle = (fieldObject) => {
         switch (fieldObject.sortType){
             case '':
-                return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => shiftOrderStyle(fieldObject)} />
+                return <BsFillLightningChargeFill style={{cursor: 'pointer'}} onClick={() => sort(fieldObject)} />
             case 'asc':
-                return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => shiftOrderStyle(fieldObject)} />
+                return <BsFillArrowDownCircleFill style={{cursor: 'pointer'}} onClick={() => sort(fieldObject)} />
             case 'desc':
-                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => shiftOrderStyle(fieldObject)}  />
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => sort(fieldObject)}  />
             default:
-                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => shiftOrderStyle(fieldObject)}  />
+                return <BsFillArrowUpCircleFill style={{cursor: 'pointer'}} onClick={() => sort(fieldObject)}  />
         }
     }
 
-    const executeActions = (func, actionType) => {
+    /**
+     *
+     * @param func
+     * @param actionType
+     * @returns {Promise<void>}
+     */
+    const executeActions = async (func, actionType) => {
         if(actionType === 'action'){
-            func().then(() => setActionButton(!actionButton))
+
+            const updateList = async () => {
+                const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+                const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
+
+                setTableConfig(prevTableConfigList => {
+                    return { ...prevTableConfigList, list: data}
+                })
+            }
+
+            func().then(() => updateList())
+
         }
         else if(actionType === 'navigate'){
             navigate(func())
@@ -219,11 +150,12 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                     <th>Actions</th>
 
                 </tr>
+                {/*{tableConfig.list.map(x => console.log(x))}*/}
                 </thead>
                 <tbody>
                 {
                     /* Iterating through the list and creating the corresponding row  */
-                    objectList.map(
+                    tableConfig.list.map(
                         (el, index) =>
                             <tr key={index} style={{textAlign: 'center'}}>
                                 {/* Insert in the appropriate column the appropriate data */}
@@ -257,7 +189,7 @@ const CustomTable = ({ tableConfig, setTableConfig, objectList, setObjectList, g
                 }
                 </tbody>
             </Table>
-            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} setObjectList={setObjectList} getData={getData} />
+            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getData} />
         </>
     );
 };

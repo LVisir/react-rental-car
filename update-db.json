@@ -2,10 +2,10 @@
   "users": [
     {
       "id": 4332730519,
-      "name": "Phedra",
-      "surname": "Draycott",
+      "name": "Phedrater",
+      "surname": "Marylin",
       "email": "pdraycott0@google.ca",
-      "birthDate": "1966-07-18",
+      "birthDate": "1965-07-18",
       "role": "CUSTOMER",
       "password": "yobh98mzM7i6",
       "cf": "AVUWN31027GSTNS"
@@ -27,7 +27,7 @@
       "email": "skrysiak1@bluehost.com",
       "birthDate": "1988-09-14",
       "role": "CUSTOMER",
-      "password": "zxwXpy",
+      "password": "1234",
       "cf": "LIWUX38273PCTAW"
     },
     {
@@ -81,16 +81,6 @@
       "cf": "FUIMK44618WLDTM"
     },
     {
-      "id": 9466746505,
-      "name": "Aarika",
-      "surname": "Pavier",
-      "email": "apavier7@github.com",
-      "birthDate": "2000-12-01",
-      "role": "CUSTOMER",
-      "password": "bFHrnR0tDT",
-      "cf": "UQBLI92176WIIDM"
-    },
-    {
       "id": 7135223796,
       "name": "Nikolai",
       "surname": "Leipnik",
@@ -103,7 +93,7 @@
     {
       "id": "0995761225",
       "name": "Dene",
-      "surname": "Caws",
+      "surname": "Cawlins",
       "email": "dcaws9@xinhuanet.com",
       "birthDate": "1958-09-19",
       "role": "CUSTOMER",
@@ -1013,797 +1003,806 @@
   ],
   "vehicles": [
     {
-      "id": 1988928005,
-      "licensePlate": "EB766UF",
-      "model": "Impreza WRX",
-      "typology": "SUV",
-      "manufacturer": "Subaru",
-      "registrYear": "01-01-1999"
-    },
-    {
-      "id": 1504240370,
-      "licensePlate": "NN870HX",
-      "model": "Zephyr",
-      "typology": "SUV",
-      "manufacturer": "Lincoln",
-      "registrYear": "11-12-2008"
-    },
-    {
-      "id": 2394250404,
-      "licensePlate": "LU081CV",
-      "model": "Sierra 2500HD",
+      "id": 5367877328,
+      "licensePlate": "GB976DL",
+      "model": "Riviera",
       "typology": "MINIVAN",
-      "manufacturer": "GMC",
-      "registrYear": "23-07-1999"
+      "manufacturer": "Honda",
+      "registrYear": "2018-01-29"
     },
     {
-      "id": "0196893586",
-      "licensePlate": "YY885LP",
-      "model": "Navigator",
-      "typology": "UTILITARIA",
-      "manufacturer": "Lincoln",
-      "registrYear": "26-03-2004"
+      "id": 2282014886,
+      "licensePlate": "IS307QC",
+      "model": "Ram 2500",
+      "typology": "COMPACT",
+      "manufacturer": "Dodge",
+      "registrYear": "1996-07-16"
     },
     {
-      "id": 5903863214,
-      "licensePlate": "YW472IG",
-      "model": "Excel",
-      "typology": "MINIVAN",
-      "manufacturer": "Hyundai",
-      "registrYear": "22-03-1999"
-    },
-    {
-      "id": 3019696874,
-      "licensePlate": "BC781UW",
-      "model": "Concorde",
-      "typology": "UTILITARIA",
-      "manufacturer": "Chrysler",
-      "registrYear": "09-04-2002"
-    },
-    {
-      "id": 5346384293,
-      "licensePlate": "OV503AD",
-      "model": "Corvette",
-      "typology": "UTILITARIA",
-      "manufacturer": "Chevrolet",
-      "registrYear": "08-05-2008"
-    },
-    {
-      "id": 4136425578,
-      "licensePlate": "OH143YF",
-      "model": "Cordia",
-      "typology": "UTILITARIA",
-      "manufacturer": "Mitsubishi",
-      "registrYear": "11-08-2004"
-    },
-    {
-      "id": 3621322850,
-      "licensePlate": "DD076JX",
-      "model": "Sunfire",
-      "typology": "MINIVAN",
-      "manufacturer": "Pontiac",
-      "registrYear": "13-09-2009"
-    },
-    {
-      "id": "0211807674",
-      "licensePlate": "WK636GZ",
-      "model": "4000s Quattro",
+      "id": 4742980441,
+      "licensePlate": "EP914NQ",
+      "model": "A6",
       "typology": "SUV",
       "manufacturer": "Audi",
-      "registrYear": "31-10-2009"
+      "registrYear": "1995-10-19"
     },
     {
-      "id": 2845667152,
-      "licensePlate": "BW900KY",
-      "model": "Storm",
+      "id": 3404899062,
+      "licensePlate": "CV438KD",
+      "model": "Oasis",
       "typology": "MINIVAN",
-      "manufacturer": "Geo",
-      "registrYear": "20-07-2007"
+      "manufacturer": "Isuzu",
+      "registrYear": "1995-07-07"
     },
     {
-      "id": 1693100013,
-      "licensePlate": "XB444RL",
-      "model": "F150",
-      "typology": "MINIVAN",
-      "manufacturer": "Ford",
-      "registrYear": "06-02-2010"
+      "id": 8654486774,
+      "licensePlate": "YN581QO",
+      "model": "Cougar",
+      "typology": "COMPACT",
+      "manufacturer": "Mercury",
+      "registrYear": "2004-11-12"
     },
     {
-      "id": 4995308094,
-      "licensePlate": "EG412NI",
-      "model": "Eurovan",
-      "typology": "UTILITARIA",
-      "manufacturer": "Volkswagen",
-      "registrYear": "24-10-2001"
-    },
-    {
-      "id": 4180000317,
-      "licensePlate": "FZ214JY",
-      "model": "MPV",
-      "typology": "UTILITARIA",
-      "manufacturer": "Mazda",
-      "registrYear": "02-07-2007"
-    },
-    {
-      "id": 6236287712,
-      "licensePlate": "DP235JN",
-      "model": "S-Class",
-      "typology": "SUV",
-      "manufacturer": "Mercedes-Benz",
-      "registrYear": "15-10-2004"
-    },
-    {
-      "id": 3133500386,
-      "licensePlate": "VF981LG",
-      "model": "X5",
-      "typology": "SUV",
-      "manufacturer": "BMW",
-      "registrYear": "17-11-2001"
-    },
-    {
-      "id": 4595841660,
-      "licensePlate": "XC964JU",
-      "model": "RX",
-      "typology": "MINIVAN",
-      "manufacturer": "Lexus",
-      "registrYear": "17-10-2005"
-    },
-    {
-      "id": 5133162548,
-      "licensePlate": "UQ966ST",
-      "model": "Avalanche 1500",
-      "typology": "SUV",
-      "manufacturer": "Chevrolet",
-      "registrYear": "09-09-2009"
-    },
-    {
-      "id": 7067548047,
-      "licensePlate": "AF469NN",
-      "model": "V70",
-      "typology": "SUV",
-      "manufacturer": "Volvo",
-      "registrYear": "23-02-1999"
-    },
-    {
-      "id": 2323051168,
-      "licensePlate": "YS635SZ",
-      "model": "C-Class",
-      "typology": "SUV",
-      "manufacturer": "Mercedes-Benz",
-      "registrYear": "25-03-2001"
-    },
-    {
-      "id": 8476219426,
-      "licensePlate": "WL007JK",
-      "model": "Altima",
-      "typology": "MINIVAN",
-      "manufacturer": "Nissan",
-      "registrYear": "26-10-2007"
-    },
-    {
-      "id": 3751949183,
-      "licensePlate": "VD313SP",
-      "model": "Mustang",
-      "typology": "SUV",
-      "manufacturer": "Ford",
-      "registrYear": "10-01-2006"
-    },
-    {
-      "id": 7370112259,
-      "licensePlate": "ID603RN",
-      "model": "9-3",
-      "typology": "MINIVAN",
-      "manufacturer": "Saab",
-      "registrYear": "16-08-2002"
-    },
-    {
-      "id": 4339253964,
-      "licensePlate": "KU085KN",
-      "model": "Tacoma",
-      "typology": "SUV",
-      "manufacturer": "Toyota",
-      "registrYear": "02-06-2007"
-    },
-    {
-      "id": 4856703489,
-      "licensePlate": "PS673QY",
-      "model": "Patriot",
-      "typology": "SUV",
-      "manufacturer": "Jeep",
-      "registrYear": "30-05-1999"
-    },
-    {
-      "id": 5219889291,
-      "licensePlate": "DQ664HE",
+      "id": 4048537870,
+      "licensePlate": "AA541UR",
       "model": "Galant",
-      "typology": "UTILITARIA",
+      "typology": "COMPACT",
       "manufacturer": "Mitsubishi",
-      "registrYear": "09-04-1999"
+      "registrYear": "1998-03-08"
     },
     {
-      "id": 1526152419,
-      "licensePlate": "IV564IV",
-      "model": "Protege",
-      "typology": "SUV",
-      "manufacturer": "Mazda",
-      "registrYear": "26-05-2000"
+      "id": 1073982672,
+      "licensePlate": "UA248IM",
+      "model": "G-Series G20",
+      "typology": "COMPACT",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2016-11-15"
     },
     {
-      "id": 5505447906,
-      "licensePlate": "EJ737FO",
-      "model": "Arnage",
-      "typology": "MINIVAN",
-      "manufacturer": "Bentley",
-      "registrYear": "26-04-2008"
-    },
-    {
-      "id": "0905295170",
-      "licensePlate": "FJ528XN",
-      "model": "Ghost",
-      "typology": "MINIVAN",
-      "manufacturer": "Rolls-Royce",
-      "registrYear": "09-12-2009"
-    },
-    {
-      "id": 6568268524,
-      "licensePlate": "UH030XM",
-      "model": "Sedona",
-      "typology": "UTILITARIA",
-      "manufacturer": "Kia",
-      "registrYear": "03-04-2004"
-    },
-    {
-      "id": 4035799251,
-      "licensePlate": "TS065GM",
-      "model": "Express 3500",
+      "id": 6193943409,
+      "licensePlate": "NT055KA",
+      "model": "Express 1500",
       "typology": "MINIVAN",
       "manufacturer": "Chevrolet",
-      "registrYear": "03-07-2009"
+      "registrYear": "2015-01-02"
     },
     {
-      "id": 1295114425,
-      "licensePlate": "MK472ZX",
-      "model": 3500,
+      "id": 4728740381,
+      "licensePlate": "XN825MX",
+      "model": "CC",
       "typology": "MINIVAN",
-      "manufacturer": "GMC",
-      "registrYear": "25-09-2003"
-    },
-    {
-      "id": 4994969977,
-      "licensePlate": "QZ744NL",
-      "model": "Escalade EXT",
-      "typology": "SUV",
-      "manufacturer": "Cadillac",
-      "registrYear": "31-05-2002"
-    },
-    {
-      "id": 2448191454,
-      "licensePlate": "DV537UY",
-      "model": "Thunderbird",
-      "typology": "SUV",
-      "manufacturer": "Ford",
-      "registrYear": "15-08-2002"
-    },
-    {
-      "id": 2105551446,
-      "licensePlate": "SJ748TP",
-      "model": "Grand Prix",
-      "typology": "SUV",
-      "manufacturer": "Pontiac",
-      "registrYear": "13-08-2009"
-    },
-    {
-      "id": 5345723245,
-      "licensePlate": "MT124KA",
-      "model": "LX",
-      "typology": "MINIVAN",
-      "manufacturer": "Lexus",
-      "registrYear": "25-05-2007"
-    },
-    {
-      "id": 8410000504,
-      "licensePlate": "LI848EJ",
-      "model": "GTI",
-      "typology": "SUV",
       "manufacturer": "Volkswagen",
-      "registrYear": "05-09-2006"
+      "registrYear": "2002-02-05"
     },
     {
-      "id": 8517037602,
-      "licensePlate": "LH911LX",
-      "model": "FX",
-      "typology": "UTILITARIA",
-      "manufacturer": "Infiniti",
-      "registrYear": "12-08-1999"
+      "id": 9606346497,
+      "licensePlate": "UE362UG",
+      "model": "Grand Caravan",
+      "typology": "COMPACT",
+      "manufacturer": "Dodge",
+      "registrYear": "1997-11-12"
     },
     {
-      "id": 6086931574,
-      "licensePlate": "BO126ZC",
-      "model": "X6 M",
-      "typology": "UTILITARIA",
-      "manufacturer": "BMW",
-      "registrYear": "27-06-1999"
-    },
-    {
-      "id": 2643553471,
-      "licensePlate": "LO434DM",
-      "model": "H2 SUT",
-      "typology": "SUV",
-      "manufacturer": "Hummer",
-      "registrYear": "24-09-2001"
-    },
-    {
-      "id": 6211705191,
-      "licensePlate": "VD965NU",
-      "model": "CX-7",
-      "typology": "UTILITARIA",
+      "id": 3785144407,
+      "licensePlate": "ZU705WG",
+      "model": "RX-7",
+      "typology": "MINIVAN",
       "manufacturer": "Mazda",
-      "registrYear": "29-08-1999"
+      "registrYear": "2003-12-27"
     },
     {
-      "id": 2544087437,
-      "licensePlate": "HP023IP",
-      "model": "F-Series",
-      "typology": "MINIVAN",
-      "manufacturer": "Ford",
-      "registrYear": "14-01-2009"
-    },
-    {
-      "id": 7854707420,
-      "licensePlate": "IX700AM",
-      "model": "M",
-      "typology": "UTILITARIA",
-      "manufacturer": "Infiniti",
-      "registrYear": "19-06-2008"
-    },
-    {
-      "id": 8471998380,
-      "licensePlate": "IO579RE",
-      "model": "Crossfire",
-      "typology": "MINIVAN",
-      "manufacturer": "Chrysler",
-      "registrYear": "07-11-1999"
-    },
-    {
-      "id": 7525250855,
-      "licensePlate": "GU063JE",
-      "model": "Sentra",
-      "typology": "MINIVAN",
-      "manufacturer": "Nissan",
-      "registrYear": "10-04-2000"
-    },
-    {
-      "id": 8958926159,
-      "licensePlate": "XN447WA",
-      "model": "Tracker",
-      "typology": "UTILITARIA",
-      "manufacturer": "Geo",
-      "registrYear": "23-01-2010"
-    },
-    {
-      "id": 3415281491,
-      "licensePlate": "JK811YF",
-      "model": "Catera",
-      "typology": "UTILITARIA",
-      "manufacturer": "Cadillac",
-      "registrYear": "16-03-2008"
-    },
-    {
-      "id": 3282065759,
-      "licensePlate": "BI799CS",
-      "model": "F150",
-      "typology": "SUV",
-      "manufacturer": "Ford",
-      "registrYear": "16-07-2003"
-    },
-    {
-      "id": 5121563661,
-      "licensePlate": "JZ202LM",
-      "model": "Cirrus",
-      "typology": "SUV",
-      "manufacturer": "Chrysler",
-      "registrYear": "17-12-2007"
-    },
-    {
-      "id": 5853611059,
-      "licensePlate": "NW243MN",
+      "id": 3547124236,
+      "licensePlate": "UR068XP",
       "model": "Thunderbird",
       "typology": "MINIVAN",
       "manufacturer": "Ford",
-      "registrYear": "18-07-2003"
+      "registrYear": "1991-10-16"
     },
     {
-      "id": 2541370055,
-      "licensePlate": "AW622IP",
-      "model": "Continental Mark VII",
+      "id": 4004844792,
+      "licensePlate": "CM185DU",
+      "model": "Sportage",
+      "typology": "COMPACT",
+      "manufacturer": "Kia",
+      "registrYear": "2005-07-29"
+    },
+    {
+      "id": 8420617598,
+      "licensePlate": "ON120FJ",
+      "model": "Caravan",
       "typology": "MINIVAN",
-      "manufacturer": "Lincoln",
-      "registrYear": "25-07-2003"
+      "manufacturer": "Dodge",
+      "registrYear": "1992-03-12"
     },
     {
-      "id": 2151522709,
-      "licensePlate": "NZ102XK",
-      "model": "Countach",
-      "typology": "MINIVAN",
-      "manufacturer": "Lamborghini",
-      "registrYear": "04-03-2000"
-    },
-    {
-      "id": 8310891371,
-      "licensePlate": "CA559AP",
-      "model": "Suburban 2500",
-      "typology": "SUV",
-      "manufacturer": "Chevrolet",
-      "registrYear": "18-07-2007"
-    },
-    {
-      "id": 6543605416,
-      "licensePlate": "IZ961WI",
-      "model": "Rogue",
-      "typology": "SUV",
-      "manufacturer": "Nissan",
-      "registrYear": "28-07-2005"
-    },
-    {
-      "id": 6491858006,
-      "licensePlate": "QK308IJ",
-      "model": "Flex",
-      "typology": "SUV",
-      "manufacturer": "Ford",
-      "registrYear": "17-03-2009"
-    },
-    {
-      "id": 7216626560,
-      "licensePlate": "XP583UK",
-      "model": "Coachbuilder",
-      "typology": "SUV",
-      "manufacturer": "Buick",
-      "registrYear": "27-04-2001"
-    },
-    {
-      "id": 7619178220,
-      "licensePlate": "ZD131CD",
-      "model": "Sierra 1500",
-      "typology": "MINIVAN",
+      "id": 3470568982,
+      "licensePlate": "YW315HA",
+      "model": "1500 Club Coupe",
+      "typology": "COMPACT",
       "manufacturer": "GMC",
-      "registrYear": "31-10-2002"
+      "registrYear": "1995-10-20"
     },
     {
-      "id": 5402051939,
-      "licensePlate": "TM635OR",
-      "model": "Discovery",
-      "typology": "UTILITARIA",
-      "manufacturer": "Land Rover",
-      "registrYear": "25-10-2006"
-    },
-    {
-      "id": 9022182736,
-      "licensePlate": "SS229OX",
-      "model": "M",
-      "typology": "UTILITARIA",
-      "manufacturer": "Infiniti",
-      "registrYear": "18-07-2002"
-    },
-    {
-      "id": 5941346472,
-      "licensePlate": "CY936LB",
+      "id": 8786823188,
+      "licensePlate": "DR207HN",
       "model": "3 Series",
       "typology": "MINIVAN",
       "manufacturer": "BMW",
-      "registrYear": "11-10-2007"
+      "registrYear": "2017-08-09"
     },
     {
-      "id": "0208665574",
-      "licensePlate": "AI251KN",
-      "model": "CR-V",
-      "typology": "MINIVAN",
-      "manufacturer": "Honda",
-      "registrYear": "20-02-2000"
-    },
-    {
-      "id": 3916394279,
-      "licensePlate": "XG516VY",
-      "model": "CTS",
-      "typology": "UTILITARIA",
-      "manufacturer": "Cadillac",
-      "registrYear": "16-08-2001"
-    },
-    {
-      "id": 9642238394,
-      "licensePlate": "KQ622GB",
-      "model": "Familia",
+      "id": 2938914600,
+      "licensePlate": "YL884PU",
+      "model": "Colt Vista",
       "typology": "SUV",
-      "manufacturer": "Mazda",
-      "registrYear": "13-08-2003"
+      "manufacturer": "Plymouth",
+      "registrYear": "2008-03-05"
     },
     {
-      "id": 6488206161,
-      "licensePlate": "XL140VK",
-      "model": "XLR",
+      "id": 7910349677,
+      "licensePlate": "SJ380XA",
+      "model": "CTS-V",
       "typology": "MINIVAN",
       "manufacturer": "Cadillac",
-      "registrYear": "01-09-2006"
+      "registrYear": "2000-11-26"
     },
     {
-      "id": 4340765143,
-      "licensePlate": "DT339IB",
-      "model": "Spectra",
-      "typology": "SUV",
-      "manufacturer": "Kia",
-      "registrYear": "13-11-2005"
-    },
-    {
-      "id": "0440419721",
-      "licensePlate": "WF774XM",
-      "model": "Sephia",
-      "typology": "MINIVAN",
-      "manufacturer": "Kia",
-      "registrYear": "16-02-2007"
-    },
-    {
-      "id": 2640033200,
-      "licensePlate": "ZY043NU",
-      "model": "Estate",
-      "typology": "MINIVAN",
-      "manufacturer": "Buick",
-      "registrYear": "02-09-2004"
-    },
-    {
-      "id": 5101257988,
-      "licensePlate": "DV177OI",
-      "model": "Ramcharger",
-      "typology": "MINIVAN",
-      "manufacturer": "Dodge",
-      "registrYear": "03-11-2004"
-    },
-    {
-      "id": 9966828640,
-      "licensePlate": "OR867KD",
-      "model": "Alero",
-      "typology": "UTILITARIA",
-      "manufacturer": "Oldsmobile",
-      "registrYear": "12-10-2008"
-    },
-    {
-      "id": 3227859904,
-      "licensePlate": "YZ838BF",
-      "model": "Integra",
-      "typology": "UTILITARIA",
-      "manufacturer": "Acura",
-      "registrYear": "10-06-2003"
-    },
-    {
-      "id": 4535024382,
-      "licensePlate": "HY002TB",
-      "model": "PT Cruiser",
-      "typology": "MINIVAN",
-      "manufacturer": "Chrysler",
-      "registrYear": "17-04-2002"
-    },
-    {
-      "id": "0021103245",
-      "licensePlate": "JM980QL",
-      "model": "S40",
-      "typology": "MINIVAN",
-      "manufacturer": "Volvo",
-      "registrYear": "03-07-1999"
-    },
-    {
-      "id": 5374927428,
-      "licensePlate": "PG357KH",
-      "model": "A6",
-      "typology": "UTILITARIA",
-      "manufacturer": "Audi",
-      "registrYear": "10-02-2004"
-    },
-    {
-      "id": 6384033371,
-      "licensePlate": "KQ948DS",
-      "model": "xB",
-      "typology": "MINIVAN",
-      "manufacturer": "Scion",
-      "registrYear": "05-12-2000"
-    },
-    {
-      "id": 4576168496,
-      "licensePlate": "AX393YV",
-      "model": "Jetta",
-      "typology": "SUV",
-      "manufacturer": "Volkswagen",
-      "registrYear": "17-04-2003"
-    },
-    {
-      "id": 8033690323,
-      "licensePlate": "KA046VD",
-      "model": "Cordia",
-      "typology": "MINIVAN",
-      "manufacturer": "Mitsubishi",
-      "registrYear": "26-03-1999"
-    },
-    {
-      "id": 9858274084,
-      "licensePlate": "MH813QK",
-      "model": "IS",
-      "typology": "UTILITARIA",
-      "manufacturer": "Lexus",
-      "registrYear": "24-01-2010"
-    },
-    {
-      "id": 6401241078,
-      "licensePlate": "GN001FG",
-      "model": "V70",
-      "typology": "UTILITARIA",
-      "manufacturer": "Volvo",
-      "registrYear": "15-09-2005"
-    },
-    {
-      "id": "0829255714",
-      "licensePlate": "JF307AR",
-      "model": "Coachbuilder",
-      "typology": "MINIVAN",
-      "manufacturer": "Buick",
-      "registrYear": "01-07-2008"
-    },
-    {
-      "id": 8251016757,
-      "licensePlate": "QX825UN",
-      "model": "XC90",
-      "typology": "UTILITARIA",
-      "manufacturer": "Volvo",
-      "registrYear": "27-09-2003"
-    },
-    {
-      "id": 9143578990,
-      "licensePlate": "XU987YN",
-      "model": "Town Car",
-      "typology": "SUV",
-      "manufacturer": "Lincoln",
-      "registrYear": "03-05-2004"
-    },
-    {
-      "id": 5347265582,
-      "licensePlate": "BD347SF",
-      "model": "RS4",
-      "typology": "SUV",
-      "manufacturer": "Audi",
-      "registrYear": "16-03-2008"
-    },
-    {
-      "id": 9154327348,
-      "licensePlate": "VX849JR",
-      "model": "Grand Prix",
-      "typology": "MINIVAN",
-      "manufacturer": "Pontiac",
-      "registrYear": "22-09-2005"
-    },
-    {
-      "id": 9258600995,
-      "licensePlate": "HH696EB",
-      "model": "Pathfinder",
-      "typology": "MINIVAN",
-      "manufacturer": "Nissan",
-      "registrYear": "10-02-2007"
-    },
-    {
-      "id": 3887753159,
-      "licensePlate": "VS984ZM",
-      "model": "Starion",
-      "typology": "MINIVAN",
-      "manufacturer": "Mitsubishi",
-      "registrYear": "10-05-2009"
-    },
-    {
-      "id": 9487105106,
-      "licensePlate": "EN855VQ",
-      "model": "Lynx",
-      "typology": "MINIVAN",
-      "manufacturer": "Mercury",
-      "registrYear": "13-05-2006"
-    },
-    {
-      "id": 1115255220,
-      "licensePlate": "JX301HC",
-      "model": "riolet",
-      "typology": "MINIVAN",
-      "manufacturer": "Audi",
-      "registrYear": "15-08-1999"
-    },
-    {
-      "id": 7205556874,
-      "licensePlate": "JG830KY",
-      "model": "Forenza",
-      "typology": "MINIVAN",
-      "manufacturer": "Suzuki",
-      "registrYear": "13-12-2003"
-    },
-    {
-      "id": 9977340095,
-      "licensePlate": "XC910XW",
-      "model": "Windstar",
-      "typology": "MINIVAN",
-      "manufacturer": "Ford",
-      "registrYear": "08-10-2008"
-    },
-    {
-      "id": 4360068762,
-      "licensePlate": "AW876TT",
-      "model": "XK Series",
-      "typology": "SUV",
-      "manufacturer": "Jaguar",
-      "registrYear": "30-04-2000"
-    },
-    {
-      "id": 8973327127,
-      "licensePlate": "AT172FV",
-      "model": "Suburban",
+      "id": 6330644128,
+      "licensePlate": "UE651UF",
+      "model": "Corvette",
       "typology": "MINIVAN",
       "manufacturer": "Chevrolet",
-      "registrYear": "12-03-2001"
+      "registrYear": "2004-06-09"
     },
     {
-      "id": 5460607465,
-      "licensePlate": "ZV912LP",
-      "model": "Pathfinder",
-      "typology": "SUV",
-      "manufacturer": "Nissan",
-      "registrYear": "05-08-2001"
+      "id": 8924168369,
+      "licensePlate": "GV400VP",
+      "model": "Touareg",
+      "typology": "MINIVAN",
+      "manufacturer": "Volkswagen",
+      "registrYear": "1999-03-13"
     },
     {
-      "id": 6390694501,
-      "licensePlate": "EN967PV",
-      "model": "RAV4",
+      "id": 6016145821,
+      "licensePlate": "RX422AC",
+      "model": "Lumina",
+      "typology": "MINIVAN",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2009-10-28"
+    },
+    {
+      "id": "0977299563",
+      "licensePlate": "IG766HT",
+      "model": "riolet",
       "typology": "SUV",
+      "manufacturer": "Audi",
+      "registrYear": "1991-10-18"
+    },
+    {
+      "id": 3001611750,
+      "licensePlate": "UH302GQ",
+      "model": 330,
+      "typology": "COMPACT",
+      "manufacturer": "BMW",
+      "registrYear": "1996-01-15"
+    },
+    {
+      "id": 2615924522,
+      "licensePlate": "DH604IH",
+      "model": "Freelander",
+      "typology": "MINIVAN",
+      "manufacturer": "Land Rover",
+      "registrYear": "2014-01-12"
+    },
+    {
+      "id": 8338695561,
+      "licensePlate": "OI506MA",
+      "model": "Carrera GT",
+      "typology": "COMPACT",
+      "manufacturer": "Porsche",
+      "registrYear": "2017-03-18"
+    },
+    {
+      "id": "0991631046",
+      "licensePlate": "VP654DA",
+      "model": "Supra",
+      "typology": "MINIVAN",
       "manufacturer": "Toyota",
-      "registrYear": "08-12-2004"
+      "registrYear": "2005-09-03"
     },
     {
-      "id": 1205247087,
-      "licensePlate": "US703HA",
+      "id": 4733708977,
+      "licensePlate": "DT237EH",
+      "model": "Touareg",
+      "typology": "COMPACT",
+      "manufacturer": "Volkswagen",
+      "registrYear": "1998-05-22"
+    },
+    {
+      "id": 6840099298,
+      "licensePlate": "SP366VW",
+      "model": "Explorer Sport Trac",
+      "typology": "COMPACT",
+      "manufacturer": "Ford",
+      "registrYear": "2009-03-11"
+    },
+    {
+      "id": 6689142074,
+      "licensePlate": "HB206RL",
+      "model": "Thunderbird",
+      "typology": "SUV",
+      "manufacturer": "Ford",
+      "registrYear": "2017-03-22"
+    },
+    {
+      "id": "0661971793",
+      "licensePlate": "TE946BH",
+      "model": "Sienna",
+      "typology": "MINIVAN",
+      "manufacturer": "Toyota",
+      "registrYear": "2002-01-02"
+    },
+    {
+      "id": 4208860653,
+      "licensePlate": "NU374IF",
+      "model": "Lumina",
+      "typology": "MINIVAN",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2014-04-11"
+    },
+    {
+      "id": 8606257077,
+      "licensePlate": "LX911QN",
+      "model": "Savana 1500",
+      "typology": "MINIVAN",
+      "manufacturer": "GMC",
+      "registrYear": "2004-08-22"
+    },
+    {
+      "id": 9802292822,
+      "licensePlate": "SY566OL",
+      "model": "Explorer Sport",
+      "typology": "COMPACT",
+      "manufacturer": "Ford",
+      "registrYear": "2000-04-10"
+    },
+    {
+      "id": 1760905089,
+      "licensePlate": "DH799JQ",
+      "model": "C-Class",
+      "typology": "COMPACT",
+      "manufacturer": "Mercedes-Benz",
+      "registrYear": "1992-02-27"
+    },
+    {
+      "id": 1225070657,
+      "licensePlate": "JA637TG",
+      "model": "Sorento",
+      "typology": "COMPACT",
+      "manufacturer": "Kia",
+      "registrYear": "1993-09-02"
+    },
+    {
+      "id": "0070653868",
+      "licensePlate": "GG941LC",
+      "model": "Dakota",
+      "typology": "MINIVAN",
+      "manufacturer": "Dodge",
+      "registrYear": "2016-11-30"
+    },
+    {
+      "id": 4240472982,
+      "licensePlate": "FJ094HY",
+      "model": "Montana",
+      "typology": "MINIVAN",
+      "manufacturer": "Pontiac",
+      "registrYear": "2009-11-16"
+    },
+    {
+      "id": 4816809547,
+      "licensePlate": "UL995DZ",
+      "model": "300ZX",
+      "typology": "COMPACT",
+      "manufacturer": "Nissan",
+      "registrYear": "1994-09-05"
+    },
+    {
+      "id": 5809280149,
+      "licensePlate": "OO742CG",
       "model": "Galant",
-      "typology": "UTILITARIA",
+      "typology": "COMPACT",
       "manufacturer": "Mitsubishi",
-      "registrYear": "06-10-2007"
+      "registrYear": "2001-09-05"
     },
     {
-      "id": 7565349418,
-      "licensePlate": "DN671RY",
+      "id": 9165403467,
+      "licensePlate": "CO446KO",
+      "model": "E-Series",
+      "typology": "COMPACT",
+      "manufacturer": "Ford",
+      "registrYear": "1999-11-25"
+    },
+    {
+      "id": 7526262765,
+      "licensePlate": "FA078LM",
+      "model": "Thunderbird",
+      "typology": "SUV",
+      "manufacturer": "Ford",
+      "registrYear": "1999-02-26"
+    },
+    {
+      "id": 1102988129,
+      "licensePlate": "OQ975GE",
+      "model": 325,
+      "typology": "SUV",
+      "manufacturer": "BMW",
+      "registrYear": "1998-06-16"
+    },
+    {
+      "id": 9146248476,
+      "licensePlate": "HH680CL",
+      "model": "Sportvan G20",
+      "typology": "COMPACT",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2017-12-31"
+    },
+    {
+      "id": 8900261527,
+      "licensePlate": "ZE637SQ",
+      "model": "Electra",
+      "typology": "MINIVAN",
+      "manufacturer": "Buick",
+      "registrYear": "2004-04-16"
+    },
+    {
+      "id": "0018172558",
+      "licensePlate": "YY001KX",
+      "model": "CLK-Class",
+      "typology": "SUV",
+      "manufacturer": "Mercedes-Benz",
+      "registrYear": "2004-11-17"
+    },
+    {
+      "id": 2067061187,
+      "licensePlate": "BD411CP",
+      "model": "Sierra 3500",
+      "typology": "MINIVAN",
+      "manufacturer": "GMC",
+      "registrYear": "2012-01-12"
+    },
+    {
+      "id": 8081838047,
+      "licensePlate": "TM022LO",
+      "model": "Ranger",
+      "typology": "MINIVAN",
+      "manufacturer": "Ford",
+      "registrYear": "2017-01-03"
+    },
+    {
+      "id": 8570499535,
+      "licensePlate": "TS484HS",
+      "model": 98,
+      "typology": "SUV",
+      "manufacturer": "Oldsmobile",
+      "registrYear": "2005-08-21"
+    },
+    {
+      "id": 8850319726,
+      "licensePlate": "KE761YT",
+      "model": "Continental",
+      "typology": "SUV",
+      "manufacturer": "Lincoln",
+      "registrYear": "2017-08-05"
+    },
+    {
+      "id": 8080459363,
+      "licensePlate": "EC537SG",
       "model": "XK Series",
       "typology": "MINIVAN",
       "manufacturer": "Jaguar",
-      "registrYear": "13-11-2005"
+      "registrYear": "1993-09-21"
     },
     {
-      "id": "0306524412",
-      "licensePlate": "RV806UJ",
-      "model": "Ascender",
-      "typology": "UTILITARIA",
-      "manufacturer": "Isuzu",
-      "registrYear": "23-12-2009"
-    },
-    {
-      "id": 5539999916,
-      "licensePlate": "DL579VP",
-      "model": "LS",
-      "typology": "UTILITARIA",
-      "manufacturer": "Lexus",
-      "registrYear": "08-10-2000"
-    },
-    {
-      "id": "0004508061",
-      "licensePlate": "GE683OC",
-      "model": "5 Series",
+      "id": 2261674377,
+      "licensePlate": "BO360DU",
+      "model": "Challenger",
       "typology": "SUV",
-      "manufacturer": "BMW",
-      "registrYear": "12-05-2009"
+      "manufacturer": "Mitsubishi",
+      "registrYear": "2007-01-31"
     },
     {
-      "id": 7025938216,
-      "licensePlate": "QG384QK",
-      "model": "Jetta",
+      "id": 4693862742,
+      "licensePlate": "QU005AR",
+      "model": "Regal",
+      "typology": "SUV",
+      "manufacturer": "Buick",
+      "registrYear": "2004-06-17"
+    },
+    {
+      "id": 3494791664,
+      "licensePlate": "XK351TX",
+      "model": "xD",
+      "typology": "SUV",
+      "manufacturer": "Scion",
+      "registrYear": "2006-12-21"
+    },
+    {
+      "id": 8898962567,
+      "licensePlate": "HD437RG",
+      "model": "Mazda2",
+      "typology": "MINIVAN",
+      "manufacturer": "Mazda",
+      "registrYear": "2018-01-07"
+    },
+    {
+      "id": 9205467406,
+      "licensePlate": "IU820VH",
+      "model": "Explorer Sport Trac",
+      "typology": "COMPACT",
+      "manufacturer": "Ford",
+      "registrYear": "2009-06-13"
+    },
+    {
+      "id": 7408374015,
+      "licensePlate": "BI638QB",
+      "model": "Mazda3",
+      "typology": "SUV",
+      "manufacturer": "Mazda",
+      "registrYear": "2001-10-24"
+    },
+    {
+      "id": 3468743932,
+      "licensePlate": "JI956MN",
+      "model": "Tucson",
+      "typology": "MINIVAN",
+      "manufacturer": "Hyundai",
+      "registrYear": "2006-11-20"
+    },
+    {
+      "id": 5441762570,
+      "licensePlate": "XQ611TV",
+      "model": "Tiguan",
       "typology": "MINIVAN",
       "manufacturer": "Volkswagen",
-      "registrYear": "30-05-2007"
+      "registrYear": "2001-03-05"
+    },
+    {
+      "id": 9106785190,
+      "licensePlate": "QS407OK",
+      "model": "Grand Caravan",
+      "typology": "COMPACT",
+      "manufacturer": "Dodge",
+      "registrYear": "2001-07-01"
+    },
+    {
+      "id": 4978938115,
+      "licensePlate": "CE412OY",
+      "model": "Thunderbird",
+      "typology": "MINIVAN",
+      "manufacturer": "Ford",
+      "registrYear": "2003-06-21"
+    },
+    {
+      "id": 7895860874,
+      "licensePlate": "TK552RY",
+      "model": "Grand Voyager",
+      "typology": "SUV",
+      "manufacturer": "Plymouth",
+      "registrYear": "2004-01-05"
+    },
+    {
+      "id": 1846223442,
+      "licensePlate": "ZW278OQ",
+      "model": "Bravada",
+      "typology": "MINIVAN",
+      "manufacturer": "Oldsmobile",
+      "registrYear": "2000-09-21"
+    },
+    {
+      "id": 7159564047,
+      "licensePlate": "FK101DE",
+      "model": "Impala SS",
+      "typology": "MINIVAN",
+      "manufacturer": "Chevrolet",
+      "registrYear": "1992-07-01"
+    },
+    {
+      "id": 1893320853,
+      "licensePlate": "LO973EI",
+      "model": "Corvette",
+      "typology": "COMPACT",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2001-12-30"
+    },
+    {
+      "id": "0434376965",
+      "licensePlate": "UQ581ZI",
+      "model": "Dakota",
+      "typology": "SUV",
+      "manufacturer": "Dodge",
+      "registrYear": "1996-09-09"
+    },
+    {
+      "id": 6049038176,
+      "licensePlate": "VQ468GV",
+      "model": "Panamera",
+      "typology": "SUV",
+      "manufacturer": "Porsche",
+      "registrYear": "2000-03-09"
+    },
+    {
+      "id": 1149360327,
+      "licensePlate": "JH117XN",
+      "model": "Explorer Sport Trac",
+      "typology": "SUV",
+      "manufacturer": "Ford",
+      "registrYear": "2007-12-12"
+    },
+    {
+      "id": 9880037947,
+      "licensePlate": "UO331SA",
+      "model": "Jetta",
+      "typology": "SUV",
+      "manufacturer": "Volkswagen",
+      "registrYear": "1994-01-30"
+    },
+    {
+      "id": 1510486200,
+      "licensePlate": "PH247GN",
+      "model": "Colorado",
+      "typology": "MINIVAN",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2015-05-14"
+    },
+    {
+      "id": 5021696041,
+      "licensePlate": "BP818HB",
+      "model": "9-3",
+      "typology": "SUV",
+      "manufacturer": "Saab",
+      "registrYear": "2011-06-24"
+    },
+    {
+      "id": 3086537337,
+      "licensePlate": "DO188AW",
+      "model": "Bronco",
+      "typology": "SUV",
+      "manufacturer": "Ford",
+      "registrYear": "2014-04-25"
+    },
+    {
+      "id": "0129851416",
+      "licensePlate": "RI072QR",
+      "model": "Previa",
+      "typology": "COMPACT",
+      "manufacturer": "Toyota",
+      "registrYear": "1997-09-08"
+    },
+    {
+      "id": 4513703969,
+      "licensePlate": "YR947QD",
+      "model": "LS",
+      "typology": "COMPACT",
+      "manufacturer": "Lincoln",
+      "registrYear": "2005-10-09"
+    },
+    {
+      "id": 7710571103,
+      "licensePlate": "OL344JH",
+      "model": "S-Type",
+      "typology": "MINIVAN",
+      "manufacturer": "Jaguar",
+      "registrYear": "2009-05-26"
+    },
+    {
+      "id": 4736471828,
+      "licensePlate": "VU443OS",
+      "model": "Savana 1500",
+      "typology": "COMPACT",
+      "manufacturer": "GMC",
+      "registrYear": "2012-03-20"
+    },
+    {
+      "id": 9107125988,
+      "licensePlate": "NZ983MH",
+      "model": "Tempest",
+      "typology": "MINIVAN",
+      "manufacturer": "Pontiac",
+      "registrYear": "1998-07-09"
+    },
+    {
+      "id": 8045748960,
+      "licensePlate": "JE118IX",
+      "model": "M5",
+      "typology": "MINIVAN",
+      "manufacturer": "BMW",
+      "registrYear": "2003-01-28"
+    },
+    {
+      "id": 7246107946,
+      "licensePlate": "AZ748LK",
+      "model": "LR2",
+      "typology": "SUV",
+      "manufacturer": "Land Rover",
+      "registrYear": "2010-05-06"
+    },
+    {
+      "id": 4273836950,
+      "licensePlate": "AA854LZ",
+      "model": "Sonoma",
+      "typology": "COMPACT",
+      "manufacturer": "GMC",
+      "registrYear": "1996-07-20"
+    },
+    {
+      "id": 1018526982,
+      "licensePlate": "ZH405CZ",
+      "model": "Swift",
+      "typology": "COMPACT",
+      "manufacturer": "Suzuki",
+      "registrYear": "1991-07-25"
+    },
+    {
+      "id": 1335102123,
+      "licensePlate": "VS295WE",
+      "model": "Camaro",
+      "typology": "SUV",
+      "manufacturer": "Chevrolet",
+      "registrYear": "1991-07-13"
+    },
+    {
+      "id": 5671969170,
+      "licensePlate": "OT682WA",
+      "model": "Tacoma Xtra",
+      "typology": "MINIVAN",
+      "manufacturer": "Toyota",
+      "registrYear": "2009-01-08"
+    },
+    {
+      "id": 5209298399,
+      "licensePlate": "UF907SY",
+      "model": "Eclipse",
+      "typology": "MINIVAN",
+      "manufacturer": "Mitsubishi",
+      "registrYear": "2002-02-21"
+    },
+    {
+      "id": 3048887605,
+      "licensePlate": "ZU593SD",
+      "model": "Eos",
+      "typology": "SUV",
+      "manufacturer": "Volkswagen",
+      "registrYear": "1999-07-21"
+    },
+    {
+      "id": 1506913488,
+      "licensePlate": "EH821MG",
+      "model": "rio",
+      "typology": "MINIVAN",
+      "manufacturer": "Volkswagen",
+      "registrYear": "2004-05-26"
+    },
+    {
+      "id": 9637219097,
+      "licensePlate": "GD692QR",
+      "model": "Grand Am",
+      "typology": "MINIVAN",
+      "manufacturer": "Pontiac",
+      "registrYear": "1996-08-25"
+    },
+    {
+      "id": 7125745740,
+      "licensePlate": "TV483ET",
+      "model": "Legacy",
+      "typology": "SUV",
+      "manufacturer": "Subaru",
+      "registrYear": "1992-03-17"
+    },
+    {
+      "id": 7296570416,
+      "licensePlate": "OT718ZK",
+      "model": "Miata MX-5",
+      "typology": "SUV",
+      "manufacturer": "Mazda",
+      "registrYear": "1990-07-24"
+    },
+    {
+      "id": 8884901905,
+      "licensePlate": "UO968TU",
+      "model": "Corvette",
+      "typology": "SUV",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2000-03-17"
+    },
+    {
+      "id": 1579563672,
+      "licensePlate": "LT361FY",
+      "model": "CL-Class",
+      "typology": "MINIVAN",
+      "manufacturer": "Mercedes-Benz",
+      "registrYear": "2010-10-04"
+    },
+    {
+      "id": 3932370677,
+      "licensePlate": "EQ964ZT",
+      "model": "Montero",
+      "typology": "MINIVAN",
+      "manufacturer": "Mitsubishi",
+      "registrYear": "2017-04-02"
+    },
+    {
+      "id": 8377864497,
+      "licensePlate": "RU717NS",
+      "model": "EX",
+      "typology": "COMPACT",
+      "manufacturer": "Infiniti",
+      "registrYear": "2017-08-12"
+    },
+    {
+      "id": 8976090936,
+      "licensePlate": "JG449ZA",
+      "model": "Paseo",
+      "typology": "MINIVAN",
+      "manufacturer": "Toyota",
+      "registrYear": "2012-11-23"
+    },
+    {
+      "id": 2107992914,
+      "licensePlate": "TN775SZ",
+      "model": "Tiburon",
+      "typology": "COMPACT",
+      "manufacturer": "Hyundai",
+      "registrYear": "2008-07-20"
+    },
+    {
+      "id": 2555495911,
+      "licensePlate": "RB149OK",
+      "model": 6000,
+      "typology": "MINIVAN",
+      "manufacturer": "Pontiac",
+      "registrYear": "2002-07-13"
+    },
+    {
+      "id": 9219314318,
+      "licensePlate": "XR720XZ",
+      "model": 2500,
+      "typology": "COMPACT",
+      "manufacturer": "Chevrolet",
+      "registrYear": "2006-11-09"
+    },
+    {
+      "id": 9889367126,
+      "licensePlate": "NZ304LT",
+      "model": "Cabriolet",
+      "typology": "MINIVAN",
+      "manufacturer": "Volkswagen",
+      "registrYear": "1994-08-15"
+    },
+    {
+      "id": 7102675422,
+      "licensePlate": "IE348NN",
+      "model": "Ram",
+      "typology": "SUV",
+      "manufacturer": "Dodge",
+      "registrYear": "2011-06-09"
     }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "id": 1,
+      "end": "2022-02-23",
+      "start": "2020-02-02",
+      "userId": "8310258435",
+      "approval": 0,
+      "vehicleId": "1225070657"
+    },
+    {
+      "id": 2,
+      "end": "2022-03-02",
+      "start": "2021-02-01",
+      "userId": "8310258435",
+      "approval": 0,
+      "vehicleId": "4978938115"
+    }
+  ]
 }

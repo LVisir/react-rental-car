@@ -7,7 +7,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomerService from "../../service/Customer/CustomerService";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
-const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, setCustomers, customers, getData }) => {
+const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
@@ -94,12 +94,22 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
             updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: birthDate, role: role, password: password, cf: cf}
-            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setCustomers(r))
+            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfig => {
+                    return {
+                        ...prevTableConfig,
+                        list: r,
+                    }
+                }))
         }
         else {
-            addObject({name, surname, email, birthDate: birthDate, role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath, new AbortController().signal))
-                .then((r) => setCustomers(r))
+            addObject({name, surname, email, birthDate: birthDate, role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
+                .then((r) => setTableConfig(prevTableConfig => {
+                    return {
+                        ...prevTableConfig,
+                        list: r,
+                    }
+                }))
         }
 
         setCustAlreadyExists(false)

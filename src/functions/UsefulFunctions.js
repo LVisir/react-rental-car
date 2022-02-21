@@ -48,22 +48,25 @@ const UsefulFunctions = () => {
      * @param orderPath
      * @param tableConfig
      * @param startPath
-     * @param signal
+     * @param page
+     * @param searchText
+     * @param filterSearchText
      * @returns {Promise<*>}
      */
-    const getData = async (sortPath, orderPath, tableConfig, startPath, signal) => {
+    const getData = async (sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText) => {
+
         let data
-        let url = buildPath(sortPath, orderPath, startPath, tableConfig)
-        if(tableConfig.searchText==='' && tableConfig.filterSearchText===''){
-            //console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&_sort=${sortPath}&_order=${orderPath}`))
+        let url = buildPath(sortPath, orderPath, startPath, tableConfig, page, searchText, filterSearchText)
+        if(searchText==='' && filterSearchText===''){
+
             console.log(url)
-            const response = await fetch(url, { signal: signal })
+            const response = await fetch(url)
             data = await response.json()
         }
         else{
-            //console.log(startPath.concat(`?_page=${tableConfig.currentPage}&_limit=10&${tableConfig.filterSearchText}=${tableConfig.searchText}&_sort=${sortPath}&_order=${orderPath}`))
+
             console.log(url)
-            const response = await fetch(url, { signal: signal })
+            const response = await fetch(url)
             data = await response.json()
         }
 
@@ -72,15 +75,15 @@ const UsefulFunctions = () => {
 
     }
 
-    const buildPath = (sortPath, orderPath, startPath, tableConfig) => {
+    const buildPath = (sortPath, orderPath, startPath, tableConfig, page, searchText = '', filterSearchText = '') => {
 
         let url
 
         if(sessionStorage.getItem('customer') !== null && tableConfig.tableName === 'BOOKINGS'){
-            url = startPath + '?userId=' + sessionStorage.getItem('customer') + `&_page=${tableConfig.currentPage}`
+            url = startPath + '?userId=' + sessionStorage.getItem('customer') + `&_page=${page === 0 ? tableConfig.currentPage : page}`
         }
 
-        else url = startPath + `?_page=${tableConfig.currentPage}`
+        else url = startPath + `?_page=${page === 0 ? tableConfig.currentPage : page}`
 
         if(sortPath){
             url = url + `&_sort=${sortPath}`
@@ -88,8 +91,8 @@ const UsefulFunctions = () => {
         if(orderPath){
             url = url + `&_order=${orderPath}`
         }
-        if(tableConfig.filterSearchText && tableConfig.searchText){
-            url = url + `&${tableConfig.filterSearchText}=${tableConfig.searchText}`
+        if(filterSearchText && searchText){
+            url = url + `&${filterSearchText}=${searchText}`
         }
         if(tableConfig.role){
             url = url + `&role=${tableConfig.role}`

@@ -76,27 +76,23 @@ const Vehicles = ({ logout, links, homePath }) => {
         ]
     });
 
-    const [vehicles, setVehicles] = useState(tableConfig.list);
-
     return (
         <>
             <Routes>
 
-                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} vehicles={vehicles} setVehicles={setVehicles} getData={advancedGetVehicles} /> } />
+                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetVehicles} /> } />
 
                 { sessionStorage.getItem('superuser') !== null && <Route path={'AddVehicle'} element={
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
-                                      tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
-                                      getData={advancedGetVehicles}
+                                      tableConfig={tableConfig} getData={advancedGetVehicles}
                     />}
                 /> }
 
                 { sessionStorage.getItem('superuser') !== null && <Route path={'ModifyVehicle/:id'} element={
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
-                                      tableConfig={tableConfig} setVehicles={setVehicles} vehicles={vehicles}
-                                      getData={advancedGetVehicles}
+                                      tableConfig={tableConfig} getData={advancedGetVehicles}
                     />}
                 /> }
 

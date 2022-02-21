@@ -59,8 +59,9 @@ const CustomerService = () => {
 
     }*/
 
-    const advancedGetCustomers = async (sortPath, orderPath, tableConfig, startPath, signal) => {
-        const data = await getData(sortPath, orderPath, tableConfig, startPath, signal)
+    const advancedGetCustomers = async (sortPath, orderPath, tableConfig, startPath, page = 0, searchText = '', filterSearchText = '') => {
+
+        const data = await getData(sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText)
 
         data.map(
             (x) => {
