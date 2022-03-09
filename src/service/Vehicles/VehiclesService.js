@@ -25,9 +25,9 @@ const VehiclesService = () => {
         return vehicles
     }
 
-    const field = ['licensePlate','model','typology','manufacturer', 'registrYear', 'id']
+    const field = ['licensePlate','model','typology','manufacturer', 'registrYear', 'idVehicle']
     const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id']
-    const filter = ['licensePlate','model','typology','manufacturer', 'registrYear', 'id']
+    const filter = ['licensePlate','model','typology','manufacturer', 'registrYear', 'idVehicle']
 
     const advancedGetVehicles = async (sortPath, orderPath, tableConfig, startPath, page = 0, searchText = '', filterSearchText = '') => {
         const data = await getData(sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText)
@@ -39,7 +39,7 @@ const VehiclesService = () => {
                         {
                             actionName: 'Edit',
                             onClick() {
-                                return `/Vehicles/ModifyVehicle/${x.id}`
+                                return `/Vehicles/ModifyVehicle/${x.idVehicle}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -48,7 +48,7 @@ const VehiclesService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                return deleteObject(x.id, vehiclesPath)
+                                return deleteObject(x.idVehicle, vehiclesPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -61,7 +61,7 @@ const VehiclesService = () => {
                         {
                             actionName: 'Rent',
                             onClick() {
-                                return `/Bookings/AddBooking/${x.id}`
+                                return `/Bookings/AddBooking/${x.idVehicle}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue',

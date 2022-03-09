@@ -3,6 +3,8 @@ import {useNavigate} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import CustomAlert from '../alerts/CustomAlert';
 import CustomerService from "../../service/Customer/CustomerService";
+import Paths from "../../Paths";
+import jwt_decode from "jwt-decode";
 
 /**
  * Pagina di login che si carica tutti i Customer e i Superuser
@@ -12,19 +14,18 @@ import CustomerService from "../../service/Customer/CustomerService";
  * @returns {JSX.Element}
  * @constructor
  */
-const Login = ({superusers, setToken}) => {
+const Login = ({setToken}) => {
 
     // creo tali useState per poter legare i campi di input a delle variabili che poi controllo
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
-    const [emptyFieldsAlert, setEmptyFieldsAlert] = useState(false);
-    const [wrongEmailAlert, setWrongEmailAlert] = useState(false);
-    const [wrongPassAlert, setWrongPassAlert] = useState(false);
+    const [customAlert, setCustomAlert] = useState(false);
+    const [textCustomAlert, setTextCustomAlert] = useState('');
 
     const navigate = useNavigate()
 
-    const { getCustomerByEmail } = CustomerService()
+    const { basePath } = Paths()
 
     /**
      * Phases:
@@ -39,98 +40,123 @@ const Login = ({superusers, setToken}) => {
      * @returns {Promise<void>}
      */
     const onSubmit = async (e) => {
+
         e.preventDefault()
+
+        setCustomAlert(prevState => {
+            return prevState && false
+        })
+
         if (!email || !pass) {
-            if(!email && !pass){
-                setEmptyFieldsAlert(true)
-                setWrongPassAlert(false)
-                setWrongEmailAlert(false)
-            }
-            else if(!email){
-                setEmptyFieldsAlert(false)
-                setWrongPassAlert(false)
-                setWrongEmailAlert(true)
-                document.getElementById('formBasicPassword').select()
-            }
-            else if(!pass){
-                setEmptyFieldsAlert(false)
-                setWrongPassAlert(true)
-                setWrongEmailAlert(false)
-                document.getElementById('formBasicUsername').select()
-            }
-            else {
-                setEmptyFieldsAlert(true)
-                setWrongPassAlert(false)
-                setWrongEmailAlert(false)
-            }
+
+            setTextCustomAlert('The field mustn\'t be empty')
+            setCustomAlert(true)
 
             return
         }
 
-        const customer = getCustomerByEmail(email)
+        const user = {
+            email: email,
+            password: pass
+        }
 
-        // check if the email exists
-        Promise.resolve(customer).then(r => {
-            if(Object.keys(r).length === 0){
-                setEmptyFieldsAlert(false)
-                setWrongPassAlert(false)
-                setWrongEmailAlert(true)
-
-                document.getElementById('formBasicUsername').select()
-                return
+        // try to log in
+        await fetch(
+            basePath+'/login', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded',
+                },
+                body: `email=${user.email}&password=${user.password}`
             }
-            else if(r[0].password !== pass){
-                setEmptyFieldsAlert(false)
-                setWrongPassAlert(true)
-                setWrongEmailAlert(false)
+        ).then(async r => {
+            if (!r.ok) {
 
-                // select all the password input text
-                document.getElementById('formBasicPassword').select()
-                return
+                setTextCustomAlert('Some credentials are wrong')
+
+                setCustomAlert(true)
+
             }
             else {
-                if(r[0].role === 'SUPERUSER') {
 
-                    sessionStorage.setItem('superuser', r[0].id)
-                    navigate('/Bookings', {replace: true})
-                    // update the token that declare that someone log in
-                    setToken(true)
-                }
-                else {
-                    sessionStorage.setItem('customer', r[0].id)
+                let loginResponse = await r.json()
 
-                    navigate('/Bookings', {replace: true})
-                    setToken(true)
+                let decode = jwt_decode(loginResponse.access_token)
 
-                    /*// fetch of the bookings that it will be the first thing that a Customer will see in his page
-                    const bookingsData = await fetchReservationsByCustomerId(bookingsPath,sessionStorage.getItem('customer'))
+                await fetch(
+                    basePath+`/users/email/${decode.sub}`,{
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `LoginToken ${loginResponse.access_token}`
+                        }
+                    }
+                ).then(async answer => {
+                    if (!answer.ok) {
 
-                    // update the bookings in the BookingContext from [] to what it fetched at the previous operation
-                    updateBookings(bookingsData)
+                        const error = await answer.json()
 
-                    // update the token to set that a Customer is logged
-                    setToken(true)
-                    navigate('/')*/
-                }
+                        setTextCustomAlert(error.error)
+
+                        setCustomAlert(true)
+
+                    }
+                    else{
+                        const userAuthenticated = await answer.json()
+
+                        if (decode.roles[0] === 'SUPERUSER'){
+
+                            sessionStorage.setItem('superuser', userAuthenticated.idUser)
+
+                            navigate('/Customers', {replace: true})
+
+                        }
+                        else if(decode.roles[0] === 'CUSTOMER'){
+
+                            sessionStorage.setItem('customer', userAuthenticated.idUser)
+
+                            navigate('/Bookings', {replace: true})
+
+                        }
+
+                        sessionStorage.setItem('tokenJWT', loginResponse.access_token)
+
+                        setToken(true)
+
+                    }
+                }).catch((e) => {
+
+                    setTextCustomAlert('Internal Server Error')
+
+                    setCustomAlert(true)
+
+                    console.log(e)
+
+                })
+
             }
+        }).catch((e) => {
+
+            setTextCustomAlert('Internal Server Error')
+
+            setCustomAlert(true)
+
+            console.log(e)
+
         })
 
     }
 
     return (
         <Form onSubmit={onSubmit}>
+            { customAlert && <CustomAlert text={textCustomAlert} /> }
             <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label>Email</Form.Label>
                 <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             </Form.Group>
-            { wrongEmailAlert && <CustomAlert text={'Email not valid'} /> }
-            { emptyFieldsAlert && <CustomAlert text={'Invalid fields'} /> }
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" onChange={(e) => setPass(e.target.value)} placeholder="Password" />
             </Form.Group>
-            { wrongPassAlert && <CustomAlert text={'Password not valid'} /> }
-            { emptyFieldsAlert && <CustomAlert text={'Invalid fields'} /> }
             <Button variant="primary" type="submit">
                 Login
             </Button>

@@ -7,7 +7,10 @@ import CustomersTable from "../table/CustomersTable";
 
 const Customers = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, customersLength, filter, customersPath, advancedGetCustomers } = CustomerService()
+    const { field, fieldHeader, customersLength, filter, customersPath, advancedGetCustomers, customCustomersFetch } = CustomerService()
+
+    const [customAlert, setCustomAlert] = useState(false);
+    const [textCustomAlert, setTextCustomAlert] = useState('');
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -19,69 +22,74 @@ const Customers = ({ logout, links, homePath }) => {
      * - reset buttons: to manage the reset buttons
      * - fieldObjects: a list that contains all the setting for each field like the sort and the sort type
      */
-    const [tableConfig, setTableConfig] = useState({
-        dbFields: field,
-        tableHeaders: fieldHeader,
-        dataSize: customersLength,
-        currentPage: 1,
-        currentPages: [1,2,3],
-        searchableFields: filter,
-        searchText: '',
-        filterSearchText: '',
-        list: [],
-        searchButtonClicked: false,
-        disableResetHeaderButton: true,
-        disableResetPaginationButton: true,
-        disableResetTableButton: true,
-        startPath: customersPath,
-        tableName: 'CUSTOMERS',
-        role: 'CUSTOMER',
-        fieldObjects: [
-            {
-                field: field[0],
-                header: fieldHeader[0],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[1],
-                header: fieldHeader[1],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[2],
-                header: fieldHeader[2],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[3],
-                header: fieldHeader[3],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[4],
-                header: fieldHeader[4],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[5],
-                header: fieldHeader[5],
-                sortable: true,
-                sortType: '',
-            }
-        ]
+    const [tableConfig, setTableConfig] = useState(() => {
+        return {
+            dbFields: field,
+            tableHeaders: fieldHeader,
+            dataSize: customersLength,
+            currentPage: 1,
+            currentPages: [1, 2, 3],
+            searchableFields: filter,
+            searchText: '',
+            filterSearchText: '',
+            list: [],
+            searchButtonClicked: false,
+            disableResetHeaderButton: true,
+            disableResetPaginationButton: true,
+            disableResetTableButton: true,
+            startPath: customersPath,
+            tableName: 'CUSTOMERS',
+            role: 'CUSTOMER',
+            fieldObjects: [
+                {
+                    field: field[0],
+                    header: fieldHeader[0],
+                    sortable: true,
+                    sortType: '',
+                },
+                {
+                    field: field[1],
+                    header: fieldHeader[1],
+                    sortable: true,
+                    sortType: '',
+                },
+                {
+                    field: field[2],
+                    header: fieldHeader[2],
+                    sortable: true,
+                    sortType: '',
+                },
+                {
+                    field: field[3],
+                    header: fieldHeader[3],
+                    sortable: true,
+                    sortType: '',
+                },
+                {
+                    field: field[4],
+                    header: fieldHeader[4],
+                    sortable: true,
+                    sortType: '',
+                },
+                {
+                    field: field[5],
+                    header: fieldHeader[5],
+                    sortable: true,
+                    sortType: '',
+                }
+            ]
+        }
     });
 
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetCustomers} /> } />
-                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={advancedGetCustomers} />} />
-                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={advancedGetCustomers} />} />
+
+                <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links}
+                                                           setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} customAlert={customAlert} textCustomAlert={textCustomAlert} /> } />
+
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={customCustomersFetch} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={customCustomersFetch} />} />
                 <Route path={'*'} element={ <Error homePath={homePath} /> } />
             </Routes>
         </>

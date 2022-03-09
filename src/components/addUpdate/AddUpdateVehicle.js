@@ -80,7 +80,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
 
         // if 'id' is set it means an update action has been thrown
         if(id !== undefined){
-            updtData = {id: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
+            updtData = {idVehicle: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
             updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
                 .then((r) => setTableConfig(prevTableConfig => {
                     return {

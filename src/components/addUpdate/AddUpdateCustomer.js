@@ -11,8 +11,11 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 
     const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
     const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
-    const { getCustomerById } = CustomerService()
+    const { getCustomerById, updateCustomer, insertCustomer } = CustomerService()
     const [loading, setLoading] = useState(true);
+
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const { id } = useParams()
 
@@ -23,23 +26,25 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 
         // it means an update request was made to update a customer object
         if(id !== undefined ) {
-            const data = getCustomer()
-            Promise.resolve(data).then(r => {
-                // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned
-                if(Object.keys(r).length>0){
-                    setName(r['name'])
-                    setSurname(r['surname'])
-                    setEmail(r['email'])
-                    setBirthDate(r['birthDate'])
-                    setPassword(r['password'])
-                    setCf(r['cf'])
-                    setLoading(false)
-                }
-                else{
-                    // navigate through the error page because the id in the url params doesn't correspond to any customer
-                    navigate('*', {replace: true})
-                }
-            })
+
+            // check if the id param is a number
+            if(!isNaN(+id)) {
+                getCustomer().then(r => {
+                    // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned
+                    if (r != null) {
+                        setName(r['name'])
+                        setSurname(r['surname'])
+                        setEmail(r['email'])
+                        setBirthDate(r['birthDate'])
+                        setPassword(r['password'])
+                        setCf(r['cf'])
+                        setLoading(false)
+                    } else {
+                        // navigate through the error page because the id in the url params doesn't correspond to any customer
+                        navigate('*', {replace: true})
+                    }
+                })
+            }
         }
         else{
             setLoading(false)
@@ -71,46 +76,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
 
     const navigate = useNavigate()
 
-    const onSubmit = (e) => {
-        e.preventDefault()
-
-        // field blank control
-        if(!name || !surname || !cf || !email || !password || !birthDate){
-            !name ? setNameAlert(true) : setNameAlert(false)
-            !surname ? setSurnameAlert(true) : setSurnameAlert(false)
-            !cf ? setCfAlert(true) : setCfAlert(false)
-            !email ? setEmailAlert(true) : setEmailAlert(false)
-            !password ? setPasswordAlert(true) : setPasswordAlert(false)
-            !birthDate ? setBirthDateAlert(true) : setBirthDateAlert(false)
-            return
-        }
-
-        let updtCustomer = null
-
-        /**
-         * When u will implement the BE u should check the result of the fetch to see if the data you're putting doesn't exist
-         */
-
-        // if 'id' is set it means an update action has been thrown
-        if(id !== undefined){
-            updtCustomer = {id: id, name: name, surname: surname, email: email, birthDate: birthDate, role: role, password: password, cf: cf}
-            updateObject({...updtCustomer}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfig => {
-                    return {
-                        ...prevTableConfig,
-                        list: r,
-                    }
-                }))
-        }
-        else {
-            addObject({name, surname, email, birthDate: birthDate, role, password, cf}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfig => {
-                    return {
-                        ...prevTableConfig,
-                        list: r,
-                    }
-                }))
-        }
+    const addExecutedWithSuccess = () => {
 
         setCustAlreadyExists(false)
 
@@ -127,10 +93,129 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         setEmailAlert(false)
         setPasswordAlert(false)
 
-        //resetTableConfig(tableConfig, setTableConfig)
         navigate('/Customers')
 
-        return
+    }
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+
+        setError(prevState => {
+            return prevState && false
+        })
+
+        // field blank control
+        if (!name || !surname || !cf || !email || !password || !birthDate) {
+            !name ? setNameAlert(true) : setNameAlert(false)
+            !surname ? setSurnameAlert(true) : setSurnameAlert(false)
+            !cf ? setCfAlert(true) : setCfAlert(false)
+            !email ? setEmailAlert(true) : setEmailAlert(false)
+            !password ? setPasswordAlert(true) : setPasswordAlert(false)
+            !birthDate ? setBirthDateAlert(true) : setBirthDateAlert(false)
+            return
+        }
+
+        let updtCustomer = null
+
+        // if 'id' is set it means an update action has been thrown
+        if (id !== undefined) {
+            updtCustomer = {
+                idUser: id,
+                name: name,
+                surname: surname,
+                email: email,
+                birthDate: birthDate,
+                role: role,
+                password: password,
+                cf: cf
+            }
+            updateCustomer({...updtCustomer}, id)
+                .then(resultInfo => {
+
+                    if(resultInfo.error){
+
+                        setErrorMessage(resultInfo.message)
+
+                        setError(true)
+
+                    }
+
+                    else{
+
+                        const updatedList = tableConfig.list
+
+                        for(const y in updatedList){
+
+                            if(updatedList[y].idUser.toString() === id.toString()){
+
+                                updatedList.splice(y, y, {
+
+                                    ...updatedList[y],
+
+                                    ...resultInfo.customer
+
+                                })
+
+                                setTableConfig(prevState => {
+
+                                    return {
+                                        ...prevState,
+                                        list: updatedList
+                                    }
+
+                                })
+
+                                break
+
+                            }
+                        }
+
+                        navigate('/Customers')
+
+                    }
+                }).catch(e => {
+                console.log(e)
+            })
+
+        } else {
+            await insertCustomer({
+                name: name,
+                surname: surname,
+                email: email,
+                birthDate: birthDate,
+                role: role,
+                password: password,
+                cf: cf
+            })
+                .then(resultInfo => {
+
+                    if(resultInfo.error){
+
+                        setErrorMessage(resultInfo.message)
+
+                        setError(true)
+
+                    }
+                    else{
+
+                        const updateList = tableConfig.list
+
+                        updateList.push(resultInfo.customer)
+
+                        setTableConfig(prevTableConfig => {
+                            return {
+                                ...prevTableConfig,
+                                list: updateList,
+                            }
+                        })
+
+                        navigate('/Customers')
+
+                    }
+                }).catch(e => {
+                    console.log(e)
+                })
+        }
     }
 
     return loading ? (
@@ -144,6 +229,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
             <Container className={'my-2'}>
                 <h3>Insert Customer</h3><br/>
                 { custAlreadyExists && <CustomAlert text={'Customer already exists'} /> }
+                { error && <CustomAlert text={errorMessage} /> }
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Name</Form.Label>

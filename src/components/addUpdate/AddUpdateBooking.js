@@ -27,13 +27,13 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             Promise.resolve(data).then(r => {
                 // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
                 // check if this request is made by the actual logged customer
-                if(Object.keys(r).length>0 && r['userId'] === sessionStorage.getItem('customer')){
+                if(Object.keys(r).length>0 && r['user'] === sessionStorage.getItem('customer')){
                     setStartDate(r['start'])
                     setEndDate(r['end'])
-                    setIdBooking(r['id'])
-                    setCustomer(r['userId'])
+                    setIdBooking(r['idBooking'])
+                    setCustomer(r['user'])
                     setApproval(r['approval'])
-                    setVehicle(r['vehicleId'])
+                    setVehicle(r['vehicle'])
                     setLoading(false)
                 }
                 else{
@@ -80,9 +80,9 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                 id: id,
                 end: endDate,
                 start: startDate,
-                userId: customer,
+                user: customer,
                 approval: approval,
-                vehicleId: vehicle
+                vehicle: vehicle
             }
             updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
                 .then((r) => setTableConfig(prevTableConfigList => {
@@ -94,9 +94,9 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             addObject({
                 end: endDate,
                 start: startDate,
-                userId: sessionStorage.getItem('customer'),
+                user: sessionStorage.getItem('customer'),
                 approval: 0,
-                vehicleId: vehicleLicencePlate
+                vehicle: vehicleLicencePlate
             }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
                 .then((r) => setTableConfig(prevTableConfigList => {
                     return {...prevTableConfigList, list: r}

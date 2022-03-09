@@ -5,11 +5,14 @@ import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningCharg
 import Button from "../graphic/Button";
 import UsefulFunctions from "../../functions/UsefulFunctions";
 import { useNavigate } from "react-router-dom";
+import CustomSort from "../../functions/CustomSort";
 
 const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
 
     const { buildOrderFieldPath, dateFormat } = UsefulFunctions()
+
+    const { dynamicSortMultiple } = CustomSort()
 
     const navigate = useNavigate()
 
@@ -18,27 +21,24 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
      * @param fieldObjects
      * @returns {Promise<void>}
      */
-    const sort = async (fieldObjects) => {
+    const sort = (fieldObjects) => {
 
         const newFieldObjects = shiftOrderStyle(fieldObjects)
 
-        const { sortPath, orderPath } = buildOrderFieldPath(newFieldObjects)
+        const { sortPath } = buildOrderFieldPath(newFieldObjects)
 
-        const getListObjects = async () => {
-            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
+        const list = tableConfig.list.sort(dynamicSortMultiple(...sortPath))
 
-            let disableResetTableButton = false
+        let disableResetTableButton = false
 
-            if (sortPath === '') {
-                disableResetTableButton = !disableResetTableButton
-            }
-
-            setTableConfig(prevFieldObjects => {
-                return {...prevFieldObjects, fieldObjects: newFieldObjects, list: data, disableResetTableButton: disableResetTableButton}
-            })
+        if (sortPath.length === 0) {
+            disableResetTableButton = !disableResetTableButton
         }
 
-        getListObjects()
+        setTableConfig(prevFieldObjects => {
+            return {...prevFieldObjects, fieldObjects: newFieldObjects, list: list, disableResetTableButton: disableResetTableButton, dataSize: Math.floor(list.length/10)}
+        })
+
     }
 
     /**
@@ -109,7 +109,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
             const updateList = async () => {
                 const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-                const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
+                const data = await getData(sortPath, orderPath, tableConfig.startPath, tableConfig.currentPage, 10, tableConfig.searchText, tableConfig.filterSearchText)
 
                 setTableConfig(prevTableConfigList => {
                     return { ...prevTableConfigList, list: data}
@@ -155,7 +155,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
                 <tbody>
                 {
                     /* Iterating through the list and creating the corresponding row  */
-                    tableConfig.list.map(
+                    tableConfig.list.slice((tableConfig.currentPage-1)*10, ((tableConfig.currentPage-1)*10)+10).map(
                         (el, index) =>
                             <tr key={index} style={{textAlign: 'center'}}>
                                 {/* Insert in the appropriate column the appropriate data */}
@@ -189,7 +189,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
                 }
                 </tbody>
             </Table>
-            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getData} />
+            <Pagination tableConfig={tableConfig} setTableConfig={setTableConfig} />
         </>
     );
 };

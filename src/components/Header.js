@@ -6,11 +6,11 @@ import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
 import PropTypes from 'prop-types'
 
-const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
+const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData, setTextCustomAlert, setCustomAlert }) => {
 
     const navigate = useNavigate()
 
-    const { buildOrderFieldPath } = UsefulFunctions()
+    const { buildOrderFieldPath, currentPages } = UsefulFunctions()
 
     // state that manage the searching filter
     const [filter, setFilter] = useState(tableConfig.dbFields[0]);
@@ -28,9 +28,15 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
             return returnValue
         })
 
-        const { sortPath, orderPath } = buildOrderFieldPath(tmpFieldObjects)
+        const responseInfo = await getData()
 
-        const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, 1, '', '')
+        if(responseInfo.error){
+
+            setTextCustomAlert(responseInfo.message)
+
+            setCustomAlert(true)
+
+        }
 
         setTableConfig(prevTableConfig => {
             return {
@@ -39,11 +45,12 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
                 disableResetPaginationButton: true,
                 disableResetHeaderButton: true,
                 disableResetTableButton: true,
-                currentPages: [1,2,3],
+                currentPages: currentPages(responseInfo.list.length),
                 filterSearchText: '',
                 currentPage: 1,
                 searchText: '',
-                list: data
+                list: responseInfo.list,
+                dataSize: Math.floor(responseInfo.list.length/10)
             }
         })
 
@@ -59,7 +66,7 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
 
         const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-        const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, 1, searchText, filter)
+        const data = await getData(sortPath, orderPath, tableConfig.startPath, 1, 10, searchText, filter)
 
         setTableConfig(prevTableConfig => {
             return {
@@ -99,39 +106,6 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
             return false
         }
     }
-
-/*
-
-    // triggered when the useState searchButton has been pressed
-    useEffect(() => {
-
-        // variables useful to manage different simultaneously fetch
-        const controller = new AbortController()
-        const signal = controller.signal
-
-        const getListObjects = async () => {
-            return await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, signal)
-        }
-
-        if(showSearchButton) {
-            // fetch + make available the reset button
-            getListObjects().then(r => {
-                setTableConfig({
-                    ...tableConfig,
-                    list: r,
-                    disableResetHeaderButton: false,
-                })
-                showSearchButton && setObjectList(r)
-            })
-        }
-        setSearchText('')
-
-        return () => {
-            // when this useEffect is thrown, first abort the previous fetch if it is still in calling
-            controller.abort()
-        }
-
-    }, [searchButton]);*/
 
     return (
         <Navbar expand="lg" bg="dark" variant="dark">

@@ -58,7 +58,7 @@ const BookingService = () => {
                         {
                             actionName: 'Approves',
                             onClick() {
-                                return updateObject({id: x.id, end: x.end, start: x.start, userId: x.userId, approval: 1, vehicleId: x.vehicleId}, bookingsPath+`/${x.id}`)
+                                return updateObject({idBooking: x.idBooking, end: x.end, start: x.start, user: x.user, approval: 1, vehicle: x.vehicle}, bookingsPath+`/${x.id}`)
                             },
                             disable: disable,
                             color: 'MediumSlateBlue',
@@ -67,7 +67,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                return deleteObject(x.id, bookingsPath)
+                                return deleteObject(x.idBooking, bookingsPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -80,7 +80,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                return deleteObject(x.id, bookingsPath)
+                                return deleteObject(x.idBooking, bookingsPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -89,7 +89,7 @@ const BookingService = () => {
                         {
                             actionName: 'Edit',
                             onClick() {
-                                return `/Bookings/ModifyBooking/${x.id}`
+                                return `/Bookings/ModifyBooking/${x.idBooking}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -106,9 +106,9 @@ const BookingService = () => {
     // length of: (all the Prenotazione objects/10) (normally get from BE)
     const bookingsLength = 4
 
-    const field = ['start','end','userId', 'vehicleId', 'id', 'approval']
+    const field = ['start','end','user', 'vehicle', 'idBooking', 'approval']
     const fieldHeader = ['Start date', 'End date', 'Customer Id', 'Vehicle Id', 'Booking Id', 'Approval']
-    const filter = ['start','end','userId', 'vehicleId', 'id']
+    const filter = ['start','end','user', 'vehicle', 'idBooking']
 
     return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById, advancedGetBookings}
 };

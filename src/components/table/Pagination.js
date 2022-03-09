@@ -1,22 +1,15 @@
-import UsefulFunctions from "../../functions/UsefulFunctions";
+const Pagination = ({ tableConfig, setTableConfig }) => {
 
-const Pagination = ({ tableConfig, setTableConfig, getData }) => {
-
-    const { buildOrderFieldPath } = UsefulFunctions()
-
-    const changePage = async (currentPage, currentPages) => {
-        const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+    const changePage = (currentPage, currentPages) => {
 
         let disableResetPaginationButton = false
-
-        const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath, currentPage)
 
         if(currentPage === 1){
             disableResetPaginationButton = !disableResetPaginationButton
         }
 
         setTableConfig(prevTableConfigPages => {
-            return {...prevTableConfigPages, currentPage: currentPage, currentPages: currentPages, list: data, disableResetPaginationButton: disableResetPaginationButton}
+            return {...prevTableConfigPages, currentPage: currentPage, currentPages: currentPages, disableResetPaginationButton: disableResetPaginationButton}
         })
 
     }
@@ -41,14 +34,13 @@ const Pagination = ({ tableConfig, setTableConfig, getData }) => {
     const backward = (k) => {
         k-=1
 
-        let tmpCurrentPages = []
+        let tmpCurrentPages =  tableConfig.currentPages
 
         // establishes when the pages must shift backward
         if(tableConfig.currentPages[0] >= tableConfig.currentPage){
 
-            let tmpCurrentPages = tableConfig.currentPages
-
             tmpCurrentPages.forEach((value, index) => tmpCurrentPages[index] = value - 1)
+
         }
 
         tmpCurrentPages === [] ? changePage(k) : changePage(k, tmpCurrentPages)

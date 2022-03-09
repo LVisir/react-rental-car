@@ -1,7 +1,7 @@
 
 const Paths = () => {
 
-    const basePath = 'http://localhost:5001'
+    const basePath = 'http://localhost:8091'
 
     return { basePath }
 };

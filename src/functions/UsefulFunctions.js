@@ -25,17 +25,46 @@ const UsefulFunctions = () => {
     }
 
     const buildOrderFieldPath = (fieldObjects) => {
-        let sortPath = ''
-        let orderPath = ''
+        let sortPath = []
+        let s = ''
 
         fieldObjects.filter(element => element.sortType !=='').map(otherElement => {
-            sortPath = sortPath + otherElement.field + ','
-            orderPath = orderPath + otherElement.sortType + ','
+            if(otherElement.sortType === 'desc') s = '-'+otherElement.field
+            else if(otherElement.sortType === 'asc') s = otherElement.field
+            sortPath.push(s)
         })
-        if(sortPath !== '') sortPath = sortPath.slice(0,-1)
-        if(orderPath !== '') orderPath = orderPath.slice(0,-1)
 
-        return { sortPath, orderPath }
+        return { sortPath }
+    }
+
+    const currentPages = (size) => {
+
+        let pages = [1,2,3]
+
+        if(size > 0){
+
+            let nPages = Math.floor(size/10)
+
+            if(nPages<3){
+
+                if(nPages<2){
+
+                    pages = [1]
+
+                }
+                else pages = [2]
+
+            }
+
+        }
+        else {
+
+            pages = []
+
+        }
+
+        return pages
+
     }
 
     /**
@@ -80,7 +109,7 @@ const UsefulFunctions = () => {
         let url
 
         if(sessionStorage.getItem('customer') !== null && tableConfig.tableName === 'BOOKINGS'){
-            url = startPath + '?userId=' + sessionStorage.getItem('customer') + `&_page=${page === 0 ? tableConfig.currentPage : page}`
+            url = startPath + '?user=' + sessionStorage.getItem('customer') + `&_page=${page === 0 ? tableConfig.currentPage : page}`
         }
 
         else url = startPath + `?_page=${page === 0 ? tableConfig.currentPage : page}`
@@ -184,7 +213,7 @@ const UsefulFunctions = () => {
         return x.slice(6,10).join('') + '-' + x.slice(3,6).join('') + x.slice(0,2).join('')
     }
 
-    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious, dateFormat, dateFormatReverse }
+    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious, dateFormat, dateFormatReverse, currentPages }
 
 };
 
