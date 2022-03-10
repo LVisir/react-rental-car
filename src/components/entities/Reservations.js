@@ -57,6 +57,18 @@ const Reservations = ({ logout, links, homePath }) => {
                 header: fieldHeader[2],
                 sortable: true,
                 sortType: '',
+            },
+            {
+                field: field[3],
+                header: fieldHeader[3],
+                sortable: true,
+                sortType: '',
+            },
+            {
+                field: field[4],
+                header: fieldHeader[4],
+                sortable: true,
+                sortType: '',
             }
         ]
     });

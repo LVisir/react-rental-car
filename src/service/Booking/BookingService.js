@@ -28,6 +28,11 @@ const BookingService = () => {
 
                 infoResponse.list = await response.json()
 
+                infoResponse.list.map(booking => {
+                    booking.user = booking.user.idUser
+                    booking.vehicle = booking.vehicle.idVehicle
+                })
+
                 if(sessionStorage.getItem('superuser') !== null){
                     bindActions(infoResponse.list, deleteBooking, updateBooking, `/Bookings/ModifyBooking`)
                 }
@@ -78,7 +83,7 @@ const BookingService = () => {
                             actionName: 'Approves',
                             onClick() {
                                 return updateBooking({
-                                    id: x.idBooking,
+                                    idBooking: x.idBooking,
                                     end: x.end,
                                     start: x.start,
                                     user: {idUser: x.user},
@@ -242,9 +247,9 @@ const BookingService = () => {
 
     }
 
-    const field = ['start','end', 'idBooking']
-    const fieldHeader = ['Start date', 'End date', 'Booking Id']
-    const filter = ['start','end', 'idBooking']
+    const field = ['start','end', 'idBooking', 'user', 'vehicle']
+    const fieldHeader = ['Start date', 'End date', 'Booking Id', 'Vehicle Id', 'User Id']
+    const filter = ['start','end', 'idBooking', 'user', 'vehicle']
 
     return { bookingsPath, field, fieldHeader, getBookings, filter, getBookingById, insertBooking, updateBooking, deleteBooking }
 };
