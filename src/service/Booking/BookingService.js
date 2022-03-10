@@ -1,64 +1,90 @@
-import UsefulFunctions from "../../functions/UsefulFunctions";
 import Paths from "../../Paths";
+import UsefulFunctions from "../../functions/UsefulFunctions";
 
 const BookingService = () => {
 
-    // fetch delle prenotazioni dal server dato un certo cf
-    const fetchReservationsByCustomerId = async (path, cf) => {
-        const response = await fetch(path.concat(`?customer=${cf}`))
-        const prenotazioni = await response.json()
-        return prenotazioni
-    }
-
-    // fetch of the list of Booking from server
-    const fetchReservations = async (path) => {
-        const response = await fetch(path)
-        const prenotazioni = await response.json()
-
-        return prenotazioni
-    }
-// -------------------------------------------------------------------------------- da qui sotto usa queste funzioni da ora in poi
-
-    const { getData, updateObject, deleteObject } = UsefulFunctions()
     const { basePath } = Paths()
+    const { manageResponse } = UsefulFunctions()
 
     // path to fetch the list of Prenotazione from the server
     let bookingsPath = basePath+'/bookings'
 
     // fetch of the list of Prenotazione objects
     const getBookings = async () => {
-        const response = await fetch(bookingsPath)
-        const bookings = await response.json()
 
-        return bookings
+        const infoResponse = {
+            list: [],
+            error: false,
+            message: ''
+        }
+
+        await fetch(bookingsPath, {
+            method: 'GET',
+            headers: {
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            }
+        }).then(async response => {
+            if (response.ok) {
+
+                infoResponse.list = await response.json()
+
+                if(sessionStorage.getItem('superuser') !== null){
+                    bindActions(infoResponse.list, deleteBooking, updateBooking, `/Bookings/ModifyBooking`)
+                }
+                else if(sessionStorage.getItem('customer') !== null){
+
+                    const customerBookingList = infoResponse.list.filter(x => x.user === sessionStorage.getItem('customer'))
+
+                    bindActions(customerBookingList, deleteBooking, updateBooking, `/Bookings/ModifyBooking`)
+                }
+                else{
+                    throw new Error("No User is logged in")
+                }
+
+            }
+            else{
+
+                const error = response.json()
+
+                infoResponse.error = true
+
+                infoResponse.message = error.error
+
+            }
+        }).catch((e) => {
+
+            infoResponse.error = true
+
+            infoResponse.message = 'Internal Server Error'
+
+            console.log(e)
+
+        })
+
+        return infoResponse
+
     }
 
-    // custom the queries to apply pagination, sorting, filtering ecc
-    const customQueryBookings = async (path) => {
-        const response = await fetch(bookingsPath.concat(path))
-        const bookings = await response.json()
-        return bookings
-    }
-
-    const getBookingById = async (id) => {
-        const response = await fetch(bookingsPath+`/${id}`)
-        return await response.json()
-    }
-
-    const advancedGetBookings = async (sortPath, orderPath, tableConfig, startPath, page = 0, searchText = '', filterSearchText = '') => {
-        const data = await getData(sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText)
+    const bindActions = (data, deleteBooking, updateBooking, movePath) => {
 
         let disable
 
         data.map(
             (x) => {
                 if(sessionStorage.getItem('superuser') !== null){
-                    disable = x.approval === 1
+                    disable = x.approval
                     x.actions = [
                         {
                             actionName: 'Approves',
                             onClick() {
-                                return updateObject({idBooking: x.idBooking, end: x.end, start: x.start, user: x.user, approval: 1, vehicle: x.vehicle}, bookingsPath+`/${x.id}`)
+                                return updateBooking({
+                                    id: x.idBooking,
+                                    end: x.end,
+                                    start: x.start,
+                                    user: {idUser: x.user},
+                                    approval: 1,
+                                    vehicle: {idVehicle: x.vehicle}
+                                }, `${x.idBooking}`)
                             },
                             disable: disable,
                             color: 'MediumSlateBlue',
@@ -67,7 +93,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                return deleteObject(x.idBooking, bookingsPath)
+                                return deleteBooking(x.idBooking)
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -80,7 +106,7 @@ const BookingService = () => {
                         {
                             actionName: 'Delete',
                             onClick() {
-                                return deleteObject(x.idBooking, bookingsPath)
+                                return deleteBooking(x.idBooking, bookingsPath)
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -89,7 +115,7 @@ const BookingService = () => {
                         {
                             actionName: 'Edit',
                             onClick() {
-                                return `/Bookings/ModifyBooking/${x.idBooking}`
+                                return movePath+`/${x.idBooking}`
                             },
                             disable: false,
                             color: 'MediumSlateBlue',
@@ -100,17 +126,127 @@ const BookingService = () => {
             }
         )
 
-        return data
     }
 
-    // length of: (all the Prenotazione objects/10) (normally get from BE)
-    const bookingsLength = 4
+    const getBookingById = async (id) => {
 
-    const field = ['start','end','user', 'vehicle', 'idBooking', 'approval']
-    const fieldHeader = ['Start date', 'End date', 'Customer Id', 'Vehicle Id', 'Booking Id', 'Approval']
-    const filter = ['start','end','user', 'vehicle', 'idBooking']
+        let result = null
 
-    return {fetchReservations, fetchReservationsByCustomerId, bookingsPath, field, fieldHeader, bookingsLength, customQueryBookings, getBookings, filter, getBookingById, advancedGetBookings}
+        await fetch(bookingsPath+`/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            }
+        }).then(async response => {
+            if (response.ok) {
+
+                result = await response.json()
+
+            }
+            else{
+
+                let error = await response.json()
+                console.log(error.error)
+
+            }
+        }).catch(e => {
+
+            console.log(e)
+
+        })
+
+        return result
+
+    }
+
+    const insertBooking = async (booking) => {
+
+        let resultInfo = {
+            error: false,
+            message: '',
+            booking: null
+        }
+
+        await fetch(bookingsPath+'/add', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            },
+            body: JSON.stringify(booking)
+        }).then(async response => {
+            await manageResponse(await response, resultInfo, 'booking')
+        }).catch(e => {
+            console.log(e)
+        })
+
+        return resultInfo
+
+    }
+
+    const updateBooking = async (booking, id) => {
+
+        let resultInfo = {
+            error: false,
+            message: '',
+            booking: null
+        }
+
+        console.log(booking)
+        console.log(id)
+
+        await fetch(bookingsPath+`/update/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            },
+            body: JSON.stringify(booking)
+        }).then(async response => {
+            await manageResponse(response, resultInfo, 'booking')
+        }).catch(e => {
+            console.log(e)
+        })
+
+        return resultInfo
+
+    }
+
+    const deleteBooking = async (id) => {
+
+        const resultInfo = {
+            error: false,
+            message: ''
+        }
+
+        await fetch(bookingsPath+`/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            }
+        }).then(async (response) => {
+            if(!response.ok){
+
+                resultInfo.error = true
+
+                resultInfo.message = await response.json()
+
+            }
+        }).catch(e => {
+            resultInfo.error = true
+            resultInfo.message = 'Internal Server Error'
+            console.log(e)
+        })
+
+        return resultInfo
+
+    }
+
+    const field = ['start','end', 'idBooking']
+    const fieldHeader = ['Start date', 'End date', 'Booking Id']
+    const filter = ['start','end', 'idBooking']
+
+    return { bookingsPath, field, fieldHeader, getBookings, filter, getBookingById, insertBooking, updateBooking, deleteBooking }
 };
 
 export default BookingService;

@@ -1,22 +1,52 @@
 import UsefulFunctions from "../../functions/UsefulFunctions";
-import {useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import Header from "../Header";
 import {Container} from "react-bootstrap";
-import Button from "../graphic/Button";
 import CustomTable from "./CustomTable";
+import BookingService from "../../service/Booking/BookingService";
+import CustomSort from "../../functions/CustomSort";
+import CustomAlert from "../alerts/CustomAlert";
 
-const BookingsTable = ({ logout, links, tableConfig, setTableConfig, getData }) => {
+const BookingsTable = ({ logout, links, tableConfig, setTableConfig, setCustomAlert, setTextCustomAlert, customAlert, textCustomAlert }) => {
 
-    const { buildOrderFieldPath } = UsefulFunctions()
+    const { buildOrderFieldPath, currentPages } = UsefulFunctions()
+    const { getBookings } = BookingService()
+    const { dynamicSortMultiple } = CustomSort()
 
     useEffect(() => {
+
+        setCustomAlert(prevState => {
+            return prevState && false
+        })
+
         const fetchBookings = async () => {
-            const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
-            const data = await getData(sortPath, orderPath, tableConfig, tableConfig.startPath)
-            setTableConfig(prevTableConfigList => {
-                return { ...prevTableConfigList, list: data}
+
+            const responseInfo = await getBookings()
+
+            if(responseInfo.error){
+
+                setTextCustomAlert(responseInfo.message)
+
+                setCustomAlert(true)
+
+            }
+            else if(responseInfo.list !== []){
+
+                const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+                responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+
+            }
+
+            setTableConfig(prevTableConfig => {
+                return {
+                    ...prevTableConfig,
+                    list: responseInfo.list,
+                    dataSize: Math.floor(responseInfo.list.length/10),
+                    currentPages: currentPages(responseInfo.list.length)
+                }
             })
+
         }
 
         fetchBookings()
@@ -25,12 +55,21 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, getData }) 
 
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getData} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getBookings}
+                    setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} />
+
             <Container className={'my-2'}>
-                <h3>
-                    Bookings
-                </h3>
-                <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getData} />
+                { customAlert && <CustomAlert text={textCustomAlert} /> }
+                {!customAlert &&
+                        <>
+                            <h3>
+                                Bookings
+                            </h3>
+
+                            <CustomTable tableConfig={tableConfig} setTableConfig={setTableConfig} getData={getBookings}
+                            setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} />
+                        </>
+                }
             </Container>
         </>
     );

@@ -7,7 +7,7 @@ import CustomersTable from "../table/CustomersTable";
 
 const Customers = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, customersLength, filter, customersPath, advancedGetCustomers, customCustomersFetch } = CustomerService()
+    const { field, fieldHeader, filter, customersPath, getCustomers  } = CustomerService()
 
     const [customAlert, setCustomAlert] = useState(false);
     const [textCustomAlert, setTextCustomAlert] = useState('');
@@ -26,7 +26,7 @@ const Customers = ({ logout, links, homePath }) => {
         return {
             dbFields: field,
             tableHeaders: fieldHeader,
-            dataSize: customersLength,
+            dataSize: 0,
             currentPage: 1,
             currentPages: [1, 2, 3],
             searchableFields: filter,
@@ -88,8 +88,8 @@ const Customers = ({ logout, links, homePath }) => {
                 <Route path={'/'} element={<CustomersTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links}
                                                            setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} customAlert={customAlert} textCustomAlert={textCustomAlert} /> } />
 
-                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={customCustomersFetch} />} />
-                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={customCustomersFetch} />} />
+                <Route path={'AddCustomer'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={getCustomers} />} />
+                <Route path={'ModifyCustomer/:id'} element={<AddUpdateCustomer showSearchButton={false} links={links} logout={logout} setTableConfig={setTableConfig} tableConfig={tableConfig} getData={getCustomers} />} />
                 <Route path={'*'} element={ <Error homePath={homePath} /> } />
             </Routes>
         </>

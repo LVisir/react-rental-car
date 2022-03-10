@@ -7,7 +7,10 @@ import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 
 const Vehicles = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, vehiclesLength, filter, vehiclesPath, advancedGetVehicles } = VehiclesService()
+    const { field, fieldHeader, filter, vehiclesPath, getVehicles } = VehiclesService()
+
+    const [customAlert, setCustomAlert] = useState(false);
+    const [textCustomAlert, setTextCustomAlert] = useState('');
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -22,7 +25,7 @@ const Vehicles = ({ logout, links, homePath }) => {
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
         tableHeaders: fieldHeader,
-        dataSize: vehiclesLength,
+        dataSize: 0,
         currentPage: 1,
         currentPages: [1,2,3],
         searchableFields: filter,
@@ -80,19 +83,20 @@ const Vehicles = ({ logout, links, homePath }) => {
         <>
             <Routes>
 
-                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetVehicles} /> } />
+                <Route path={'/'} element={<VehiclesTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links}
+                                                          setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} customAlert={customAlert} textCustomAlert={textCustomAlert}/> } />
 
                 { sessionStorage.getItem('superuser') !== null && <Route path={'AddVehicle'} element={
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
-                                      tableConfig={tableConfig} getData={advancedGetVehicles}
+                                      tableConfig={tableConfig} getData={getVehicles}
                     />}
                 /> }
 
                 { sessionStorage.getItem('superuser') !== null && <Route path={'ModifyVehicle/:id'} element={
                     <AddUpdateVehicle showSearchButton={false} links={links} logout={logout}
                                       setTableConfig={setTableConfig}
-                                      tableConfig={tableConfig} getData={advancedGetVehicles}
+                                      tableConfig={tableConfig} getData={getVehicles}
                     />}
                 /> }
 

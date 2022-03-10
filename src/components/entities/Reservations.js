@@ -1,14 +1,16 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import BookingService from "../../service/Booking/BookingService";
 import {Route, Routes} from "react-router-dom";
 import BookingsTable from "../table/BookingsTable";
 import Error from "../errors/Error";
-import AddUpdateVehicle from "../addUpdate/AddUpdateVehicle";
 import AddUpdateBooking from "../addUpdate/AddUpdateBooking";
 
 const Reservations = ({ logout, links, homePath }) => {
 
-    const { field, fieldHeader, bookingsLength, filter, bookingsPath, advancedGetBookings } = BookingService()
+    const { field, fieldHeader, filter, bookingsPath, getBookings } = BookingService()
+
+    const [customAlert, setCustomAlert] = useState(false);
+    const [textCustomAlert, setTextCustomAlert] = useState('');
 
     /**
      * The tableConfig has all the settings where the table must adapt to:
@@ -23,7 +25,7 @@ const Reservations = ({ logout, links, homePath }) => {
     const [tableConfig, setTableConfig] = useState({
         dbFields: field,
         tableHeaders: fieldHeader,
-        dataSize: bookingsLength,
+        dataSize: 0,
         currentPage: 1,
         currentPages: [1,2,3],
         searchableFields: filter,
@@ -55,24 +57,6 @@ const Reservations = ({ logout, links, homePath }) => {
                 header: fieldHeader[2],
                 sortable: true,
                 sortType: '',
-            },
-            {
-                field: field[3],
-                header: fieldHeader[3],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[4],
-                header: fieldHeader[4],
-                sortable: true,
-                sortType: '',
-            },
-            {
-                field: field[5],
-                header: fieldHeader[5],
-                sortable: false,
-                sortType: '',
             }
         ]
     });
@@ -81,7 +65,8 @@ const Reservations = ({ logout, links, homePath }) => {
         <>
             <Routes>
 
-                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links} getData={advancedGetBookings} /> } />
+                <Route path={'/'} element={<BookingsTable tableConfig={tableConfig} setTableConfig={setTableConfig} logout={logout} links={links}
+                                                          setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} customAlert={customAlert} textCustomAlert={textCustomAlert} /> } />
 
                 { sessionStorage.getItem('customer') !== null &&
 
@@ -89,7 +74,7 @@ const Reservations = ({ logout, links, homePath }) => {
 
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
-                                          tableConfig={tableConfig} getData={advancedGetBookings}
+                                          tableConfig={tableConfig} getData={getBookings}
                         />}
 
                     />
@@ -101,7 +86,7 @@ const Reservations = ({ logout, links, homePath }) => {
 
                         <AddUpdateBooking showSearchButton={false} links={links} logout={logout}
                                           setTableConfig={setTableConfig}
-                                          tableConfig={tableConfig} getData={advancedGetBookings}
+                                          tableConfig={tableConfig} getData={getBookings}
                         />}
 
                     />

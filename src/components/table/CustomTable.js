@@ -1,11 +1,12 @@
 import {Table} from "react-bootstrap";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Pagination from "./Pagination";
 import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill} from "react-icons/bs";
 import Button from "../graphic/Button";
 import UsefulFunctions from "../../functions/UsefulFunctions";
 import { useNavigate } from "react-router-dom";
 import CustomSort from "../../functions/CustomSort";
+import CustomAlert from "../alerts/CustomAlert";
 
 const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
@@ -14,7 +15,17 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
     const { dynamicSortMultiple } = CustomSort()
 
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const navigate = useNavigate()
+
+    useEffect(() => {
+
+        error && setError(false)
+
+    }, [error]);
+
 
     /**
      *
@@ -106,17 +117,38 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
     const executeActions = async (func, actionType) => {
         if(actionType === 'action'){
 
-            const updateList = async () => {
-                const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+            const responseInfo = await func()
 
-                const data = await getData(sortPath, orderPath, tableConfig.startPath, tableConfig.currentPage, 10, tableConfig.searchText, tableConfig.filterSearchText)
+            if(responseInfo.error){
+                setErrorMessage(responseInfo.message)
+                setError(true)
+            }
+            else{
+                const responseInfo = await getData()
 
-                setTableConfig(prevTableConfigList => {
-                    return { ...prevTableConfigList, list: data}
+                if(responseInfo.error){
+
+                    setErrorMessage(responseInfo.message)
+
+                    setError(true)
+
+                }
+                else if(responseInfo.list !== []){
+
+                    const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+                    responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+
+                }
+
+                setTableConfig(prevTableConfig => {
+                    return {
+                        ...prevTableConfig,
+                        list: responseInfo.list,
+                        dataSize: Math.floor(responseInfo.list.length/10)
+                    }
                 })
             }
-
-            func().then(() => updateList())
 
         }
         else if(actionType === 'navigate'){
@@ -126,6 +158,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
     return (
         <>
+            { error && <CustomAlert text={errorMessage} /> }
             <Table striped bordered hover>
                 <thead>
                 <tr style={{textAlign: 'center'}} >

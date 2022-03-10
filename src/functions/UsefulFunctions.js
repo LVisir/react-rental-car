@@ -15,6 +15,30 @@ const UsefulFunctions = () => {
         setToken(false)
     }
 
+    const manageResponse = async (response, resultInfo, object) => {
+
+        if (response.ok) {
+            resultInfo[object] = await response.json()
+        }
+        else{
+
+            console.log(response)
+
+            const error = await response.json()
+
+            if(error.error_validation){
+                resultInfo.error = true
+                Object.keys(error.error_validation).map(x => resultInfo.message = resultInfo.message + '; '+error.error_validation[x])
+            }
+            else if(error.error){
+                resultInfo.error = true
+                resultInfo.message = error.error
+            }
+
+        }
+
+    }
+
     // usePrevious hook
     function usePrevious(value) {
         const ref = useRef();
@@ -213,7 +237,7 @@ const UsefulFunctions = () => {
         return x.slice(6,10).join('') + '-' + x.slice(3,6).join('') + x.slice(0,2).join('')
     }
 
-    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious, dateFormat, dateFormatReverse, currentPages }
+    return { logout, token, setToken, buildOrderFieldPath, getData, addObject, deleteObject, resetTableConfig, updateObject, usePrevious, dateFormat, dateFormatReverse, currentPages, manageResponse }
 
 };
 

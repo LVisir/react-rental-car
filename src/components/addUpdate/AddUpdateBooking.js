@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import UsefulFunctions from "../../functions/UsefulFunctions";
 import {useNavigate, useParams} from "react-router-dom";
 import Header from "../Header";
 import {Button, Container, Form} from "react-bootstrap";
@@ -9,38 +8,51 @@ import BookingService from "../../service/Booking/BookingService";
 const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const [loading, setLoading] = useState(true);
-
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
-    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
-    const { getBookingById } = BookingService()
+    const { getBookingById, updateBooking, insertBooking } = BookingService()
 
     const { id, vehicleLicencePlate } = useParams()
 
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     useEffect(() => {
+
         const getBooking = async () => {
             return await getBookingById(id)
         }
 
         // it means an update request was made to update a customer object
         if(id !== undefined ) {
-            const data = getBooking()
-            Promise.resolve(data).then(r => {
-                // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
-                // check if this request is made by the actual logged customer
-                if(Object.keys(r).length>0 && r['user'] === sessionStorage.getItem('customer')){
-                    setStartDate(r['start'])
-                    setEndDate(r['end'])
-                    setIdBooking(r['idBooking'])
-                    setCustomer(r['user'])
-                    setApproval(r['approval'])
-                    setVehicle(r['vehicle'])
-                    setLoading(false)
-                }
-                else{
-                    // navigate through the error page because the id in the url params doesn't correspond to any customer
-                    navigate('*', {replace: true})
-                }
-            })
+
+            // check if the id param is a number
+            if(!isNaN(+id)) {
+
+                getBooking().then(r => {
+
+                    if(r !== null){
+
+                        // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
+                        // check if this request is made by the actual logged customer
+                        if (r['user'] === sessionStorage.getItem('customer')) {
+                            setStartDate(r['start'])
+                            setEndDate(r['end'])
+                            setIdBooking(r['idBooking'])
+                            setCustomer(r['user'])
+                            setApproval(r['approval'])
+                            setVehicle(r['vehicle'])
+                            setLoading(false)
+                        } else {
+                            // navigate through the error page because the id in the url params doesn't correspond to any customer
+                            navigate('*', {replace: true})
+                        }
+                    } else {
+                        // navigate through the error page because the id in the url params doesn't correspond to any customer
+                        navigate('*', {replace: true})
+                    }
+
+
+                }).catch(() => navigate('*', {replace: true}))
+            }
         }
         else{
             setLoading(false)
@@ -52,7 +64,6 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [idBooking, setIdBooking] = useState('');
-    const [code, setCode] = useState('');
     const [customer, setCustomer] = useState('');
     const [approval, setApproval] = useState('');
     const [vehicle, setVehicle] = useState('');
@@ -63,11 +74,15 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
     const navigate = useNavigate()
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
 
+        setError(prevState => {
+            return prevState && false
+        })
+
         // field blank control
-        if(!startDate || !endDate){
+        if (!startDate || !endDate) {
             !startDate ? setStartDateAlert(true) : setStartDateAlert(false)
             !endDate ? setEndDateAlert(true) : setEndDateAlert(false)
             return
@@ -75,42 +90,101 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
         let updtBooking = null
 
-        if(id !== undefined){
+        if (id !== undefined) {
             updtBooking = {
-                id: id,
+                id: idBooking,
                 end: endDate,
                 start: startDate,
-                user: customer,
+                user: {
+                    idUser: customer
+                },
                 approval: approval,
-                vehicle: vehicle
+                vehicle: {
+                    idVehicle: vehicle
+                }
             }
-            updateObject({...updtBooking}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfigList => {
-                    return {...prevTableConfigList, list: r}
-                }))
-        }
-        else{
+            updateBooking({...updtBooking}, id)
+                .then(resultInfo => {
 
-            addObject({
+                    if (resultInfo.error) {
+
+                        setErrorMessage(resultInfo.message)
+
+                        setError(true)
+
+                    } else {
+
+                        const updatedList = tableConfig.list
+
+                        for (const y in updatedList) {
+
+                            if (updatedList[y].idBooking.toString() === id.toString()) {
+
+                                updatedList.splice(y, y, {
+
+                                    ...updatedList[y],
+
+                                    ...resultInfo.booking
+
+                                })
+
+                                setTableConfig(prevState => {
+
+                                    return {
+                                        ...prevState,
+                                        list: updatedList
+                                    }
+
+                                })
+
+                                break
+
+                            }
+                        }
+
+                        navigate('/Bookings')
+
+                    }
+                }).catch(e => {
+                console.log(e)
+            })
+        } else {
+
+            await insertBooking({
                 end: endDate,
                 start: startDate,
                 user: sessionStorage.getItem('customer'),
                 approval: 0,
                 vehicle: vehicleLicencePlate
-            }, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfigList => {
-                    return {...prevTableConfigList, list: r}
-                }))
+            })
+                .then(resultInfo => {
+
+                    if (resultInfo.error) {
+
+                        setErrorMessage(resultInfo.message)
+
+                        setError(true)
+
+                    } else {
+
+                        const updateList = tableConfig.list
+
+                        updateList.push(resultInfo.booking)
+
+                        setTableConfig(prevTableConfig => {
+                            return {
+                                ...prevTableConfig,
+                                list: updateList,
+                            }
+                        })
+
+                        navigate('/Bookings')
+
+                    }
+                }).catch(e => {
+                    console.log(e)
+                })
         }
-
-        setEndDate('')
-        setStartDate('')
-        setStartDateAlert(false)
-        setEndDateAlert(false)
-
-        navigate('/Bookings')
-
-        return
 
     }
 
@@ -123,6 +197,7 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} getData={getData} />
             <Container className={'my-2'}>
                 <h3>Edit booking</h3><br/>
+                { error && <CustomAlert text={errorMessage} /> }
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formStartDate">
                         <Form.Label>Start date</Form.Label>

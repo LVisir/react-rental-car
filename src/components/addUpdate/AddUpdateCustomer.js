@@ -3,14 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import {Button, Container, Form} from "react-bootstrap";
 import Header from "../Header";
 import CustomAlert from "../alerts/CustomAlert";
-import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomerService from "../../service/Customer/CustomerService";
 
 // prende la lista dei customers per poter controllare se può aggiungere un Customer col cf inserito
 const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
-    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
     const { getCustomerById, updateCustomer, insertCustomer } = CustomerService()
     const [loading, setLoading] = useState(true);
 
@@ -31,7 +28,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
             if(!isNaN(+id)) {
                 getCustomer().then(r => {
                     // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned
-                    if (r != null) {
+                    if (r !== null) {
                         setName(r['name'])
                         setSurname(r['surname'])
                         setEmail(r['email'])
@@ -43,7 +40,7 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
                         // navigate through the error page because the id in the url params doesn't correspond to any customer
                         navigate('*', {replace: true})
                     }
-                })
+                }).catch(() => navigate('*', {replace: true}))
             }
         }
         else{
@@ -68,34 +65,10 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
     const [passwordAlert, setPasswordAlert] = useState(false);
     const [birthDateAlert, setBirthDateAlert] = useState(false);
 
-    // alert if the user tried to insert an existing Customer
-    const [custAlreadyExists, setCustAlreadyExists] = useState(false);
-
     // customer role
     const role = 'CUSTOMER'
 
     const navigate = useNavigate()
-
-    const addExecutedWithSuccess = () => {
-
-        setCustAlreadyExists(false)
-
-        setName('')
-        setSurname('')
-        setBirthDate('')
-        setCf('')
-        setEmail('')
-        setPassword('')
-        setNameAlert(false)
-        setSurnameAlert(false)
-        setBirthDateAlert(false)
-        setCfAlert(false)
-        setEmailAlert(false)
-        setPasswordAlert(false)
-
-        navigate('/Customers')
-
-    }
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -228,7 +201,6 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
             <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} getData={getData} />
             <Container className={'my-2'}>
                 <h3>Insert Customer</h3><br/>
-                { custAlreadyExists && <CustomAlert text={'Customer already exists'} /> }
                 { error && <CustomAlert text={errorMessage} /> }
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formName">

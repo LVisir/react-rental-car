@@ -1,16 +1,14 @@
-import UsefulFunctions from "../../functions/UsefulFunctions";
+
 import Paths from "../../Paths";
+import UsefulFunctions from "../../functions/UsefulFunctions";
 
 const CustomerService = () => {
 
-    const { updateObject, deleteObject, getData } = UsefulFunctions()
     const { basePath } = Paths()
+    const { manageResponse } = UsefulFunctions()
 
     // path to fetch the list of Customer from the server
     const customersPath = basePath+'/users/customers'
-
-    // normally this length came from the BE; is the upperBound[(length of customers)/(data per page)]
-    const customersLength = 10
 
     // function to fetch the list of Customers
     const getCustomers = async () => {
@@ -32,7 +30,7 @@ const CustomerService = () => {
 
             else if (response.ok) {
 
-                infoResponse.list = bindActions(await response.json(), customersPath, deleteCustomer, `/Customers/ModifyCustomer`)
+                infoResponse.list = bindActions(await response.json(), deleteCustomer, `/Customers/ModifyCustomer`)
 
             }
 
@@ -90,29 +88,6 @@ const CustomerService = () => {
 
     }
 
-    const getUserById = async (id) => {
-        let result = null
-
-        await fetch(basePath+`/users/${id}`).then(async (response) => {
-            result = await response.json()
-        })
-
-        return result
-    }
-
-    const getUserByEmail = async (email) => {
-
-        let result = null
-
-        await fetch(basePath+`/users/email/${email}`).then(async (response) => {
-            if(response.status === 200){
-                result = await response.json()
-            }
-        })
-
-        return result
-    }
-
     const insertCustomer = async (customer) => {
 
         let resultInfo = {
@@ -120,8 +95,6 @@ const CustomerService = () => {
             message: '',
             customer: null
         }
-
-        console.log(customer)
 
         await fetch(customersPath+'/add', {
             method: 'POST',
@@ -131,10 +104,8 @@ const CustomerService = () => {
             },
             body: JSON.stringify(customer)
         }).then(async response => {
-            await manageResponse(await response, resultInfo)
+            await manageResponse(await response, resultInfo, 'customer')
         }).catch(e => {
-            console.log('after error')
-            console.log(customer)
             console.log(e)
         })
 
@@ -158,36 +129,12 @@ const CustomerService = () => {
             },
             body: JSON.stringify(customer)
         }).then(async response => {
-            await manageResponse(response, resultInfo)
+            await manageResponse(response, resultInfo, 'customer')
         }).catch(e => {
             console.log(e)
         })
 
         return resultInfo
-
-    }
-
-    const manageResponse = async (response, resultInfo) => {
-
-        if (response.ok) {
-            resultInfo.customer = await response.json()
-        }
-        else{
-
-            const error = await response.json()
-
-            console.log(error)
-
-            if(error.error_validation){
-                resultInfo.error = true
-                Object.keys(error.error_validation).map(x => resultInfo.message = resultInfo.message + '; '+error.error_validation[x])
-            }
-            else if(error.error){
-                resultInfo.error = true
-                resultInfo.message = error.error
-            }
-
-        }
 
     }
 
@@ -211,97 +158,17 @@ const CustomerService = () => {
                 resultInfo.message = await response.json()
 
             }
-        }).catch(e => console.log(e))
+        }).catch(e => {
+            resultInfo.error = true
+            resultInfo.message = 'Internal Server Error'
+            console.log(e)
+        })
 
         return resultInfo
 
     }
 
-    // custom the queries to apply pagination, sorting, filtering ecc
-    const customQueryCustomers = async (path) => {
-        const response = await fetch(customersPath.concat(path))
-        const customers = await response.json()
-        return customers
-    }
-
-    const customCustomersFetch = async (sortPath, orderPath, startPath, page, limit, searchText , filterSearchText ) => {
-
-        let url = startPath
-
-        let result = []
-
-        if(sortPath && orderPath && startPath && page && limit && searchText && filterSearchText){
-
-            url = url + `/search/sort?_page=${page}&_limit=${limit}&_sort=${sortPath}&_order=${orderPath}&field=${filterSearchText}&value=${searchText}`
-
-            await fetch(url).then(async (response) => {
-                if(response.status !== 200){
-                    result = []
-                }
-                else{
-                    result = await response.json()
-                    bindActions(result, customersPath, deleteCustomer, `/Customers/ModifyCustomer`)
-                }
-            })
-
-            return result
-
-        }
-        else if(startPath && page && limit && searchText && filterSearchText){
-
-            url = url + `/search?_page=${page}&_limit=${limit}&field=${filterSearchText}&value=${searchText}`
-
-            await fetch(url).then(async (response) => {
-                if(response.status !== 200){
-                    result = []
-                }
-                else{
-                    result = await response.json()
-                    bindActions(result, customersPath, deleteCustomer,`/Customers/ModifyCustomer`)
-                }
-            })
-
-            return result
-
-        }
-        else if(sortPath && orderPath && startPath && page && limit){
-
-            url = url + `/paging/sortBy?_page=${page}&_limit=${limit}&_sort=${sortPath}&_order=${orderPath}`
-
-            await fetch(url).then(async (response) => {
-                if(response.status !== 200){
-                    result = []
-                }
-                else{
-                    result = await response.json()
-                    bindActions(result, customersPath, deleteCustomer,`/Customers/ModifyCustomer`)
-                }
-            })
-
-            return result
-
-        }
-        else if(page && limit){
-
-            url = url + `/paging?_page=${page}&_limit=${limit}`
-
-            await fetch(url).then(async (response) => {
-                if(response.status !== 200){
-                    result = []
-                }
-                else{
-                    result = await response.json()
-                    bindActions(result, customersPath, deleteCustomer,`/Customers/ModifyCustomer`)
-                }
-            })
-
-            return result
-
-        }
-
-    }
-
-    const bindActions = (data, path, deleteCustomer, movePath) => {
+    const bindActions = (data, deleteCustomer, movePath) => {
 
         data.map(
             (x) => {
@@ -318,40 +185,9 @@ const CustomerService = () => {
                     {
                         actionName: 'Delete',
                         onClick() {
+
                             return deleteCustomer(x.idUser)
-                        },
-                        disable: false,
-                        color: 'MediumSlateBlue',
-                        actionType: 'action'
-                    }
-                ]
-            }
-        )
 
-        return data
-
-    }
-
-    const advancedGetCustomers = async (sortPath, orderPath, tableConfig, startPath, page = 0, searchText = '', filterSearchText = '') => {
-
-        const data = await getData(sortPath, orderPath, tableConfig, startPath, page, searchText, filterSearchText)
-
-        data.map(
-            (x) => {
-                x.actions = [
-                    {
-                        actionName: 'Edit',
-                        onClick() {
-                            return `/Customers/ModifyCustomer/${x.idUser}`
-                        },
-                        disable: false,
-                        color: 'MediumSlateBlue',
-                        actionType: 'navigate'
-                    },
-                    {
-                        actionName: 'Delete',
-                        onClick() {
-                            return deleteObject(x.idUser, customersPath)
                         },
                         disable: false,
                         color: 'MediumSlateBlue',
@@ -370,9 +206,8 @@ const CustomerService = () => {
     const fieldHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id']
     const filter = ['name','surname','birthDate','cf', 'email', 'idUser']
 
-    return { customersPath, getCustomers, customQueryCustomers, customersLength, field,
-        fieldHeader, filter, getCustomerById, getUserByEmail, advancedGetCustomers,
-        getUserById, customCustomersFetch, updateCustomer, insertCustomer, deleteCustomer }
+    return { customersPath, getCustomers, field,
+        fieldHeader, filter, getCustomerById, updateCustomer, insertCustomer, deleteCustomer }
 };
 
 export default CustomerService;

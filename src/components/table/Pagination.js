@@ -60,8 +60,8 @@ const Pagination = ({ tableConfig, setTableConfig }) => {
                             <button className='page-link' style={{cursor: 'pointer'}} onClick={() => changePage(page, tableConfig.currentPages)}>{page}</button>
                         </li>)}
                     <li
-                        className={`page-item ${tableConfig.currentPages[2] === tableConfig.dataSize && 'disabled'}`}
-                        style={{cursor: `${tableConfig.currentPages[2] === tableConfig.dataSize ? 'default' : 'pointer'}`}}
+                        className={`page-item ${tableConfig.currentPages.at(-1) === (tableConfig.dataSize+1) && 'disabled'}`}
+                        style={{cursor: `${tableConfig.currentPages.at(-1)=== (tableConfig.dataSize+1) ? 'default' : 'pointer'}`}}
                     >
                         <button className='page-link' style={{cursor: 'pointer'}} onClick={() => forward(tableConfig.currentPage)}>Next</button>
                     </li>

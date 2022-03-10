@@ -1,44 +1,47 @@
 import {useEffect, useState} from "react";
 import Header from "../Header";
 import {Button, Container, Form} from "react-bootstrap";
-import UsefulFunctions from "../../functions/UsefulFunctions";
 import CustomAlert from "../alerts/CustomAlert";
 import { useNavigate, useParams } from "react-router-dom";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
 
 const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
-    const { addObject, buildOrderFieldPath, updateObject } = UsefulFunctions()
-    const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
-    const { getVehicleById } = VehiclesService()
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const { getVehicleById, updateVehicle, insertVehicle } = VehiclesService()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true);
 
     const { id } = useParams()
 
     useEffect(() => {
+
         const getVehicle = async () => {
             return await getVehicleById(id)
         }
 
         // it means an update request was made to update a vehicle object
         if( id !== undefined) {
-            const data = getVehicle()
-            Promise.resolve(data).then(r => {
-                // check if the id passed as url param is valid so check if the object length is higher than 0 otherwise it means no object was returned
-                if(Object.keys(r).length>0){
-                    setLicensePlate(r['licensePlate'])
-                    setModel(r['model'])
-                    setTypology(r['typology'])
-                    setManufacturer(r['manufacturer'])
-                    setRegistrYear(r['registrYear'])
-                    setLoading(false)
-                }
-                else {
-                    // navigate through the error page because the id in the url params doesn't correspond to any vehicle
-                    navigate('*', {replace: true})
-                }
-            })
+
+            // check if the id param is a number
+            if(!isNaN(+id)) {
+                getVehicle().then(r => {
+                    // check if the id passed as url param is valid so check if the object length is higher than 0 otherwise it means no object was returned
+                    if (r !== null) {
+                        setLicensePlate(r['licensePlate'])
+                        setModel(r['model'])
+                        setTypology(r['typology'])
+                        setManufacturer(r['manufacturer'])
+                        setRegistrYear(r['registrYear'])
+                        setLoading(false)
+                    } else {
+                        // navigate through the error page because the id in the url params doesn't correspond to any vehicle
+                        navigate('*', {replace: true})
+                    }
+                })
+            }
         }
         else {
             setLoading(false)
@@ -60,14 +63,11 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
     const [manufacturerAlert, setManufacturerAlert] = useState(false);
     const [regYearAlert, setRegYearAlert] = useState(false);
 
-    // alert if the user tried to insert an existing Customer
-    const [vehicleAlreadyExists, setVehicleAlreadyExists] = useState(false);
-
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
 
         // field blank control
-        if(!licensePlate || !model || !typology || !manufacturer || !registrYear){
+        if (!licensePlate || !model || !typology || !manufacturer || !registrYear) {
             !licensePlate ? setLicensePlateAlert(true) : setLicensePlateAlert(false)
             !model ? setModelAlert(true) : setModelAlert(false)
             !typology ? setTypologyAlert(true) : setModelAlert(false)
@@ -79,44 +79,96 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
         let updtData = null
 
         // if 'id' is set it means an update action has been thrown
-        if(id !== undefined){
-            updtData = {idVehicle: id, licensePlate: licensePlate, model: model, typology: typology, manufacturer:manufacturer, registrYear: registrYear}
-            updateObject({...updtData}, tableConfig.startPath+`/${id}`).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfig => {
-                    return {
-                        ...prevTableConfig,
-                        list: r,
+        if (id !== undefined) {
+            updtData = {
+                idVehicle: id,
+                licensePlate: licensePlate,
+                model: model,
+                typology: typology,
+                manufacturer: manufacturer,
+                registrYear: registrYear
+            }
+            updateVehicle({...updtData}, id).then(resultInfo => {
+
+                if (resultInfo.error) {
+
+                    setErrorMessage(resultInfo.message)
+
+                    setError(true)
+
+                } else {
+
+                    const updatedList = tableConfig.list
+
+                    for (const y in updatedList) {
+
+                        if (updatedList[y].idVehicle.toString() === id.toString()) {
+
+                            updatedList.splice(y, y, {
+
+                                ...updatedList[y],
+
+                                ...resultInfo.vehicle
+
+                            })
+
+                            setTableConfig(prevState => {
+
+                                return {
+                                    ...prevState,
+                                    list: updatedList
+                                }
+
+                            })
+
+                            break
+
+                        }
                     }
-                }))
+
+                    navigate('/Vehicles')
+
+                }
+            }).catch(e => {
+                console.log(e)
+            })
+        } else {
+
+            await insertVehicle({
+                licensePlate,
+                model,
+                typology,
+                manufacturer,
+                registrYear: registrYear
+            }).then(resultInfo => {
+
+                if(resultInfo.error){
+
+                    setErrorMessage(resultInfo.message)
+
+                    setError(true)
+
+                }
+                else{
+
+                    const updateList = tableConfig.list
+
+                    updateList.push(resultInfo.customer)
+
+                    setTableConfig(prevTableConfig => {
+                        return {
+                            ...prevTableConfig,
+                            list: updateList,
+                        }
+                    })
+
+                    navigate('/Vehicles')
+
+                }
+            }).catch(e => {
+                console.log(e)
+            })
         }
-        else {
-
-            addObject({licensePlate, model, typology, manufacturer, registrYear: registrYear}, tableConfig.startPath).then(() => getData(sortPath, orderPath, tableConfig, tableConfig.startPath))
-                .then((r) => setTableConfig(prevTableConfig => {
-                    return {
-                        ...prevTableConfig,
-                        list: r,
-                    }
-                }))
-        }
-
-        setVehicleAlreadyExists(false)
-
-        setLicensePlate('')
-        setModel('')
-        setTypology('')
-        setManufacturer('')
-        setRegistrYear('')
-        setLicensePlateAlert(false)
-        setModelAlert(false)
-        setTypologyAlert(false)
-        setManufacturerAlert(false)
-        setRegYearAlert(false)
-
-        //resetTableConfig(tableConfig, setTableConfig)
-        navigate('/Vehicles')
-
-        return
 
     }
 
@@ -129,7 +181,7 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
             <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={showSearchButton} throwResetFetch={false} getData={getData} />
             <Container className={'my-2'}>
                 <h3>Insert Vehicle</h3><br/>
-                { vehicleAlreadyExists && <CustomAlert text={'Vehicle already exists'} /> }
+                { error && <CustomAlert text={errorMessage} /> }
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3" controlId="formLicensePlate">
                         <Form.Label>License plate</Form.Label>
