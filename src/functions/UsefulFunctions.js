@@ -22,8 +22,6 @@ const UsefulFunctions = () => {
         }
         else{
 
-            console.log(response)
-
             const error = await response.json()
 
             if(error.error_validation){

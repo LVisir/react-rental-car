@@ -12,7 +12,7 @@ import CustomAlert from "../alerts/CustomAlert";
 const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, setCustomAlert, setTextCustomAlert, customAlert, textCustomAlert }) => {
 
     const { getVehicles } = VehiclesService()
-    const { buildOrderFieldPath } = UsefulFunctions()
+    const { buildOrderFieldPath, currentPages } = UsefulFunctions()
     const { dynamicSortMultiple } = CustomSort()
 
     const navigate = useNavigate()
@@ -46,7 +46,8 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
                 return {
                     ...prevTableConfig,
                     list: responseInfo.list,
-                    dataSize: Math.floor(responseInfo.list.length/10)
+                    dataSize: Math.floor(responseInfo.list.length/10),
+                    currentPages: currentPages(responseInfo.list.length)
                 }
             })
 

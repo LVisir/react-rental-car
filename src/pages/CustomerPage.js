@@ -1,6 +1,4 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import Error from "../components/errors/Error";
-import BookingService from "../service/Booking/BookingService";
 import Reservations from "../components/entities/Reservations";
 import React from "react";
 import Vehicles from "../components/entities/Vehicles";

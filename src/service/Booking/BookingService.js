@@ -6,7 +6,6 @@ const BookingService = () => {
     const { basePath } = Paths()
     const { manageResponse } = UsefulFunctions()
 
-    // path to fetch the list of Prenotazione from the server
     let bookingsPath = basePath+'/bookings'
 
     // fetch of the list of Prenotazione objects
@@ -18,7 +17,19 @@ const BookingService = () => {
             message: ''
         }
 
-        await fetch(bookingsPath, {
+        // path to fetch the list of Prenotazione from the server
+        let pathBasedOnLoggedUser
+        if(sessionStorage.getItem('superuser') !== null){
+            pathBasedOnLoggedUser = basePath+'/bookings'
+        }
+        else if(sessionStorage.getItem('customer') !== null){
+            pathBasedOnLoggedUser = basePath+`/bookings/customer/${sessionStorage.getItem('customer')}`
+        }
+        else{
+            pathBasedOnLoggedUser = basePath+'/bookings'
+        }
+
+        await fetch(pathBasedOnLoggedUser, {
             method: 'GET',
             headers: {
                 'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
@@ -38,9 +49,9 @@ const BookingService = () => {
                 }
                 else if(sessionStorage.getItem('customer') !== null){
 
-                    const customerBookingList = infoResponse.list.filter(x => x.user === sessionStorage.getItem('customer'))
+                    bindActions(infoResponse.list, deleteBooking, updateBooking, `/Bookings/ModifyBooking`)
 
-                    bindActions(customerBookingList, deleteBooking, updateBooking, `/Bookings/ModifyBooking`)
+
                 }
                 else{
                     throw new Error("No User is logged in")
@@ -122,7 +133,7 @@ const BookingService = () => {
                             onClick() {
                                 return movePath+`/${x.idBooking}`
                             },
-                            disable: false,
+                            disable: x.approval,
                             color: 'MediumSlateBlue',
                             actionType: 'navigate'
                         }
@@ -172,6 +183,8 @@ const BookingService = () => {
             booking: null
         }
 
+        console.log(booking)
+
         await fetch(bookingsPath+'/add', {
             method: 'POST',
             headers: {
@@ -197,8 +210,7 @@ const BookingService = () => {
             booking: null
         }
 
-        console.log(booking)
-        console.log(id)
+        console.log(booking.user)
 
         await fetch(bookingsPath+`/update/${id}`, {
             method: 'PUT',
@@ -247,8 +259,8 @@ const BookingService = () => {
 
     }
 
-    const field = ['start','end', 'idBooking', 'user', 'vehicle']
-    const fieldHeader = ['Start date', 'End date', 'Booking Id', 'Vehicle Id', 'User Id']
+    const field = ['start','end', 'idBooking', 'user', 'vehicle', 'approval']
+    const fieldHeader = ['Start date', 'End date', 'Booking Id', 'User Id', 'Vehicle Id', 'Approval']
     const filter = ['start','end', 'idBooking', 'user', 'vehicle']
 
     return { bookingsPath, field, fieldHeader, getBookings, filter, getBookingById, insertBooking, updateBooking, deleteBooking }

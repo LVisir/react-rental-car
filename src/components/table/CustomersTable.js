@@ -14,7 +14,7 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, setCustomA
     const navigate = useNavigate()
 
     const { getCustomers } = CustomerService()
-    const { buildOrderFieldPath } = UsefulFunctions()
+    const { buildOrderFieldPath, currentPages } = UsefulFunctions()
     const { dynamicSortMultiple } = CustomSort()
 
     useEffect(() => {
@@ -46,7 +46,8 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, setCustomA
                 return {
                     ...prevTableConfig,
                     list: responseInfo.list,
-                    dataSize: Math.floor(responseInfo.list.length/10)
+                    dataSize: Math.floor(responseInfo.list.length/10),
+                    currentPages: currentPages(responseInfo.list.length)
                 }
             })
 

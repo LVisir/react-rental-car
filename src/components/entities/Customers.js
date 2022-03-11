@@ -28,7 +28,7 @@ const Customers = ({ logout, links, homePath }) => {
             tableHeaders: fieldHeader,
             dataSize: 0,
             currentPage: 1,
-            currentPages: [1, 2, 3],
+            currentPages: [],
             searchableFields: filter,
             searchText: '',
             filterSearchText: '',

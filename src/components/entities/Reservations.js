@@ -27,7 +27,7 @@ const Reservations = ({ logout, links, homePath }) => {
         tableHeaders: fieldHeader,
         dataSize: 0,
         currentPage: 1,
-        currentPages: [1,2,3],
+        currentPages: [],
         searchableFields: filter,
         searchText: '',
         filterSearchText: '',
@@ -68,6 +68,12 @@ const Reservations = ({ logout, links, homePath }) => {
                 field: field[4],
                 header: fieldHeader[4],
                 sortable: true,
+                sortType: '',
+            },
+            {
+                field: field[5],
+                header: fieldHeader[5],
+                sortable: false,
                 sortType: '',
             }
         ]

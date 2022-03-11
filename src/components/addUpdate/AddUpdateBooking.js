@@ -4,11 +4,13 @@ import Header from "../Header";
 import {Button, Container, Form} from "react-bootstrap";
 import CustomAlert from "../alerts/CustomAlert";
 import BookingService from "../../service/Booking/BookingService";
+import VehiclesService from "../../service/Vehicles/VehiclesService";
 
 const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const [loading, setLoading] = useState(true);
     const { getBookingById, updateBooking, insertBooking } = BookingService()
+    const { getVehicleById, getLastBookingDates } = VehiclesService()
 
     const { id, vehicleLicencePlate } = useParams()
 
@@ -19,6 +21,14 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
         const getBooking = async () => {
             return await getBookingById(id)
+        }
+
+        const getVehicle = async () => {
+            return await getVehicleById(vehicleLicencePlate);
+        }
+
+        const getLastBooking = async () => {
+            return await getLastBookingDates(vehicleLicencePlate);
         }
 
         // it means an update request was made to update a customer object
@@ -33,7 +43,7 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
                         // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
                         // check if this request is made by the actual logged customer
-                        if (r['user'] === sessionStorage.getItem('customer')) {
+                        if (r['user'].idUser.toString() === sessionStorage.getItem('customer').toString()) {
                             setStartDate(r['start'])
                             setEndDate(r['end'])
                             setIdBooking(r['idBooking'])
@@ -51,7 +61,43 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                     }
 
 
-                }).catch(() => navigate('*', {replace: true}))
+                }).catch(() => {
+                    navigate('*', {replace: true})
+                })
+            }
+        }
+        else if(vehicleLicencePlate !== undefined){
+            // check if the vehicleLicencePlate param is a number
+            if(!isNaN(+vehicleLicencePlate)) {
+
+                getVehicle().then(r => {
+
+                    if(r !== null){
+
+                        getLastBooking().then(innerResponse => {
+
+                            console.log(innerResponse['startDate'])
+
+                            setStartDate(innerResponse['startDate'])
+                            setEndDate(innerResponse['endDate'])
+                            setIdBooking(r['idBooking'])
+                            setCustomer(r['user'])
+                            setApproval(r['approval'])
+                            setVehicle(r['vehicle'])
+                            setLoading(false)
+
+                        })
+
+                    }else {
+                        // navigate through the error page because the vehicleLincensePlate in the url params doesn't correspond to any customer
+                        navigate('*', {replace: true})
+                    }
+
+                }).catch( () =>navigate('*', {replace: true}) )
+
+            }else {
+                // navigate through the error page because the vehicleLincensePlate in the url params doesn't correspond to any customer
+                navigate('*', {replace: true})
             }
         }
         else{
@@ -91,22 +137,22 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
         let updtBooking = null
 
         if (id !== undefined) {
+
             updtBooking = {
-                id: idBooking,
+                idBooking: idBooking,
                 end: endDate,
                 start: startDate,
-                user: {
-                    idUser: customer
-                },
+                user: customer,
                 approval: approval,
-                vehicle: {
-                    idVehicle: vehicle
-                }
+                vehicle: vehicle
             }
+
             updateBooking({...updtBooking}, id)
                 .then(resultInfo => {
 
                     if (resultInfo.error) {
+
+                        console.log('dioooooo')
 
                         setErrorMessage(resultInfo.message)
 
@@ -153,9 +199,9 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             await insertBooking({
                 end: endDate,
                 start: startDate,
-                user: sessionStorage.getItem('customer'),
+                user: {idUser: sessionStorage.getItem('customer')},
                 approval: 0,
-                vehicle: vehicleLicencePlate
+                vehicle: {idVehicle: vehicleLicencePlate}
             })
                 .then(resultInfo => {
 

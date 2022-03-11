@@ -199,6 +199,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
                                             return (
                                                 <td key={innerIndex} colSpan={`${innerEl.sortable ? 2 : 1}`}>
                                                     {isNaN(Date.parse(el[innerEl.field])) ? el[innerEl.field] : dateFormat(el[innerEl.field]) } {/* check if it is a date; if yes format from yyyy-mm-dd to gg-mm-yyy */}
+                                                    {typeof el[innerEl.field] === 'boolean' && (el[innerEl.field] === false ? 'False' : 'True')} {/* check if it is a boolean to format in an appropriate way */}
                                                 </td>)
                                         }
                                     )

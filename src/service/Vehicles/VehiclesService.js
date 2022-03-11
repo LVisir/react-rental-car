@@ -28,7 +28,12 @@ const VehiclesService = () => {
 
                 infoResponse.list = await response.json()
 
-                bindActions(infoResponse.list, deleteVehicle, updateVehicle, `/Vehicles/ModifyVehicle`)
+                if(sessionStorage.getItem('superuser') !== null) {
+                    bindActions(infoResponse.list, deleteVehicle, updateVehicle, `/Vehicles/ModifyVehicle`)
+                }
+                else if(sessionStorage.getItem('customer') !== null){
+                    bindActions(infoResponse.list, deleteVehicle, updateVehicle, `/Bookings/AddBooking`)
+                }
 
             }
             else{
@@ -54,7 +59,7 @@ const VehiclesService = () => {
 
     }
 
-    const bindActions = (data, deleteVehicle, movePath) => {
+    const bindActions = (data, deleteVehicle, updateVehicle = () => {}, movePath) => {
 
         data.map(
             (x) => {
@@ -129,6 +134,42 @@ const VehiclesService = () => {
 
     }
 
+    /**
+     *
+     * @param id: id of a Vehicle
+     * @returns {Promise<null>}: The last Booking date of a Vehicle given in input
+     */
+    const getLastBookingDates = async (id) => {
+
+        let result = null
+
+        await fetch(vehiclesPath+`/lastBooking/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+            }
+        }).then(async response => {
+            if (response.ok) {
+
+                result = await response.json()
+
+            }
+            else{
+
+                let error = await response.json()
+                console.log(error.error)
+
+            }
+        }).catch(e => {
+
+            console.log(e)
+
+        })
+
+        return result
+
+    }
+
     const insertVehicle = async (vehicle) => {
 
         let resultInfo = {
@@ -162,7 +203,7 @@ const VehiclesService = () => {
             vehicle: null
         }
 
-        await fetch(vehicle+`/update/${id}`, {
+        await fetch(vehiclesPath+`/update/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -213,7 +254,7 @@ const VehiclesService = () => {
     const fieldHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id']
     const filter = ['licensePlate','model','typology','manufacturer', 'registrYear', 'idVehicle']
 
-    return { vehiclesPath, getVehicles, field, fieldHeader, filter, getVehicleById, insertVehicle, deleteVehicle, updateVehicle };
+    return { vehiclesPath, getVehicles, field, fieldHeader, filter, getVehicleById, insertVehicle, deleteVehicle, updateVehicle, getLastBookingDates };
 };
 
 export default VehiclesService;
