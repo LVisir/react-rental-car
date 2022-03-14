@@ -5,12 +5,14 @@ import {default as MyButton} from './graphic/Button'
 import UsefulFunctions from "../functions/UsefulFunctions";
 import {useNavigate} from "react-router-dom";
 import PropTypes from 'prop-types'
+import CustomSort from "../functions/CustomSort";
 
 const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData, setTextCustomAlert, setCustomAlert }) => {
 
     const navigate = useNavigate()
 
     const { buildOrderFieldPath, currentPages } = UsefulFunctions()
+    const { dynamicSortMultiple } = CustomSort()
 
     // state that manage the searching filter
     const [filter, setFilter] = useState(tableConfig.dbFields[0]);
@@ -37,25 +39,28 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
             setCustomAlert(true)
 
         }
+        else{
+            setTableConfig(prevTableConfig => {
+                return {
+                    ...prevTableConfig,
+                    fieldObjects: tmpFieldObjects,
+                    disableResetPaginationButton: true,
+                    disableResetHeaderButton: true,
+                    disableResetTableButton: true,
+                    currentPages: currentPages(responseInfo.list.length),
+                    filterSearchText: '',
+                    currentPage: 1,
+                    searchText: '',
+                    list: responseInfo.list,
+                    dataSize: Math.floor(responseInfo.list.length / 10)
+                }
+            })
 
-        setTableConfig(prevTableConfig => {
-            return {
-                ...prevTableConfig,
-                fieldObjects: tmpFieldObjects,
-                disableResetPaginationButton: true,
-                disableResetHeaderButton: true,
-                disableResetTableButton: true,
-                currentPages: currentPages(responseInfo.list.length),
-                filterSearchText: '',
-                currentPage: 1,
-                searchText: '',
-                list: responseInfo.list,
-                dataSize: Math.floor(responseInfo.list.length/10)
-            }
-        })
+            setFilter(tableConfig.dbFields[0])
+            setSearchText('')
 
-        setFilter(tableConfig.dbFields[0])
-        setSearchText('')
+            setCustomAlert(false)
+        }
 
     }
 
@@ -64,19 +69,33 @@ const Header = ({ logout, links, tableConfig, setTableConfig, showSearchButton, 
      */
     const search = async () => {
 
-        const { sortPath, orderPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+        const responseInfo = await getData(filter, searchText)
 
-        const data = await getData(sortPath, orderPath, tableConfig.startPath, 1, 10, searchText, filter)
+        if(responseInfo.error){
+
+            setTextCustomAlert(responseInfo.message)
+
+            setCustomAlert(true)
+
+        }
+        else if(responseInfo.list !== []){
+
+            const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+            responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+
+        }
 
         setTableConfig(prevTableConfig => {
             return {
                 ...prevTableConfig,
+                list: responseInfo.list,
                 filterSearchText: filter,
                 searchText: searchText,
                 disableResetHeaderButton: false,
-                currentPages: [1,2,3],
+                currentPages: currentPages(responseInfo.list.length),
                 currentPage: 1,
-                list: data
+                dataSize: Math.floor(responseInfo.list.length/10)
             }
         })
 

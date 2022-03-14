@@ -124,7 +124,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
                 setError(true)
             }
             else{
-                const responseInfo = await getData()
+                const responseInfo = await getData(tableConfig.filterSearchText, tableConfig.searchText)
 
                 if(responseInfo.error){
 

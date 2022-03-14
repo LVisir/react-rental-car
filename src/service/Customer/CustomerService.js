@@ -11,7 +11,7 @@ const CustomerService = () => {
     const customersPath = basePath+'/users/customers'
 
     // function to fetch the list of Customers
-    const getCustomers = async () => {
+    const getCustomers = async (field = '', value = '') => {
 
         const infoResponse = {
             list: [],
@@ -19,7 +19,13 @@ const CustomerService = () => {
             message: ''
         }
 
-        await fetch(customersPath, {
+        let path = customersPath
+
+        if(field && value){
+            path = path + `/normalSearch?field=${field}&value=${value}`
+        }
+
+        await fetch(path, {
             method: 'GET',
             headers: {
                 'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`

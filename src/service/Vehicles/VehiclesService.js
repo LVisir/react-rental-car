@@ -10,7 +10,7 @@ const VehiclesService = () => {
     const vehiclesPath = basePath+'/vehicles'
 
     // fetch of the list of Prenotazione objects
-    const getVehicles = async () => {
+    const getVehicles = async (field = '', value = '') => {
 
         const infoResponse = {
             list: [],
@@ -18,7 +18,13 @@ const VehiclesService = () => {
             message: ''
         }
 
-        await fetch(vehiclesPath, {
+        let path = vehiclesPath
+
+        if(field && value){
+            path = path + `/search?field=${field}&value=${value}`
+        }
+
+        await fetch(path, {
             method: 'GET',
             headers: {
                 'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`

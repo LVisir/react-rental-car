@@ -9,7 +9,7 @@ const BookingService = () => {
     let bookingsPath = basePath+'/bookings'
 
     // fetch of the list of Prenotazione objects
-    const getBookings = async () => {
+    const getBookings = async (field = '', value = '') => {
 
         const infoResponse = {
             list: [],
