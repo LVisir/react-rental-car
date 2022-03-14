@@ -38,9 +38,12 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                         setLoading(false)
                     } else {
                         // navigate through the error page because the id in the url params doesn't correspond to any vehicle
-                        navigate('*', {replace: true})
+                        navigate('/Vehicles', {replace: true})
                     }
                 })
+            }else {
+                // navigate through the error page because the id in the url params doesn't correspond to any vehicle
+                navigate('/Vehicles', {replace: true})
             }
         }
         else {

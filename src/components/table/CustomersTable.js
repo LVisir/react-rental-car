@@ -25,7 +25,7 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, setCustomA
 
         const fetchCustomers = async () => {
 
-            const responseInfo = await getCustomers()
+            const responseInfo = await getCustomers(tableConfig.filterSearchText, tableConfig.searchText)
 
             if(responseInfo.error){
 

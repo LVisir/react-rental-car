@@ -120,6 +120,8 @@ const VehiclesService = () => {
 
         let result = null
 
+        console.log(vehiclesPath+`/${id}`)
+
         await fetch(vehiclesPath+`/${id}`, {
             method: 'GET',
             headers: {
@@ -150,13 +152,14 @@ const VehiclesService = () => {
     /**
      *
      * @param id: id of a Vehicle
+     * @param customer: id of a customer
      * @returns {Promise<null>}: The last Booking date of a Vehicle given in input
      */
-    const getLastBookingDates = async (id) => {
+    const getLastBookingDates = async (id, customer) => {
 
         let result = null
 
-        await fetch(vehiclesPath+`/lastBooking/${id}`, {
+        await fetch(vehiclesPath+`/lastBooking?booking=${id}&customer=${customer}`, {
             method: 'GET',
             headers: {
                 'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`

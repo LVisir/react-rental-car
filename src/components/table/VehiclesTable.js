@@ -25,7 +25,7 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
 
         const fetchVehicles = async () => {
 
-            const responseInfo = await getVehicles()
+            const responseInfo = await getVehicles(tableConfig.filterSearchText, tableConfig.searchText)
 
             if(responseInfo.error){
 

@@ -1,8 +1,5 @@
 # Important
-Finished. Work in progress for the back-end.
-
-# Next step
-APPROVES and DELETE action for Bookings page; testing; start to build Customer login version.
+COMPLETE.
 
 # Getting Started with Create React App
 

@@ -38,14 +38,11 @@ const CustomerService = () => {
             }
         }).then(async response => {
 
-            if (response.status === 204) infoResponse.list = []
-
-            else if (response.ok) {
+            if (response.ok) {
 
                 infoResponse.list = bindActions(await response.json(), deleteCustomer, `/Customers/ModifyCustomer`)
 
             }
-
             else{
 
                 const error = await response.json()
@@ -92,7 +89,7 @@ const CustomerService = () => {
             }
         }).catch(e => {
 
-            console.log(e)
+            console.log('Return a non JSON object '+e)
 
         })
 

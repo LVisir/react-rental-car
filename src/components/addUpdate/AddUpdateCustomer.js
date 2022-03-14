@@ -24,24 +24,22 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
         // it means an update request was made to update a customer object
         if(id !== undefined ) {
 
-            // check if the id param is a number
-            if(!isNaN(+id)) {
-                getCustomer().then(r => {
-                    // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned
-                    if (r !== null) {
-                        setName(r['name'])
-                        setSurname(r['surname'])
-                        setEmail(r['email'])
-                        setBirthDate(r['birthDate'])
-                        setPassword(r['password'])
-                        setCf(r['cf'])
-                        setLoading(false)
-                    } else {
-                        // navigate through the error page because the id in the url params doesn't correspond to any customer
-                        navigate('*', {replace: true})
-                    }
-                }).catch(() => navigate('*', {replace: true}))
-            }
+            getCustomer().then(r => {
+                // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned
+                if (r !== null) {
+                    setName(r['name'])
+                    setSurname(r['surname'])
+                    setEmail(r['email'])
+                    setBirthDate(r['birthDate'])
+                    setPassword(r['password'])
+                    setCf(r['cf'])
+                    setLoading(false)
+                } else {
+                    // navigate through the error page because the id in the url params doesn't correspond to any customer
+                    navigate('/Customers', {replace: true})
+                }
+            }).catch(() => navigate('/Customers', {replace: true}))
+
         }
         else{
             setLoading(false)

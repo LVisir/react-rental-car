@@ -1,35 +1,20 @@
 import {Table} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Pagination from "./Pagination";
 import {BsFillArrowDownCircleFill, BsFillArrowUpCircleFill, BsFillLightningChargeFill} from "react-icons/bs";
 import Button from "../graphic/Button";
 import UsefulFunctions from "../../functions/UsefulFunctions";
 import { useNavigate } from "react-router-dom";
 import CustomSort from "../../functions/CustomSort";
-import CustomAlert from "../alerts/CustomAlert";
 
-const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
+const CustomTable = ({ tableConfig, setTableConfig, getData, setCustomAlert, setTextCustomAlert }) => {
 
 
     const { buildOrderFieldPath, dateFormat } = UsefulFunctions()
 
     const { dynamicSortMultiple } = CustomSort()
 
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-
     const navigate = useNavigate()
-
-    useEffect(() => {
-
-
-        console.log('dentro dentrio')
-        console.log(tableConfig.list)
-
-        error && setError(false)
-
-    }, [error]);
-
 
     /**
      *
@@ -124,48 +109,60 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
             const responseInfo = await func()
 
             if(responseInfo.error){
-                setErrorMessage(responseInfo.message)
-                setError(true)
+                setTextCustomAlert(responseInfo.message)
+                setCustomAlert(true)
             }
             else{
                 const responseInfo = await getData(tableConfig.filterSearchText, tableConfig.searchText)
 
                 if(responseInfo.error){
 
-                    setErrorMessage(responseInfo.message)
+                    setTextCustomAlert(responseInfo.message)
 
-                    setError(true)
+                    setCustomAlert(true)
+
+                    setTableConfig(prevTableConfig => {
+                        return {
+                            ...prevTableConfig,
+                            list: responseInfo.list,
+                            dataSize: Math.floor(responseInfo.list.length/10)
+                        }
+                    })
 
                 }
-                else if(responseInfo.list !== []){
+                else{
 
-                    const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+                    if(responseInfo.list !== []){
 
-                    if(sortPath.length!==0){
-                        responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                        const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
+
+                        if(sortPath.length!==0){
+                            responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                        }
+
                     }
 
+                    setTableConfig(prevTableConfig => {
+                        return {
+                            ...prevTableConfig,
+                            list: responseInfo.list,
+                            dataSize: Math.floor(responseInfo.list.length/10)
+                        }
+                    })
                 }
 
-                setTableConfig(prevTableConfig => {
-                    return {
-                        ...prevTableConfig,
-                        list: responseInfo.list,
-                        dataSize: Math.floor(responseInfo.list.length/10)
-                    }
-                })
             }
 
         }
         else if(actionType === 'navigate'){
+
             navigate(func())
+
         }
     }
 
     return (
         <>
-            { error && <CustomAlert text={errorMessage} /> }
-            {console.log(tableConfig.list)}
             <Table striped bordered hover>
                 <thead>
                 <tr style={{textAlign: 'center'}} >
@@ -190,7 +187,6 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
                     <th>Actions</th>
 
                 </tr>
-                {/*{tableConfig.list.map(x => console.log(x))}*/}
                 </thead>
                 <tbody>
                 {

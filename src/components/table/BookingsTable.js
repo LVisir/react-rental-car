@@ -21,7 +21,7 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
 
         const fetchBookings = async () => {
 
-            const responseInfo = await getBookings()
+            const responseInfo = await getBookings(tableConfig.filterSearchText, tableConfig.searchText)
 
             if(responseInfo.error){
 
@@ -52,9 +52,6 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
         }
 
         fetchBookings()
-
-        console.log('dentro')
-        console.log(tableConfig.list)
 
     }, []);
 

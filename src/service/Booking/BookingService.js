@@ -23,7 +23,7 @@ const BookingService = () => {
             pathBasedOnLoggedUser = basePath+'/bookings'
         }
         else if(sessionStorage.getItem('customer') !== null){
-            pathBasedOnLoggedUser = basePath+`/bookings/customer/${sessionStorage.getItem('customer')}`
+            pathBasedOnLoggedUser = basePath+`/bookings/customers/${sessionStorage.getItem('customer')}`
         }
         else{
             pathBasedOnLoggedUser = basePath+'/bookings'
@@ -224,8 +224,6 @@ const BookingService = () => {
             message: '',
             booking: null
         }
-
-        console.log(booking.user)
 
         await fetch(bookingsPath+`/update/${id}`, {
             method: 'PUT',

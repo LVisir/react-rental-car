@@ -5,14 +5,12 @@ import {Button, Container, Form} from "react-bootstrap";
 import CustomAlert from "../alerts/CustomAlert";
 import BookingService from "../../service/Booking/BookingService";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
-import CustomerService from "../../service/Customer/CustomerService";
 
 const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const [loading, setLoading] = useState(true);
     const { getBookingById, updateBooking, insertBooking } = BookingService()
     const { getVehicleById, getLastBookingDates } = VehiclesService()
-    const { getCustomerById } = CustomerService()
 
     const { id, vehicleLicencePlate } = useParams()
 
@@ -29,62 +27,51 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             return await getVehicleById(vehicleLicencePlate);
         }
 
-        const getLastBooking = async () => {
-            return await getLastBookingDates(vehicleLicencePlate);
+        const getLastBooking = async (customer) => {
+            return await getLastBookingDates(vehicleLicencePlate, customer);
         }
 
         // it means an update request was made to update a customer object
         if(id !== undefined ) {
 
-            // check if the id param is a number
-            if(!isNaN(+id)) {
+            getBooking().then(r => {
 
-                getBooking().then(r => {
+                if(r !== null){
 
-                    if(r !== null){
-
-                        // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
-                        // check if this request is made by the actual logged customer
-                        if (r['user'].idUser.toString() === sessionStorage.getItem('customer').toString()) {
-                            setStartDate(r['start'])
-                            setEndDate(r['end'])
-                            setIdBooking(r['idBooking'])
-                            setCustomer(r['user'])
-                            setApproval(r['approval'])
-                            setVehicle(r['vehicle'])
-                            setLoading(false)
-                        } else {
-                            // navigate through the error page because the id in the url params doesn't correspond to any customer
-                            navigate('*', {replace: true})
-                        }
+                    // check if the id passed as a param is valid so check if the object length is higher than 0 otherwise it means no object was returned and
+                    // check if this request is made by the actual logged customer
+                    if (r['user'].idUser.toString() === sessionStorage.getItem('customer').toString()) {
+                        setStartDate(r['start'])
+                        setEndDate(r['end'])
+                        setIdBooking(r['idBooking'])
+                        setCustomer(r['user'])
+                        setApproval(r['approval'])
+                        setVehicle(r['vehicle'])
+                        setLoading(false)
                     } else {
                         // navigate through the error page because the id in the url params doesn't correspond to any customer
                         navigate('*', {replace: true})
                     }
-
-
-                }).catch(() => {
+                } else {
+                    // navigate through the error page because the id in the url params doesn't correspond to any customer
                     navigate('*', {replace: true})
-                })
-            }
+                }
+
+
+            }).catch(() => {
+                navigate('*', {replace: true})
+            })
+
         }
         else if(vehicleLicencePlate !== undefined){
-            // check if the vehicleLicencePlate param is a number
-            if(!isNaN(+vehicleLicencePlate)) {
 
-                console.log('------------------')
-                console.log(tableConfig.list)
-                console.log('------------------')
+            getVehicle().then(r => {
 
-                getVehicle().then(r => {
+                if(r !== null){
 
-                    if(r !== null){
+                    if(sessionStorage.getItem('customer') !== null) {
 
-                        getLastBooking().then(innerResponse => {
-
-                            console.log(innerResponse['startDate'])
-
-                            console.log('ciao')
+                        getLastBooking(sessionStorage.getItem('customer')).then(innerResponse => {
 
                             setStartDate(innerResponse['startDate'])
                             setEndDate(innerResponse['endDate'])
@@ -95,21 +82,23 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                             setLoading(false)
 
                         })
-
                     }else {
-                        // navigate through the error page because the vehicleLincensePlate in the url params doesn't correspond to any customer
+                        // navigate through the error page because the customer that is renting is not logged in
                         navigate('*', {replace: true})
                     }
 
-                }).catch( () =>navigate('*', {replace: true}) )
+                }else {
+                    // navigate through the error page because the vehicleLincensePlate in the url params doesn't correspond to any customer
+                    navigate('*', {replace: true})
+                }
 
-            }else {
-                // navigate through the error page because the vehicleLincensePlate in the url params doesn't correspond to any customer
-                navigate('*', {replace: true})
-            }
+            }).catch( () =>navigate('*', {replace: true}) )
+
+
         }
         else{
             setLoading(false)
+            navigate('*', {replace: true})
         }
 
     }, []);
@@ -165,34 +154,6 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                         setError(true)
 
                     } else {
-
-                        const updatedList = tableConfig.list
-
-                        for (const y in updatedList) {
-
-                            if (updatedList[y].idBooking.toString() === id.toString()) {
-
-                                updatedList.splice(y, y, {
-
-                                    ...updatedList[y],
-
-                                    ...resultInfo.booking
-
-                                })
-
-                                setTableConfig(prevState => {
-
-                                    return {
-                                        ...prevState,
-                                        list: updatedList
-                                    }
-
-                                })
-
-                                break
-
-                            }
-                        }
 
                         navigate('/Bookings')
 
