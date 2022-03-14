@@ -3,7 +3,7 @@ import Paths from "../../Paths";
 
 const VehiclesService = () => {
 
-    const { manageResponse } = UsefulFunctions()
+    const { manageResponse, dateFormatReverse } = UsefulFunctions()
     const { basePath } = Paths()
 
     // path to fetch the list of Vehicles from server
@@ -21,7 +21,14 @@ const VehiclesService = () => {
         let path = vehiclesPath
 
         if(field && value){
+
+            // if it is a date to the form dd-MM-yyyy, reverse it to yyyy-MM-dd
+            if(!isNaN(Date.parse(dateFormatReverse(value)))){
+                value = dateFormatReverse(value)
+            }
+
             path = path + `/search?field=${field}&value=${value}`
+
         }
 
         await fetch(path, {
@@ -44,7 +51,7 @@ const VehiclesService = () => {
             }
             else{
 
-                const error = response.json()
+                const error = await response.json()
 
                 infoResponse.error = true
 
@@ -184,7 +191,7 @@ const VehiclesService = () => {
             vehicle: null
         }
 
-        await fetch(vehicle+'/add', {
+        await fetch(vehiclesPath+'/add', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -193,6 +200,7 @@ const VehiclesService = () => {
             body: JSON.stringify(vehicle)
         }).then(async response => {
             await manageResponse(await response, resultInfo, 'vehicle')
+
         }).catch(e => {
             console.log(e)
         })

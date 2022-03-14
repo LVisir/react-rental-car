@@ -38,7 +38,9 @@ const CustomersTable = ({ logout, links, tableConfig, setTableConfig, setCustomA
 
                 const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-                responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                if(sortPath.length!==0){
+                    responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                }
 
             }
 

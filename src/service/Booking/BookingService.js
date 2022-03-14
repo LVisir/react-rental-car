@@ -4,7 +4,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 const BookingService = () => {
 
     const { basePath } = Paths()
-    const { manageResponse } = UsefulFunctions()
+    const { manageResponse, dateFormatReverse } = UsefulFunctions()
 
     let bookingsPath = basePath+'/bookings'
 
@@ -29,7 +29,20 @@ const BookingService = () => {
             pathBasedOnLoggedUser = basePath+'/bookings'
         }
 
-        await fetch(pathBasedOnLoggedUser, {
+        let path = pathBasedOnLoggedUser
+
+        if(field && value){
+
+            // if it is a date to the form dd-MM-yyyy, reverse it to yyyy-MM-dd
+            if(!isNaN(Date.parse(dateFormatReverse(value)))){
+                value = dateFormatReverse(value)
+            }
+
+            path = path + `/search?field=${field}&value=${value}`
+
+        }
+
+        await fetch(path, {
             method: 'GET',
             headers: {
                 'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
@@ -60,7 +73,7 @@ const BookingService = () => {
             }
             else{
 
-                const error = response.json()
+                const error = await response.json()
 
                 infoResponse.error = true
 
@@ -141,6 +154,8 @@ const BookingService = () => {
                 }
             }
         )
+
+        return data
 
     }
 

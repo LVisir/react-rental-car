@@ -5,7 +5,7 @@ import UsefulFunctions from "../../functions/UsefulFunctions";
 const CustomerService = () => {
 
     const { basePath } = Paths()
-    const { manageResponse } = UsefulFunctions()
+    const { manageResponse, dateFormatReverse } = UsefulFunctions()
 
     // path to fetch the list of Customer from the server
     const customersPath = basePath+'/users/customers'
@@ -22,6 +22,12 @@ const CustomerService = () => {
         let path = customersPath
 
         if(field && value){
+
+            // if it is a date to the form dd-MM-yyyy, reverse it to yyyy-MM-dd
+            if(!isNaN(Date.parse(dateFormatReverse(value)))){
+                value = dateFormatReverse(value)
+            }
+
             path = path + `/normalSearch?field=${field}&value=${value}`
         }
 

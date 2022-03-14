@@ -11,6 +11,8 @@ const UsefulFunctions = () => {
         sessionStorage.removeItem('superuser')
         sessionStorage.removeItem('customer')
 
+        sessionStorage.removeItem('tokenJWT')
+
         // aggiorno il token che dichiara se qualcuno si è autenticato
         setToken(false)
     }

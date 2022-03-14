@@ -38,7 +38,11 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
 
                 const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-                responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                if(sortPath.length!==0){
+
+                    responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+
+                }
 
             }
 
@@ -59,7 +63,8 @@ const VehiclesTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
 
     return (
         <>
-            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getVehicles} />
+            <Header logout={logout} links={links} tableConfig={tableConfig} setTableConfig={setTableConfig} showSearchButton={true} throwResetFetch={true} getData={getVehicles}
+                    setCustomAlert={setCustomAlert} setTextCustomAlert={setTextCustomAlert} />
             <Container className={'my-2'}>
                 { customAlert && <CustomAlert text={textCustomAlert} /> }
                 {!customAlert &&

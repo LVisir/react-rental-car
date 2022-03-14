@@ -151,17 +151,6 @@ const AddUpdateVehicle = ({ logout, links, tableConfig, setTableConfig, showSear
                 }
                 else{
 
-                    const updateList = tableConfig.list
-
-                    updateList.push(resultInfo.customer)
-
-                    setTableConfig(prevTableConfig => {
-                        return {
-                            ...prevTableConfig,
-                            list: updateList,
-                        }
-                    })
-
                     navigate('/Vehicles')
 
                 }

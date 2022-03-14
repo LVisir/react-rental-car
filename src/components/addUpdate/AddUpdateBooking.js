@@ -5,12 +5,14 @@ import {Button, Container, Form} from "react-bootstrap";
 import CustomAlert from "../alerts/CustomAlert";
 import BookingService from "../../service/Booking/BookingService";
 import VehiclesService from "../../service/Vehicles/VehiclesService";
+import CustomerService from "../../service/Customer/CustomerService";
 
 const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSearchButton, getData }) => {
 
     const [loading, setLoading] = useState(true);
     const { getBookingById, updateBooking, insertBooking } = BookingService()
     const { getVehicleById, getLastBookingDates } = VehiclesService()
+    const { getCustomerById } = CustomerService()
 
     const { id, vehicleLicencePlate } = useParams()
 
@@ -70,6 +72,10 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
             // check if the vehicleLicencePlate param is a number
             if(!isNaN(+vehicleLicencePlate)) {
 
+                console.log('------------------')
+                console.log(tableConfig.list)
+                console.log('------------------')
+
                 getVehicle().then(r => {
 
                     if(r !== null){
@@ -77,6 +83,8 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                         getLastBooking().then(innerResponse => {
 
                             console.log(innerResponse['startDate'])
+
+                            console.log('ciao')
 
                             setStartDate(innerResponse['startDate'])
                             setEndDate(innerResponse['endDate'])
@@ -152,8 +160,6 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
 
                     if (resultInfo.error) {
 
-                        console.log('dioooooo')
-
                         setErrorMessage(resultInfo.message)
 
                         setError(true)
@@ -212,17 +218,6 @@ const AddUpdateBooking = ({ logout, links, tableConfig, setTableConfig, showSear
                         setError(true)
 
                     } else {
-
-                        const updateList = tableConfig.list
-
-                        updateList.push(resultInfo.booking)
-
-                        setTableConfig(prevTableConfig => {
-                            return {
-                                ...prevTableConfig,
-                                list: updateList,
-                            }
-                        })
 
                         navigate('/Bookings')
 

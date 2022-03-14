@@ -171,17 +171,6 @@ const AddUpdateCustomer = ({ logout, links, tableConfig, setTableConfig, showSea
                     }
                     else{
 
-                        const updateList = tableConfig.list
-
-                        updateList.push(resultInfo.customer)
-
-                        setTableConfig(prevTableConfig => {
-                            return {
-                                ...prevTableConfig,
-                                list: updateList,
-                            }
-                        })
-
                         navigate('/Customers')
 
                     }

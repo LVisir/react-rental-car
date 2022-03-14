@@ -34,7 +34,9 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
 
                 const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-                responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                if(sortPath.length!==0){
+                    responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                }
 
             }
 
@@ -50,6 +52,9 @@ const BookingsTable = ({ logout, links, tableConfig, setTableConfig, setCustomAl
         }
 
         fetchBookings()
+
+        console.log('dentro')
+        console.log(tableConfig.list)
 
     }, []);
 

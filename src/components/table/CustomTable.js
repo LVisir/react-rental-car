@@ -22,6 +22,10 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
     useEffect(() => {
 
+
+        console.log('dentro dentrio')
+        console.log(tableConfig.list)
+
         error && setError(false)
 
     }, [error]);
@@ -137,7 +141,9 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
 
                     const { sortPath } = buildOrderFieldPath(tableConfig.fieldObjects)
 
-                    responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                    if(sortPath.length!==0){
+                        responseInfo.list.sort(dynamicSortMultiple(...sortPath))
+                    }
 
                 }
 
@@ -159,6 +165,7 @@ const CustomTable = ({ tableConfig, setTableConfig, getData }) => {
     return (
         <>
             { error && <CustomAlert text={errorMessage} /> }
+            {console.log(tableConfig.list)}
             <Table striped bordered hover>
                 <thead>
                 <tr style={{textAlign: 'center'}} >
