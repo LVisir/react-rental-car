@@ -1,102 +1,45 @@
-# Important
-COMPLETE.
 
-# Getting Started with Create React App
+# React RentalCar
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Front-end React project of a simple rental car application.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+ - [General Info](#general-info)
+ - [Introduction](#introduction)
+ - [Technologies](#technologies)
+ - [Setup](#setup)
+ - [Illustrations](#illustrations)
+ - [Functionalities](#functionalities)
+ - [Links](#-links)
+ 
 
-### `npm start`
+## General Info
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+A front-end project of an application that allowed users to rent a car for a specific period of time. Some users are 'SUPERUSER' and they are the admin. They can insert, update, delete each data in the database.
+## Introduction
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The goal of this project is to learn how [React](https://it.reactjs.org/) works. There is a login page, a page for the vehicles, a page for the customers and a page for the bookings and each of them are represented by a dynamic table. It can be sorted, filtered and the user can search whatever data they need. An header will guide the user through all the possible actions.
+## Technologies
+- React 17.0.2
+## Setup
 
-### `npm test`
+When you'll lunch the application, there is no data because you have to lunch firstly the back-end. Read here to setup it: [Back-end RentalCar](https://github.com/LVisir/spring-rental-car#readme) (it takes just a few minutes). After the back-end is running, just clone this repo, execute ```yarn install``` and run ```npm run start```, wait a few seconds, and the page will appear in the browser in localhost:3000.
+## Illustrations
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A brief overview of a page of an entity:
 
-### `npm run build`
+![](./vehicles_page.PNG)
+## Functionalities
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The ```src/components/table/CustomTable.js``` is the generic dynamic table in which all the data will adapt to. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Each page cannot be accessible if there isn't the jwt token in the header of the page requested (read more in [Back-end RentalCar](https://github.com/LVisir/spring-rental-car#readme)). For each request the email and the password of the user in the current session are mixed with a secret key that generate the token. If the email and the password exists in the db, so the token will be generated. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To have more data to work with, there is some files with 'db' in the file name, for example in ```db.json``` or ```new-db.json```, that you can use to load the data in the MySQL database by just importing the json as tables.
 
-### `npm run eject`
+The core of this project is all inside ```src/components/``` which have all the element needed for the app.
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/LVisir)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/edoardo-mariani-2903a5262/)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-# Rental Car
-
-## DB
-In this React project the goal is to simulate an application that manage the bookings of cars. The fake DB it has been done thanks to [json-server](https://github.com/typicode/json-server). 
-The possible users are: Superuser and Customer. 
-
-### Customer
-Every Customer has an email and a password and others details like name, surname, date and the card id number (that in Italy normally is a string) that reflect his uniqueness in the db. Every Customer can rent a Car just one at a time and every rent request have to be denied or accepted from the Superuser. So the Customer can have multiple Bookings but not more than one Booking not accepted. 
-
-### Car
-The Car entity has some details like model, tipology (SUV, MINIVAN, CLASSIC), date of creation, his id number plate and the brand. 
-
-### Booking
-A Booking can be done from a Customer and it is relate to a Car so his property are: period of the reservations (start date/end date), the Car, the Customer, an id and a state that represents if the Superuser have accepted or denied the Booking. 
-
-### Superuser
-The goal of the Superuser is to add/cancel a Car, modify/cancel/add Customer, accept/deny/cancel Bookings.
-
-
-
-# UI
-A User can access to the application via his username and password where is put on the Customer entity. There is also a 'role' attribute that indicates if a certain Customer is just a Customer or a Superuser.
-
-### Superuser UI
-In the Superuser UI there is an Header where he can navigate through the app. There is the page for the Bookings with the appropriate actions, a page for Customers with the appropriate actions and the page of Cars with appropriate actions. Every list of entities is rappresented by a table where the user can sort by a certain field and search some data based on some filter. Every page can have at most ten elements, if more, a paging will allow the user to navigate through all the data.
-
-### Customer UI
-Also here there is an Header where he can navigate through the app. There is a page that shows all his Bookings, a page where he can update the Booking and a page where he can see and rent a Car. A Customer can update a Booking just if the initial date of the reservation is far at least two days from the new Booking.  
