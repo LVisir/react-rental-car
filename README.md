@@ -34,7 +34,7 @@ A brief overview of a page of an entity:
 
 The ```src/components/table/CustomTable.js``` is the generic dynamic table in which all the data will adapt to. 
 
-Each page cannot be accessible if there isn't the jwt token in the header of the page requested (read more in [Back-end RentalCar](https://github.com/LVisir/spring-rental-car#readme)). For each request the email and the password of the user in the current session are mixed with a secret key that generate the token. If the email and the password exists in the db, so the token will be generated. 
+Each page cannot be accessible if there isn't the jwt token in the header of the http message requesting the page (read more in [Back-end RentalCar](https://github.com/LVisir/spring-rental-car#readme)). For each request the email and the password of the user in the current session are mixed with a secret key that generate the token. If the email and the password exists in the db, the token will be generated and saved inside the session storage.
 
 To have more data to work with, there is some files with 'db' in the file name, for example in ```db.json``` or ```new-db.json```, that you can use to load the data in the MySQL database by just importing the json as tables.
 
